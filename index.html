@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Esther Nam · UX Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #FAFAFA;
+    --ink: #0E0E10;
+    --muted: #6B6B72;
+    --line: #E0E6F0;
+    --lavender: #DDE7F7;
+    --lavender-deep: #C8D6EE;
+    --lavender-ink: #1A2540;
+    --accent: #2D6CDF;
+  }
+  body[data-theme="graphite"] {
+    --bg: #18181C;
+    --ink: #F4F4F6;
+    --muted: #9A9AA4;
+    --line: #2A2A33;
+    --accent: #B4A7F5;
+    --lavender: #22222A;
+    --lavender-deep: #2E2E38;
+    --lavender-ink: #F0F0F2;
+  }
+  /* Cards keep their lavender frame in both modes — they read as framed work samples on the page. */
+  html, body { transition: background-color 0.25s ease, color 0.25s ease; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1200px; margin: 0 auto; padding: 32px 56px 120px; }
+
+  /* ─── Nav (matches case-study site-nav) ─── */
+  header.nav { display: flex; justify-content: space-between; align-items: center; padding: 8px 0 0; }
+  .wordmark { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 22px; letter-spacing: -0.01em; text-decoration: none; color: var(--ink); }
+  .wordmark .dot { color: var(--accent); display: inline; background: transparent; width: auto; height: auto; border-radius: 0; margin: 0; vertical-align: baseline; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 400; font-family: 'Geist', sans-serif; letter-spacing: 0; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--ink); font-weight: 500; }
+  .nav-links a.active::after { content: none; }
+
+  /* ─── Single light/dark toggle ─── */
+  .theme-toggle {
+    display: inline-grid; place-items: center;
+    width: 32px; height: 32px; border-radius: 999px;
+    margin-left: 4px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.15s;
+  }
+  .theme-toggle:hover { background: var(--line); transform: scale(1.05); }
+  .theme-toggle svg { width: 16px; height: 16px; }
+  .theme-toggle .icon-sun { display: none; }
+  .theme-toggle .icon-moon { display: block; }
+  body[data-theme="graphite"] .theme-toggle .icon-sun { display: block; }
+  body[data-theme="graphite"] .theme-toggle .icon-moon { display: none; }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ─── Hero ─── */
+  .hero { padding: 56px 0 48px; max-width: 880px; }
+  .hero .portrait { width: 88px; height: 88px; border-radius: 999px; object-fit: cover; object-position: center 22%; background: linear-gradient(135deg, #D7CEFB 0%, #B7A8F0 100%); margin-bottom: 26px; display: block; }
+  .hero h1 { font-family: 'Inter', sans-serif; font-weight: 700; font-size: clamp(44px, 5.6vw, 64px); line-height: 1.04; letter-spacing: -0.028em; margin: 0 0 22px; text-wrap: balance; }
+  .hero h1 .accent { color: var(--accent); }
+  .hero p.blurb { font-size: 16px; line-height: 1.55; color: var(--ink); margin: 0; max-width: 640px; }
+  .hero p.blurb .underline { background-image: linear-gradient(transparent 92%, var(--accent) 92%); padding-bottom: 1px; }
+
+  /* ─── Section header ─── */
+  .arc-header { display: flex; align-items: center; gap: 16px; margin: 96px 0 24px; }
+  .arc-header .label { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; color: var(--ink); white-space: nowrap; }
+  .arc-header .line { flex: 1; height: 1px; background: var(--ink); position: relative; }
+  .arc-header .line::after { content: ""; position: absolute; right: -1px; top: -4px; width: 0; height: 0; border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; border-left: 8px solid var(--ink); }
+
+  /* ─── Cards grid ─── */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .col-tall { grid-row: span 2; }
+
+  .card {
+    position: relative;
+    background: var(--lavender);
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--lavender-ink);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -20px rgba(45, 108, 223, 0.35); }
+  .card .meta { padding: 28px 28px 0; position: relative; z-index: 2; }
+  .card .eyebrow { font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .card .title { font-family: 'Inter', sans-serif; font-size: 30px; font-weight: 700; line-height: 1.08; letter-spacing: -0.022em; margin: 0; }
+  .card .sub { font-size: 14px; color: var(--lavender-ink); opacity: 0.7; margin: 6px 0 0; }
+  .card .arrow {
+    position: absolute; top: 24px; right: 24px;
+    width: 36px; height: 36px; border-radius: 999px; background: white;
+    display: grid; place-items: center; transition: transform 0.25s ease;
+    z-index: 3;
+    box-shadow: 0 2px 8px rgba(26, 37, 64, 0.08);
+  }
+  .card:hover .arrow { transform: translate(2px, -2px); }
+  .card .arrow svg { width: 14px; height: 14px; }
+
+  .card .crop {
+    flex: 1; min-height: 220px;
+    margin: 24px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 14px rgba(26, 37, 64, 0.08);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Tall left card, UX Audit (annotated wireframe, already works) */
+  .card-audit .crop { min-height: 380px; padding: 18px; }
+  .audit-stack { position: relative; height: 100%; }
+  .audit-frame {
+    background: white; border: 1px solid #D5DEEC; border-radius: 6px; padding: 12px;
+    position: absolute;
+  }
+  .audit-frame .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; background: #E8EEFA; font-size: 9.5px; font-weight: 600; color: var(--accent); }
+  .audit-frame .pill .ic { width: 10px; height: 10px; border-radius: 999px; background: #FFC857; }
+  .audit-frame .lines { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+  .audit-frame .lines i { display: block; height: 4px; border-radius: 2px; background: #ECE8F8; }
+  .audit-frame .lines i:nth-child(1) { width: 80%; }
+  .audit-frame .lines i:nth-child(2) { width: 60%; }
+  .audit-frame .lines i:nth-child(3) { width: 70%; }
+  .audit-frame .stars { display: flex; gap: 2px; margin-top: 10px; }
+  .audit-frame .stars span { width: 9px; height: 9px; border-radius: 2px; background: #FFC857; }
+  .audit-frame .stars span.off { background: #ECE8F8; }
+  .audit-frame.f1 { top: 8px; left: 0; width: 60%; }
+  .audit-frame.f2 { bottom: 12px; right: 0; width: 60%; }
+  .audit-thread { position: absolute; top: 96px; left: 52%; width: 2px; height: 70px; background: var(--accent); }
+  .audit-thread::before { content: ""; position: absolute; top: 0; left: -3px; width: 8px; height: 8px; border-radius: 999px; background: var(--accent); }
+  .audit-thread::after { content: ""; position: absolute; bottom: 0; left: -3px; width: 8px; height: 8px; border-radius: 999px; background: var(--accent); }
+
+  /* Writing Solutions, zoomed scoring tile */
+  .crop-writing { padding: 22px; background: #F4F7FC; }
+  .scoring-tile {
+    background: white; border: 1.5px solid var(--accent); border-radius: 10px; padding: 16px; position: relative;
+    box-shadow: 0 4px 16px rgba(45, 108, 223, 0.12);
+  }
+  .scoring-tile .radio { position: absolute; top: 16px; right: 16px; width: 18px; height: 18px; border-radius: 999px; border: 2px solid var(--accent); display: grid; place-items: center; }
+  .scoring-tile .radio::after { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--accent); }
+  .scoring-tile .icon { width: 28px; height: 28px; border-radius: 8px; background: #E6EEFA; display: grid; place-items: center; margin-bottom: 10px; color: var(--accent); font-weight: 700; }
+  .scoring-tile h4 { margin: 0 0 6px; font-size: 16px; font-weight: 700; color: #0E1A2E; letter-spacing: -0.01em; }
+  .scoring-tile .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 4px; background: #EAF6EF; color: #1E7A47; font-size: 10.5px; font-weight: 600; margin-bottom: 8px; }
+  .scoring-tile .badge::before { content: "✓"; font-size: 9px; }
+  .scoring-tile p { margin: 0; font-size: 12.5px; line-height: 1.5; color: #4A5468; }
+  .crop-writing .ghost {
+    position: absolute; right: -40px; bottom: -28px;
+    background: white; border: 1px solid #D5DEEC; border-radius: 8px; padding: 12px; width: 160px;
+    opacity: 0.55;
+    transform: rotate(2deg);
+  }
+  .crop-writing .ghost .h { height: 6px; width: 70%; background: #ECE8F8; border-radius: 2px; margin-bottom: 8px; }
+  .crop-writing .ghost .l { height: 4px; background: #ECE8F8; border-radius: 2px; margin-bottom: 4px; }
+  .crop-writing .ghost .l.s { width: 60%; }
+
+  /* Freehand Grader, pinned answer + question */
+  .crop-grader { padding: 0; background: #F8FBFE; display: grid; grid-template-columns: 1.4fr 1fr; gap: 0; }
+  .grader-left { padding: 18px; border-right: 1px dashed #D0DDEF; position: relative; }
+  .grader-left .label { font-size: 10.5px; font-weight: 600; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .grader-left .answer { background: white; border: 1px solid #D5DEEC; border-radius: 6px; padding: 14px; position: relative; min-height: 130px; }
+  .grader-left .answer svg { width: 100%; height: 100px; color: #1A2540; }
+  .grader-left .pin { position: absolute; top: 14px; right: 14px; width: 22px; height: 22px; border-radius: 999px; background: var(--accent); color: white; display: grid; place-items: center; font-size: 11px; font-weight: 700; box-shadow: 0 4px 10px rgba(45, 108, 223, 0.4); }
+  .grader-right { padding: 18px; background: white; }
+  .grader-right .label { font-size: 10.5px; font-weight: 600; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .grader-right h5 { margin: 0 0 8px; font-size: 14px; font-weight: 700; color: #0E1A2E; }
+  .grader-right p { margin: 0 0 10px; font-size: 11.5px; line-height: 1.5; color: #4A5468; }
+  .grader-right .feedback { background: #E8EEFA; border-left: 3px solid var(--accent); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: #1A2540; line-height: 1.45; }
+
+  /* ─── Focus Gym (separate, as user noted) ─── */
+  .separator { display: flex; align-items: center; gap: 16px; margin: 64px 0 24px; color: var(--muted); }
+  .separator .line { flex: 1; height: 1px; background: var(--line); }
+  .separator .label { font-size: 13px; font-weight: 500; }
+
+  .focus {
+    background: #0E0E10; color: #E8EEFA; border-radius: 18px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0; overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.25s ease;
+  }
+  .focus:hover { transform: translateY(-3px); }
+  .focus .left { padding: 36px 36px 40px; display: flex; flex-direction: column; justify-content: space-between; min-height: 280px; }
+  .focus .eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #7AA0F2; }
+  .focus h3 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 12px; }
+  .focus p { margin: 0 0 16px; font-size: 14px; line-height: 1.55; color: #B8C6DE; max-width: 360px; }
+  .focus .award { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border: 1px solid #1F2A45; border-radius: 999px; font-size: 12px; font-weight: 600; color: #E8EEFA; align-self: flex-start; }
+  .focus .award .star { width: 6px; height: 6px; border-radius: 999px; background: #FFC857; }
+  .focus .right { background: radial-gradient(circle at 50% 50%, #15244A 0%, #0A1426 60%, #0E0E10 100%); display: grid; place-items: center; position: relative; min-height: 280px; overflow: hidden; }
+  .ring { position: absolute; border-radius: 999px; border: 1px solid rgba(122, 160, 242, 0.25); }
+  .ring.r1 { width: 320px; height: 320px; }
+  .ring.r2 { width: 240px; height: 240px; }
+  .ring.r3 { width: 160px; height: 160px; }
+  .ring.r4 { width: 80px; height: 80px; border-color: rgba(122, 160, 242, 0.6); }
+  .ring-core { width: 14px; height: 14px; border-radius: 999px; background: #FFC857; box-shadow: 0 0 32px rgba(255, 200, 87, 0.7); position: relative; z-index: 2; }
+  .focus .stamp { position: absolute; top: 24px; right: 24px; font-size: 11px; font-family: ui-monospace, monospace; color: #7AA0F2; letter-spacing: 0.1em; }
+
+  /* ─── Critique callouts ─── */
+  .callout {
+    margin-top: 96px; padding: 32px;
+    background: #FFF8E8; border: 1px dashed #E8C97F; border-radius: 14px;
+  }
+  .callout h2 { margin: 0 0 18px; font-size: 18px; font-weight: 700; }
+  .callout ol { margin: 0; padding-left: 22px; }
+  .callout li { margin-bottom: 14px; font-size: 14px; line-height: 1.55; }
+  .callout li strong { display: block; margin-bottom: 4px; }
+  .callout code { background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+</style>
+</head>
+<body data-theme="blue">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('case-palette');
+      document.body.dataset.theme = (t === 'graphite' || t === 'blue') ? t : 'blue';
+    } catch(e) { document.body.dataset.theme = 'blue'; }
+  })();
+</script>
+<div class="page">
+
+  <!-- Site nav, canonical -->
+  <header class="nav">
+    <a class="wordmark" href="index.html">Esther Nam<span class="dot"> •</span></a>
+    <nav class="nav-links">
+      <a href="#" class="active">Work</a>
+      <a href="#">Resume</a>
+      <a href="#">Contact</a>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ─── Hero: avatar inline with name, real positioning in the H1 ─── -->
+  <section class="hero">
+    <img class="portrait" src="images/esther-portrait.png" alt="Esther Nam" />
+    <h1>I’m Esther, a product designer based in Boston.</h1>
+    <p class="blurb">
+      I care about the parts of design that don’t always show up on screen: how problems get framed, how decisions get made, and how things hold up once real people start using them.
+    </p>
+  </section>
+
+  <!-- ─── Audit → Redesign arc (keeping your framing) ─── -->
+  <div class="arc-header">
+    <span class="label">From audit</span>
+    <span class="line"></span>
+    <span class="label">redesign</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- UX Audit, tall left column (your "featured" headline of the arc) -->
+    <a href="UX Audit Case Study.html" class="card card-audit col-tall">
+      <div class="meta">
+        <div class="eyebrow">01 · Research foundation</div>
+        <h3 class="title">UX Audit</h3>
+        <p class="sub">Six weeks of heuristic review and stakeholder interviews, the substrate the next two projects were built on.</p>
+      </div>
+      <div class="arrow"><svg viewBox="0 0 16 16" fill="none" stroke="#0E0E10" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
+      <div class="crop">
+        <div class="audit-stack">
+          <div class="audit-frame f1">
+            <div class="pill"><span class="ic"></span>Navigation</div>
+            <div class="lines"><i></i><i></i><i></i></div>
+            <div class="stars"><span></span><span></span><span></span><span class="off"></span><span class="off"></span></div>
+          </div>
+          <div class="audit-thread"></div>
+          <div class="audit-frame f2">
+            <div class="pill"><span class="ic" style="background:#2D6CDF"></span>Visual Design</div>
+            <div class="lines"><i></i><i></i><i></i></div>
+            <div class="stars"><span></span><span></span><span></span><span></span><span class="off"></span></div>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Writing Solutions, cropped to ONE scoring tile -->
+    <a href="WSOL Case Study.html" class="card">
+      <div class="meta">
+        <div class="eyebrow">02 · Informed by the audit</div>
+        <h3 class="title">Writing Solutions</h3>
+        <p class="sub">Re-design of the assignment creation flow.</p>
+      </div>
+      <div class="arrow"><svg viewBox="0 0 16 16" fill="none" stroke="#0E0E10" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
+      <div class="crop crop-writing">
+        <div class="scoring-tile">
+          <div class="radio"></div>
+          <div class="icon">Σ</div>
+          <span class="badge">Recommended</span>
+          <h4>Evaluation-based scoring</h4>
+          <p>Each response is scored on rubric criteria the instructor sets, automatically, with manual override.</p>
+        </div>
+        <div class="ghost"><div class="h"></div><div class="l"></div><div class="l s"></div></div>
+      </div>
+    </a>
+
+    <!-- Freehand Grader, cropped to pinned answer + feedback -->
+    <a href="#" class="card">
+      <div class="meta">
+        <div class="eyebrow">03 · Informed by the audit</div>
+        <h3 class="title">Freehand Grader</h3>
+        <p class="sub">Re-design of the student experience.</p>
+      </div>
+      <div class="arrow"><svg viewBox="0 0 16 16" fill="none" stroke="#0E0E10" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
+      <div class="crop crop-grader">
+        <div class="grader-left">
+          <div class="label">Pinned answer</div>
+          <div class="answer">
+            <div class="pin">4</div>
+            <svg viewBox="0 0 200 100" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10 70 Q 40 30 70 55 T 130 50 T 190 38" />
+              <path d="M14 88 L 24 78 L 34 84 L 44 72" stroke-width="1.5" opacity="0.5" />
+              <text x="60" y="22" font-size="10" font-family="ui-monospace, monospace" fill="#1A2540" stroke="none">2x + 5y = 14</text>
+            </svg>
+          </div>
+        </div>
+        <div class="grader-right">
+          <div class="label">Question 4</div>
+          <h5>Solve for y.</h5>
+          <p>Show your work for full credit.</p>
+          <div class="feedback">Nice setup. Check your sign on line 2, the 5y term flipped.</div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- ─── Focus Gym, separated as you intended ─── -->
+  <div class="separator">
+    <span class="line"></span>
+    <span class="label">Side project · AI-first hackathon</span>
+    <span class="line"></span>
+  </div>
+
+  <a href="#" class="focus">
+    <div class="left">
+      <div>
+        <div class="eyebrow">48-hour hackathon · 2025</div>
+        <h3>Focus Gym</h3>
+        <p>A coaching surface that helps you turn vague intentions into a real session, without the productivity-app dread.</p>
+      </div>
+      <div class="award">
+        <span class="star"></span>
+        AWARD · Best Solution for User Impact
+      </div>
+    </div>
+    <div class="right">
+      <div class="stamp">SESSION · 00:24:00</div>
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="ring r4"></div>
+      <div class="ring-core"></div>
+    </div>
+  </a>
+
+  <!-- annotated callout removed -->
+  <aside class="callout" hidden>
+    <h2>What changed in this v2, annotated</h2>
+    <ol>
+      <li>
+        <strong>Hero (point 1)</strong>
+        Avatar is now ~56px, sitting <em>inline</em> with your name as a who-am-I row. The H1 carries positioning (<code>"AI-assisted tools for education"</code>), that's the recruiter's 4-second answer to "what kind of designer." Your blurb sits under, smaller, where it belongs.
+      </li>
+      <li>
+        <strong>Audit → redesign framing (points 2–4)</strong>
+        You're right, I retract the "lying about structure" critique. The arrow holds. To <em>reinforce</em> the arc instead of weakening it, the eyebrow on cards 02 + 03 now reads <code>"Informed by the audit"</code> so the connection is explicit, and the UX Audit card stays tall as the headline of the trio. Focus Gym is then separated by a <em>real</em> divider (<code>"Side project · AI-first hackathon"</code>), visually distinct, doesn't feel exiled.
+      </li>
+      <li>
+        <strong>"Do I need a positioning H1?" (point 5)</strong>
+        Honest answer: not strictly required, but it'd help. The hero you have today says only <em>where</em> you are ("Boston") and <em>that</em> you care about non-screen things, but it doesn't say <em>what you actually do</em>. A recruiter scanning your page in 4 seconds before context-switching wants to know if you're an AI designer, a research-leaning designer, an enterprise UX person, etc. Adding it costs you a line of copy and earns you better signal. Keep it short, what you see here is one option.
+      </li>
+      <li>
+        <strong>Card-as-window crops (the main ask)</strong>
+        Cards 02 and 03 no longer show "title above, tiny screenshot below." Instead the cropped artwork <em>is</em> the card body, title sits in a meta strip at the top, image fills the rest. Crops are tight enough you can read one decision per card: a single scoring tile for Writing Solutions, one pinned answer + question + AI feedback for Freehand Grader. No abstract shapes needed, these are real UI fragments at readable scale.
+      </li>
+      <li>
+        <strong>Wordmark (point 6)</strong>
+        Top-left is now just <code>"Esther Nam •"</code>, confident, no role label crammed underneath. The "product designer / Boston" line lives in the hero where it has room to breathe.
+      </li>
+      <li>
+        <strong>Award badge</strong>
+        Trophy emoji is gone. Replaced with a typeset pill that reads <code>"AWARD · Best Solution for User Impact"</code>, same information, more grown-up.
+      </li>
+    </ol>
+  </aside>
+
+</div>
+<script>
+  (function () {
+    const body = document.body;
+    const btn = document.querySelector('.theme-toggle');
+    function set(theme) {
+      body.dataset.theme = theme;
+      try { localStorage.setItem('case-palette', theme); } catch (e) {}
+    }
+    btn.addEventListener('click', () => {
+      set(body.dataset.theme === 'graphite' ? 'blue' : 'graphite');
+    });
+    // Head script already applied the saved theme; nothing else to do here.
+  })();
+</script>
+</body>
+</html>

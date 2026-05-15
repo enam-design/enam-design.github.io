@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UX Audit · Esther Nam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+  body {
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 16px; line-height: 1.6;
+    background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* ─────────── Palette systems ─────────── */
+  body[data-theme="blue"] {
+    --bg: #FAFAFA;
+    --ink: #0E0E10;
+    --muted: #6B6B72;
+    --line: #E0E6F0;
+    --line-soft: #EDF1F7;
+    --accent: #2D6CDF;
+    --accent-deep: #1A4FAB;
+    --accent-soft: #EBF1FB;
+    --card-bg: #DDE7F7;
+    --card-bg-soft: #EEF3FB;
+    --card-ink: #1A2540;
+    --card-line: #C8D6EE;
+    --pill-bg: #FFFFFF;
+    --hero-tint: #F4F7FC;
+    --highlight: #FFE9A8;
+    --shadow: 0 1px 0 rgba(0,0,0,0.04), 0 12px 30px rgba(20, 40, 90, 0.06);
+  }
+  body[data-theme="graphite"] {
+    --bg: #14141A;
+    --ink: #F0F0F2;
+    --muted: #8D8D95;
+    --line: #2A2A33;
+    --line-soft: #1E1E26;
+    --accent: #B4A7F5;
+    --accent-deep: #D6CEFA;
+    --accent-soft: #1F1B36;
+    --card-bg: #F8F8FA;
+    --card-bg-soft: #1E1E26;
+    --card-ink: #0E0E10;
+    --card-line: #E0E0E5;
+    --pill-bg: #1E1E26;
+    --hero-tint: #1A1A22;
+    --highlight: #5B4F7F;
+    --shadow: 0 1px 0 rgba(255,255,255,0.04), 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ─────────── Single light/dark toggle (nav-embedded) ─────────── */
+  .theme-toggle {
+    display: inline-grid; place-items: center;
+    width: 32px; height: 32px; border-radius: 999px;
+    margin-left: 20px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.15s;
+  }
+  .theme-toggle:hover { background: var(--line); transform: scale(1.05); }
+  .theme-toggle svg { width: 16px; height: 16px; }
+  .theme-toggle .icon-sun { display: none; }
+  .theme-toggle .icon-moon { display: block; }
+  body[data-theme="graphite"] .theme-toggle .icon-sun { display: block; }
+  body[data-theme="graphite"] .theme-toggle .icon-moon { display: none; }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Legacy palette bar (hidden, kept to avoid CSS churn) */
+  .palette-bar {
+    display: none;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    transition: background-color 0.25s, border-color 0.25s;
+  }
+  .palette-bar-inner {
+    max-width: 1080px; margin: 0 auto;
+    padding: 12px 32px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .bar-label {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bar-label b { color: var(--ink); font-weight: 500; }
+  .bar-toggle {
+    display: inline-flex; gap: 0;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 3px; background: var(--bg);
+  }
+  .bar-toggle button {
+    font-family: inherit; font-size: 12px; font-weight: 500;
+    padding: 7px 14px; border: 0; border-radius: 999px;
+    background: transparent; color: var(--muted); cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .bar-toggle button.active {
+    background: var(--ink); color: var(--bg);
+  }
+
+  /* ─────────── Site nav ─────────── */
+  .site-nav {
+    max-width: 1080px; margin: 0 auto;
+    padding: 32px 32px 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .wordmark {
+    font-family: "Inter", sans-serif;
+    font-size: 22px; color: var(--ink); text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .wordmark .dot { color: var(--accent); }
+  .site-nav nav { display: flex; gap: 28px; }
+  .site-nav nav a {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .site-nav nav a:hover { color: var(--ink); }
+  .site-nav nav a.current { color: var(--ink); font-weight: 500; }
+
+  .back-link {
+    max-width: 1080px; margin: 0 auto;
+    padding: 32px 32px 0;
+    display: block; font-size: 13px; color: var(--muted);
+    text-decoration: none; font-family: "Geist Mono", monospace;
+    letter-spacing: 0.04em;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  /* ─────────── Case study layout ─────────── */
+  .case-study {
+    max-width: 1080px; margin: 0 auto;
+    padding: 0 32px 120px;
+  }
+  .meta-strip {
+    margin-top: 56px;
+    display: flex; align-items: center; gap: 12px;
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-strip .tag {
+    color: var(--accent); font-weight: 500;
+  }
+  .meta-strip .sep { opacity: 0.4; }
+
+  .case-title {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin-top: 24px;
+    max-width: 18ch;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .case-title em { font-style: italic; color: var(--accent); }
+
+  .case-deck {
+    margin-top: 28px;
+    max-width: 62ch;
+    font-size: 18px; line-height: 1.55;
+    color: var(--muted);
+  }
+
+  /* Hero meta grid */
+  .hero-meta {
+    margin-top: 56px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .meta-cell {
+    padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    border-right: 1px solid var(--line);
+  }
+  .meta-cell:first-child { padding-left: 0; }
+  .meta-cell:last-child { border-right: 0; padding-right: 0; }
+  .meta-cell .k {
+    font-family: "Geist Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-cell .v {
+    font-size: 15px; color: var(--ink); font-weight: 500;
+    line-height: 1.35;
+  }
+
+  /* Jump nav */
+  .jump {
+    margin-top: 40px;
+    display: flex; flex-wrap: wrap; gap: 8px 4px;
+    align-items: center;
+  }
+  .jump-label {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-right: 12px;
+  }
+  .jump a {
+    font-size: 13px; color: var(--ink); text-decoration: none;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    background: var(--pill-bg);
+  }
+  .jump a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ─────────── Sections ─────────── */
+  section {
+    margin-top: 96px;
+    scroll-margin-top: 100px;
+  }
+  .section-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .section-eyebrow {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+    flex-shrink: 0;
+  }
+  .section-eyebrow .num {
+    color: var(--muted);
+    margin-right: 8px;
+  }
+  h2.section-title {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  h2.section-title em { font-style: italic; color: var(--accent); }
+
+  .prose {
+    max-width: 65ch;
+    font-size: 16.5px; line-height: 1.65;
+    color: var(--ink);
+  }
+  .prose p + p { margin-top: 18px; }
+  .prose .muted { color: var(--muted); }
+  .prose strong { font-weight: 600; color: var(--ink); }
+
+  /* Impact list */
+  .impact-list {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .impact-list li {
+    list-style: none;
+    padding: 28px 32px 28px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex; gap: 24px; align-items: flex-start;
+  }
+  .impact-list li:nth-child(odd) {
+    padding-right: 32px;
+    border-right: 1px solid var(--line);
+  }
+  .impact-list li:nth-child(even) {
+    padding-left: 32px;
+  }
+  .impact-list .imp-num {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 500;
+    padding-top: 4px;
+    flex-shrink: 0; min-width: 24px;
+  }
+  .impact-list .imp-body { flex: 1; }
+  .impact-list h4 {
+    font-size: 15.5px; font-weight: 600; color: var(--ink);
+    margin-bottom: 6px; line-height: 1.4;
+  }
+  .impact-list p {
+    font-size: 14.5px; color: var(--muted); line-height: 1.55;
+  }
+
+  /* Figure (image placeholder) */
+  figure {
+    margin-top: 40px;
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 32px;
+    color: var(--card-ink);
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  figure .fig-corner {
+    position: absolute; top: 16px; right: 20px;
+    font-family: "Geist Mono", monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--card-ink); opacity: 0.45;
+  }
+  figcaption {
+    margin-top: 16px;
+    font-family: "Geist Mono", monospace;
+    font-size: 11.5px; letter-spacing: 0.04em;
+    color: var(--muted);
+    padding-left: 16px;
+    border-left: 2px solid var(--accent);
+  }
+
+  /* Soft figure variant (less heavy) */
+  figure.soft {
+    background: var(--card-bg-soft);
+    box-shadow: none;
+    border: 1px solid var(--card-line);
+  }
+  body[data-theme="graphite"] figure.soft {
+    border-color: var(--line);
+    color: var(--ink);
+  }
+
+  /* ─────────── Pendo bar chart figure ─────────── */
+  .pendo {
+    background: white;
+    border-radius: 10px;
+    padding: 24px 28px;
+    color: #0E0E10;
+  }
+  .pendo .hd {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px solid #E0E6F0;
+    padding-bottom: 10px; margin-bottom: 18px;
+  }
+  .pendo .hd-l { font-size: 13px; font-weight: 600; color: #0E0E10; }
+  .pendo .hd-r { font-family: "Geist Mono", monospace; font-size: 10.5px; color: #6B6B72; letter-spacing: 0.05em; }
+  .pendo .chart {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 8px 16px;
+    align-items: center;
+  }
+  .pendo .row-label { font-size: 12px; color: #4A5468; }
+  .pendo .bar-track {
+    height: 18px; background: #F4F7FC; border-radius: 4px; position: relative;
+  }
+  .pendo .bar-fill {
+    height: 100%; background: var(--accent); border-radius: 4px;
+    display: flex; align-items: center; justify-content: flex-end;
+    padding: 0 8px; color: white; font-size: 10.5px; font-weight: 600;
+    font-family: "Geist Mono", monospace;
+  }
+  .pendo .bar-fill.drop { background: #E0E6F0; color: #6B6B72; }
+  body[data-theme="graphite"] .pendo .bar-fill { background: #5B4BA8; }
+  .pendo .annot {
+    margin-top: 18px;
+    display: flex; gap: 14px;
+    padding: 14px; background: #F4F7FC; border-radius: 6px;
+    font-size: 12.5px; color: #4A5468; line-height: 1.5;
+  }
+  .pendo .annot .annot-pin {
+    width: 6px; height: 6px; border-radius: 999px; background: var(--accent);
+    flex-shrink: 0; margin-top: 6px;
+  }
+
+  /* ─────────── Teardown figure ─────────── */
+  .teardown {
+    background: white; border-radius: 10px;
+    padding: 28px; color: #0E0E10;
+    position: relative;
+  }
+  .teardown .frame {
+    border: 1px solid #E0E6F0; border-radius: 6px;
+    padding: 14px 16px;
+    position: relative;
+  }
+  .teardown .frame .browser-bar {
+    display: flex; gap: 5px; margin-bottom: 12px;
+  }
+  .teardown .frame .browser-bar i {
+    width: 7px; height: 7px; border-radius: 999px; background: #E0E6F0;
+  }
+  .teardown .frame .stack { display: flex; flex-direction: column; gap: 6px; }
+  .teardown .frame .h1 { height: 14px; background: #E0E6F0; border-radius: 3px; width: 60%; }
+  .teardown .frame .h2 { height: 10px; background: #F4F7FC; border-radius: 3px; width: 40%; }
+  .teardown .frame .row {
+    height: 24px; background: #F4F7FC; border-radius: 4px;
+    border-left: 3px solid var(--accent);
+  }
+  .teardown .frame .row.crit { border-left-color: #E07854; background: #FCEFEB; }
+  .teardown .annotation {
+    position: absolute;
+    font-family: "Geist Mono", monospace;
+    font-size: 10.5px; color: var(--accent); font-weight: 500;
+    letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .teardown .annotation .dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: var(--accent); flex-shrink: 0;
+  }
+  .teardown .annotation .line {
+    width: 24px; height: 1px; background: var(--accent);
+  }
+  .teardown-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-top: 20px;
+  }
+  .teardown-col h6 {
+    font-family: "Geist Mono", monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #6B6B72; margin-bottom: 10px;
+  }
+  .teardown-col .note {
+    font-size: 12.5px; line-height: 1.5; color: #4A5468;
+    padding-left: 12px; border-left: 2px solid var(--accent);
+    margin-bottom: 8px;
+  }
+  .teardown-col .note .label {
+    font-family: "Geist Mono", monospace;
+    font-size: 10px; color: var(--accent); font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; display: block; margin-bottom: 2px;
+  }
+
+  /* ─────────── Method list ─────────── */
+  .method-grid {
+    margin-top: 36px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .method-grid > div {
+    padding: 24px 32px 24px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .method-grid > div:nth-child(odd) { border-right: 1px solid var(--line); }
+  .method-grid > div:nth-child(even) { padding-left: 32px; }
+  .method-grid .m-num {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em;
+    color: var(--accent); margin-bottom: 8px; font-weight: 500;
+  }
+  .method-grid h4 {
+    font-size: 15.5px; font-weight: 600; margin-bottom: 6px; color: var(--ink);
+  }
+  .method-grid p {
+    font-size: 14px; color: var(--muted); line-height: 1.55;
+  }
+
+  /* ─────────── Insight cards ─────────── */
+  .insight {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .insight:last-of-type { border-bottom: 0; padding-bottom: 0; }
+  .insight .ins-num {
+    font-family: "Inter", sans-serif;
+    font-size: 56px; line-height: 1;
+    color: var(--accent);
+    font-style: italic;
+  }
+  .insight .ins-body { max-width: 65ch; }
+  .insight h3 {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 28px; line-height: 1.2;
+    color: var(--ink); margin-bottom: 16px;
+    letter-spacing: -0.005em;
+  }
+  .insight h3 em { font-style: italic; color: var(--accent); }
+  .insight p {
+    font-size: 16px; line-height: 1.65; color: var(--ink);
+  }
+  .insight p + p { margin-top: 14px; }
+  /* Real image figure */
+  figure.real {
+    background: transparent;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--card-line);
+    box-shadow: var(--shadow);
+  }
+  body[data-theme="graphite"] figure.real { border-color: var(--line); }
+  figure.real img { display: block; width: 100%; height: auto; }
+  figure.real + figcaption,
+  figure.real .cap-wrap {
+    padding: 14px 20px;
+    background: var(--card-bg-soft);
+    border-top: 1px solid var(--card-line);
+    margin: 0;
+  }
+  body[data-theme="graphite"] figure.real .cap-wrap { border-color: var(--line); }
+  figure.real figcaption {
+    margin: 0; padding: 14px 20px;
+    background: var(--card-bg-soft);
+    border-top: 1px solid var(--card-line);
+    border-left: 0;
+    color: var(--muted);
+  }
+  body[data-theme="graphite"] figure.real figcaption { border-color: var(--line); background: var(--card-bg-soft); }
+
+  /* Two-up scope grid */
+  .scope-grid {
+    margin-top: 24px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .scope-grid figure.real { margin: 0; }
+  @media (max-width: 760px) {
+    .scope-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Placeholder figure, for real assets you'll add later */
+  figure.placeholder {
+    background: var(--card-bg-soft);
+    border: 1.5px dashed var(--card-line);
+    box-shadow: none;
+    padding: 0;
+  }
+  body[data-theme="graphite"] figure.placeholder {
+    border-color: var(--line);
+    background: var(--card-bg-soft);
+    color: var(--ink);
+  }
+  figure.placeholder .placeholder-inner {
+    padding: 64px 48px;
+    text-align: center;
+  }
+  figure.placeholder .ph-tag {
+    display: inline-block;
+    font-family: "Geist Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft);
+    margin-bottom: 18px;
+  }
+  figure.placeholder .ph-headline {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 22px; line-height: 1.3;
+    color: var(--card-ink);
+    max-width: 32ch;
+    margin: 0 auto 10px;
+    letter-spacing: -0.005em;
+  }
+  body[data-theme="graphite"] figure.placeholder .ph-headline { color: var(--ink); }
+  figure.placeholder .ph-note {
+    font-size: 13.5px; line-height: 1.55;
+    color: var(--muted);
+    max-width: 50ch;
+    margin: 0 auto;
+  }
+  figure.placeholder + figcaption,
+  figure.placeholder figcaption { display: none; }
+  figure.placeholder ~ figcaption { display: none; }
+
+  /* Glossary block (replaces speculative diagrams) */
+  .glossary {
+    margin-top: 24px;
+    padding: 28px 32px;
+    border-radius: 12px;
+    background: var(--card-bg-soft);
+    border: 1px solid var(--card-line);
+    color: var(--card-ink);
+  }
+  body[data-theme="graphite"] .glossary {
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .glossary .gloss-label {
+    display: block;
+    font-family: "Geist Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .glossary dl {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 14px 24px;
+    align-items: baseline;
+  }
+  .glossary dt {
+    font-family: "Geist Mono", monospace;
+    font-size: 13px; font-weight: 600;
+    color: var(--card-ink);
+  }
+  body[data-theme="graphite"] .glossary dt { color: var(--ink); }
+  .glossary dd {
+    font-size: 14.5px; line-height: 1.55;
+    color: var(--card-ink); opacity: 0.78;
+  }
+  body[data-theme="graphite"] .glossary dd { color: var(--ink); opacity: 0.78; }
+
+  .insight .ins-pill {
+    display: inline-block;
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft);
+    margin-bottom: 14px;
+  }
+
+  /* OV/XL/LASS diagram */
+  .layers {
+    margin-top: 24px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 28px;
+    color: var(--card-ink);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .layers .stack {
+    position: relative;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .layers .layer {
+    border: 1.5px solid var(--card-ink);
+    background: white;
+    padding: 14px 16px;
+    font-family: "Geist Mono", monospace;
+    font-size: 11.5px; letter-spacing: 0.04em;
+    color: var(--card-ink);
+    font-weight: 600;
+    position: relative;
+  }
+  .layers .layer.ov { border-radius: 8px 8px 0 0; }
+  .layers .layer.xl { background: rgba(255,255,255,0.6); }
+  .layers .layer.lass {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    border-radius: 0 0 8px 8px;
+  }
+  body[data-theme="graphite"] .layers .layer.lass { color: #14141A; }
+  .layers .layer-desc {
+    font-family: "Geist", sans-serif;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--card-ink);
+    opacity: 0.7;
+    margin-top: 3px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .layers .layer.lass .layer-desc { color: white; opacity: 0.85; }
+  body[data-theme="graphite"] .layers .layer.lass .layer-desc { color: #14141A; opacity: 0.75; }
+  .layers .legend h5 {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--card-ink); opacity: 0.65; margin-bottom: 14px;
+  }
+  .layers .legend dl { display: grid; gap: 14px; }
+  .layers .legend dt {
+    font-family: "Geist Mono", monospace;
+    font-size: 12px; font-weight: 600; color: var(--card-ink);
+    margin-bottom: 2px;
+  }
+  .layers .legend dd {
+    font-size: 12.5px; line-height: 1.5;
+    color: var(--card-ink); opacity: 0.75;
+  }
+
+  /* AI fork diagram */
+  .fork-diagram {
+    margin-top: 24px;
+    background: var(--card-bg-soft);
+    border: 1px solid var(--card-line);
+    border-radius: 12px;
+    padding: 32px;
+    color: var(--card-ink);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  body[data-theme="graphite"] .fork-diagram {
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .fork-col h6 {
+    font-family: "Geist Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .fork-col h6.before { color: #C46A40; }
+  .fork-col h6.after { color: var(--accent); }
+  .fork-col .nodes { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .fork-col .node {
+    font-family: "Geist Mono", monospace;
+    font-size: 11.5px; font-weight: 500;
+    padding: 10px 14px; border-radius: 6px;
+    border: 1px solid var(--card-line);
+    background: var(--card-bg);
+    color: var(--card-ink);
+  }
+  body[data-theme="graphite"] .fork-col .node {
+    background: var(--card-bg-soft);
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .fork-col .node.start { background: var(--card-ink); color: var(--card-bg); border-color: var(--card-ink); }
+  body[data-theme="graphite"] .fork-col .node.start { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .fork-col .node.bad { border-color: #C46A40; color: #C46A40; }
+  .fork-col .node.good { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  body[data-theme="graphite"] .fork-col .node.good { color: var(--accent-deep); }
+  .fork-col .arrow {
+    color: var(--muted); font-size: 14px; margin-left: 16px;
+    font-family: "Geist Mono", monospace;
+  }
+
+  /* ─────────── Recommendations ─────────── */
+  .recs-grid {
+    margin-top: 8px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .recs-col h4 {
+    font-family: "Inter", sans-serif;
+    font-weight: 400; font-style: italic;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .recs-col .rec-tag {
+    font-family: "Geist Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px; display: block;
+  }
+  .recs-col ul { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+  .recs-col li {
+    display: grid; grid-template-columns: 28px 1fr; gap: 12px;
+    align-items: baseline;
+  }
+  .recs-col li .num {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; color: var(--muted); font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+  .recs-col li p {
+    font-size: 14.5px; line-height: 1.55; color: var(--ink);
+  }
+  .recs-col li p b { font-weight: 600; }
+
+  /* ─────────── Next steps ─────────── */
+  .next-grid {
+    margin-top: 24px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .next-card {
+    display: block;
+    padding: 32px;
+    background: var(--card-bg);
+    border-radius: 14px;
+    text-decoration: none; color: var(--card-ink);
+    transition: transform 0.2s;
+    position: relative;
+    overflow: hidden;
+    min-height: 220px;
+  }
+  .next-card:hover { transform: translateY(-3px); }
+  .next-card .nc-eyebrow {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--card-ink); opacity: 0.6;
+  }
+  .next-card h3 {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 26px; line-height: 1.2;
+    margin-top: 12px; margin-bottom: 12px;
+    color: var(--card-ink);
+    letter-spacing: -0.005em;
+    max-width: 18ch;
+  }
+  .next-card p {
+    font-size: 14px; line-height: 1.5;
+    color: var(--card-ink); opacity: 0.7;
+    max-width: 32ch;
+  }
+  .next-card .nc-arrow {
+    position: absolute; bottom: 28px; right: 32px;
+    width: 32px; height: 32px;
+    border-radius: 999px;
+    background: var(--card-ink); color: var(--card-bg);
+    display: grid; place-items: center;
+    transition: transform 0.2s;
+  }
+  body[data-theme="graphite"] .next-card .nc-arrow { background: var(--accent); color: var(--card-ink); }
+  .next-card:hover .nc-arrow { transform: rotate(-45deg) translateX(3px); }
+
+  /* Pull quote */
+  .pullquote {
+    margin: 56px 0;
+    max-width: 24ch;
+    font-family: "Inter", sans-serif;
+    font-weight: 400; font-style: italic;
+    font-size: 36px; line-height: 1.2;
+    color: var(--accent);
+    letter-spacing: -0.005em;
+    padding-left: 32px;
+    border-left: 3px solid var(--accent);
+    text-wrap: balance;
+  }
+
+  /* Footer */
+  footer {
+    max-width: 1080px; margin: 0 auto;
+    padding: 48px 32px 80px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer .f-r { display: flex; gap: 20px; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* Small responsiveness */
+  @media (max-width: 760px) {
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .meta-cell:nth-child(2) { border-right: 0; }
+    .impact-list { grid-template-columns: 1fr; }
+    .impact-list li:nth-child(odd) { border-right: 0; padding-right: 0; }
+    .impact-list li:nth-child(even) { padding-left: 0; }
+    .method-grid { grid-template-columns: 1fr; }
+    .method-grid > div:nth-child(odd) { border-right: 0; }
+    .method-grid > div:nth-child(even) { padding-left: 0; }
+    .insight { grid-template-columns: 1fr; gap: 12px; }
+    .insight .ins-num { font-size: 40px; }
+    .recs-grid, .next-grid, .layers, .fork-diagram { grid-template-columns: 1fr; gap: 24px; }
+  }
+</style>
+</head>
+<body data-theme="blue">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('case-palette');
+      document.body.dataset.theme = (t === 'graphite' || t === 'blue') ? t : 'blue';
+    } catch(e) { document.body.dataset.theme = 'blue'; }
+  })();
+</script>
+
+  <!-- Site nav -->
+  <header class="site-nav">
+    <a class="wordmark" href="index.html">Esther Nam<span class="dot"> •</span></a>
+    <nav>
+      <a href="index.html" class="current">Work</a>
+      <a href="#">Resume</a>
+      <a href="#">Contact</a>
+      <div class="theme-toggle-wrap">
+        <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <a href="index.html" class="back-link">← BACK TO WORK</a>
+
+  <main class="case-study">
+
+    <!-- ── Hero ── -->
+    <div class="meta-strip">
+      <span class="tag">UX AUDIT</span>
+      <span class="sep">/</span>
+      <span>Pearson Higher Ed · "Generate" portfolio</span>
+      <span class="sep">/</span>
+      <span>March 2026</span>
+    </div>
+
+    <h1 class="case-title">Mapping the friction points across Pearson's <em>AI grading workflows</em>.</h1>
+
+    <p class="case-deck">A cross-product UX audit of assignment creation and grading flows across two products in Pearson's Higher Ed "Generate" portfolio, used as the connective tissue between research, product, engineering, and design.</p>
+
+    <div class="hero-meta">
+      <div class="meta-cell">
+        <span class="k">Role</span>
+        <span class="v">Lead designer</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Timeline</span>
+        <span class="v">March 2026</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Scope</span>
+        <span class="v">2 products · instructor + student flows</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Outcome</span>
+        <span class="v">Informed 2 v1 redesigns + ongoing roadmap</span>
+      </div>
+    </div>
+
+    <nav class="jump">
+      <span class="jump-label">Jump to</span>
+      <a href="#impact">Impact</a>
+      <a href="#overview">Overview</a>
+      <a href="#method">Method</a>
+      <a href="#insights">Key Insights</a>
+      <a href="#recs">Recommendations</a>
+      <a href="#next">Next steps</a>
+    </nav>
+
+    <!-- ── Impact (lifted to top) ── -->
+    <section id="impact">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">01</span>Impact</span>
+      </div>
+      <h2 class="section-title">The audit became <em>connective tissue</em> across product, engineering, and design.</h2>
+
+      <ul class="impact-list" style="margin-top: 48px;">
+        <li>
+          <span class="imp-num">01</span>
+          <div class="imp-body">
+            <h4>Drove two first-pass redesigns</h4>
+            <p>Every short-term recommendation, persistent wayfinding, in-context guidance, progress indicators, visual consistency, translated into concrete design changes in the v1 redesigns of Writing Solutions and Freehand Grader.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">02</span>
+          <div class="imp-body">
+            <h4>Aligned cross-functional diagnosis</h4>
+            <p>Named the root cause (information architecture shaped by tool constraints, not the task at hand) and tied it to business risk, adoption, support burden, trust, and revenue, giving the squad shared language for prioritization.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">03</span>
+          <div class="imp-body">
+            <h4>Anchored roadmap planning</h4>
+            <p>Long-term recommendations continue to be referenced as the squad scopes future quarters and weighs feature priorities against structural debt.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">04</span>
+          <div class="imp-body">
+            <h4>Surfaced an unconsidered mobile opportunity</h4>
+            <p>Opened a strategic conversation about reaching the 82–85% of Pearson users who enter through an LMS, a path the team hadn't previously prioritized.</p>
+          </div>
+        </li>
+      </ul>
+
+      <p class="prose" style="margin-top: 32px;"><strong>Presented to cross-functional leadership</strong> across product, engineering, and design in March 2026; findings continue to be referenced in roadmap planning.</p>
+    </section>
+
+    <!-- ── Overview ── -->
+    <section id="overview">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">02</span>Overview</span>
+      </div>
+      <h2 class="section-title">What "Generate" promises, <em>and why it wasn't landing</em>.</h2>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p><strong>Generate</strong> is a suite of digital tools for assigning and grading authentic assessments in higher education. Authentic assessments are valued for real-world relevance but time-intensive to set up and grade, so Generate's value prop is <strong>leveraging AI to save instructor time</strong> and enable authentic assessments at scale.</p>
+        <p>I audited two tools in the suite: <strong>Writing Solutions</strong> (for writing submissions) and <strong>Freehand Grader</strong> (for handwritten, uploaded solutions, usually STEM-related). Both share a mission to save instructors time while preserving pedagogical rigor and instructor judgment.</p>
+        <p class="muted">Despite impressive features, instructors were hesitating, abandoning flows, or taking longer than expected on core tasks. This friction directly undermines the time-savings value prop. I approached the audit as a strategic diagnostic of how product structure, system constraints, and legacy UI decisions were eroding instructor trust and efficiency.</p>
+      </div>
+
+      <figure class="real">
+        <img src="images/audit-pendo-usage.png" alt="Pendo dashboard data showing instructors initiate assignment creation at much higher levels than completing the process, and start the pinning process but don't finish." />
+        <figcaption>Audit slide: Usage data from Pendo dashboards.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ── Method ── -->
+    <section id="method">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">03</span>Method</span>
+      </div>
+      <h2 class="section-title">A strategic diagnostic, <em>not a heuristic checklist</em>.</h2>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>I grounded the review in four lenses, prioritizing the instructor experience given its greater complexity and business impact.</p>
+      </div>
+
+      <div class="method-grid">
+        <div>
+          <div class="m-num">01</div>
+          <h4>Jobs-to-be-done analysis</h4>
+          <p>Mapped instructor and student JTBDs at a high level. Surfaced the gap between what the product was structured to deliver and what users actually showed up to accomplish.</p>
+        </div>
+        <div>
+          <div class="m-num">02</div>
+          <h4>Information architecture &amp; hierarchy</h4>
+          <p>Audited screen-level IA across Writing Solutions and Freehand Grader. Identified competing systems and redundant containers driven by backend service boundaries.</p>
+        </div>
+        <div>
+          <div class="m-num">03</div>
+          <h4>Wayfinding, state, decision confidence</h4>
+          <p>Traced multi-step flows for moments where progress, completion, and reversibility broke down, especially at AI-related decision points.</p>
+        </div>
+        <div>
+          <div class="m-num">04</div>
+          <h4>Funnel &amp; abandonment data</h4>
+          <p>Cross-referenced UX findings with Pendo dashboards to confirm hypotheses about where users dropped off and why qualitative friction matched quantitative attrition.</p>
+        </div>
+      </div>
+
+      <figure class="real" style="margin-top: 40px;">
+        <img src="images/audit-teardown-zoom.png" alt="Annotated teardown of the assignment creation flow, with issues called out across navigation, visual design, and help &amp; documentation." />
+        <figcaption>UX teardown of core instructor &amp; student workflows, annotated issues across navigation, visual design, and help &amp; documentation.</figcaption>
+      </figure>
+
+      <div class="scope-grid">
+        <figure class="real">
+          <img src="images/audit-wsol-teardown.png" alt="Full Writing Solutions teardown, every screen across instructor and student flows reviewed." />
+          <figcaption>Writing Solutions, full instructor &amp; student flows reviewed.</figcaption>
+        </figure>
+        <figure class="real">
+          <img src="images/audit-fg-teardown.png" alt="Full Freehand Grader teardown, every screen across instructor and student flows reviewed." />
+          <figcaption>Freehand Grader, full instructor &amp; student flows reviewed.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── Key Insights ── -->
+    <section id="insights">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">04</span>Key Insights</span>
+      </div>
+      <h2 class="section-title">Four patterns explained <em>most of the friction</em>.</h2>
+
+      <article class="insight">
+        <div class="ins-num">01</div>
+        <div class="ins-body">
+          <span class="ins-pill">Information architecture</span>
+          <h3>The experience is organized around <em>tools</em>, not <em>tasks</em>.</h3>
+          <p>Different backend services each assert themselves visually, producing competing headers, redundant containers, and fragmented attention. Instructors don't think in terms of products or systems; they think <em>"I need to create an assignment"</em> or <em>"I need to finish grading"</em>. The experience often failed to support that mental model.</p>
+
+          <figure class="real" style="margin-top: 24px;">
+            <img src="images/audit-systems-diagram.png" alt="Critical Finding #1: IA & Hierarchy, Freehand Grader screens annotated with XL/OV, FG, and LASS system boundaries, showing consequences of cross dependencies: poor hierarchy, redundancy, and scroll traps." />
+            <figcaption>Critical Finding #1: IA &amp; Hierarchy, showing how three backend systems (XL/OV, FG, LASS) layer visually inside a single instructor task.</figcaption>
+          </figure>
+
+          <div class="glossary">
+            <span class="gloss-label">Systems referenced</span>
+            <dl>
+              <dt>OV</dt>
+              <dd>The shell / container application that hosts learning experiences.</dd>
+              <dt>XL</dt>
+              <dd>The legacy web application that runs courseware.</dd>
+              <dt>LASS</dt>
+              <dd>Set of shared backend / service-level capabilities that have fixed UI components, which I could not modify (at least in the short term).</dd>
+            </dl>
+          </div>
+        </div>
+      </article>
+
+      <article class="insight">
+        <div class="ins-num">02</div>
+        <div class="ins-body">
+          <span class="ins-pill">Wayfinding &amp; state</span>
+          <h3>Wayfinding and state break down when <em>confidence matters most</em>.</h3>
+          <p>Many core workflows are multi-step and consequential, yet lack clear progress indicators, visible completion states, awareness of what's next, and safe ways to revise earlier decisions.</p>
+          <p>This forces instructors to commit early, especially around AI extraction and grading, without enough context to feel confident. The funnel data confirms this: the largest drop sits exactly at the moment users are asked to commit without preview.</p>
+        </div>
+      </article>
+
+      <article class="insight">
+        <div class="ins-num">03</div>
+        <div class="ins-body">
+          <span class="ins-pill">AI framing</span>
+          <h3>AI is framed as a <em>risky fork</em>, not a helpful partner.</h3>
+          <p>AI capabilities are positioned as branching paths: AI vs. non-AI. That framing amplifies fear of choosing wrong, makes AI feel irreversible rather than assistive, and turns grading into a high-stakes configuration problem.</p>
+          <p><strong>Instructors don't want to <em>choose</em> an AI workflow. They want to grade, with AI available where it's helpful.</strong></p>
+
+          <figure class="real" style="margin-top: 24px;">
+            <img src="images/audit-ai-fork.png" alt="Recommendation: Present AI assistance and rubric generation in-context. Current flow forks instructors between Pinning (manual grading) and AI-Assisted Grading; suggested flow unifies them into a single grading task with AI surfaced inline." />
+            <figcaption>Recommendation slide: re-frame AI as an in-context assist, not a branching path.</figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="insight">
+        <div class="ins-num">04</div>
+        <div class="ins-body">
+          <span class="ins-pill">Polish &amp; recovery</span>
+          <h3>Small inefficiencies undermine the <em>value proposition</em>.</h3>
+          <p>Editing layouts for questions and rubrics are constrained, in-context guidance is sparse, error messages explain what went wrong without showing how to recover, and small visual inconsistencies erode perceived quality. Each issue is minor on its own, but together they contradict the product's core promise of saving time.</p>
+        </div>
+      </article>
+
+      <div class="pullquote">
+        Instructors don't want to choose an AI workflow. They want to grade, with AI available where it's helpful.
+      </div>
+    </section>
+
+    <!-- ── Recommendations ── -->
+    <section id="recs">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">05</span>Recommendations</span>
+      </div>
+      <h2 class="section-title">Quick wins now, <em>structural moves over the year</em>.</h2>
+
+      <div class="recs-grid" style="margin-top: 40px;">
+        <div class="recs-col">
+          <span class="rec-tag">Now · Q2–Q3</span>
+          <h4>Quick wins</h4>
+          <ul style="margin-top: 24px;">
+            <li>
+              <span class="num">01</span>
+              <p><b>Introduce task-level navigation</b>, a stepper or breadcrumbs aligned to assignment creation and grading, not to backend service boundaries.</p>
+            </li>
+            <li>
+              <span class="num">02</span>
+              <p><b>Make state visible</b>, progress, completion, and system readiness should each have a dedicated, persistent UI affordance.</p>
+            </li>
+            <li>
+              <span class="num">03</span>
+              <p><b>Scaffold key decisions</b> with clearer context, especially around AI and rubrics. Replace branching forks with progressive disclosure.</p>
+            </li>
+            <li>
+              <span class="num">04</span>
+              <p><b>Strengthen in-context help and error recovery</b>, explain what to do next, not just what went wrong.</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="recs-col">
+          <span class="rec-tag">Long term · 2026–2027</span>
+          <h4>Structural moves</h4>
+          <ul style="margin-top: 24px;">
+            <li>
+              <span class="num">01</span>
+              <p><b>Use the EOY platform modernization</b>, including iFrame removal and design system rollout, as the seam to realign the experience.</p>
+            </li>
+            <li>
+              <span class="num">02</span>
+              <p><b>Design toward a unified Generate workflow</b> across Freehand Grader, Writing Solutions, and MediaShare. Anchor in instructor tasks, not product lines.</p>
+            </li>
+            <li>
+              <span class="num">03</span>
+              <p><b>Treat AI as ambient, not branching</b>, surface AI capabilities inline at the moment of need, with manual override always available.</p>
+            </li>
+            <li>
+              <span class="num">04</span>
+              <p><b>Open the mobile conversation</b>, 82–85% of Pearson users enter through an LMS; mobile is a strategic adoption lever the team hadn't previously sized.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Next steps ── -->
+    <section id="next">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">06</span>Next steps</span>
+      </div>
+      <h2 class="section-title">What this audit <em>unlocked</em>.</h2>
+
+      <p class="prose" style="margin-top: 24px;">
+        The audit findings directly influenced design decisions made in subsequent design iterations for Writing Solutions and Freehand Grader, and continue to be referenced for roadmap planning.
+      </p>
+
+      <div class="next-grid">
+        <a class="next-card" href="WSOL Case Study.html">
+          <span class="nc-eyebrow">02 · Informed by the audit</span>
+          <h3>Writing Solutions</h3>
+          <p>Re-design of the assignment creation flow, applying the audit's scaffolding and AI-as-partner recommendations.</p>
+          <div class="nc-arrow">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg>
+          </div>
+        </a>
+        <a class="next-card" href="#">
+          <span class="nc-eyebrow">03 · Informed by the audit</span>
+          <h3>Freehand Grader</h3>
+          <p>Re-design of the student experience, closing the wayfinding gaps surfaced in insight 02.</p>
+          <div class="nc-arrow">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>© 2026 Esther Nam</span>
+    <div class="f-r">
+      <a href="mailto:#">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="#" id="top-link">↑ Top</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const body = document.body;
+      const btn = document.querySelector('.theme-toggle');
+
+      function set(theme) {
+        body.dataset.theme = theme;
+        try { localStorage.setItem('case-palette', theme); } catch (e) {}
+      }
+
+      btn.addEventListener('click', () => {
+        set(body.dataset.theme === 'graphite' ? 'blue' : 'graphite');
+      });
+
+      // Head script already applied the saved theme; nothing else to do here.
+
+      // Top link
+      document.getElementById('top-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+</body>
+</html>

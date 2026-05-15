@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Writing Solutions · Esther Nam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+  body {
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 16px; line-height: 1.6;
+    background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* ─────────── Palette systems (identical to UX Audit Case Study) ─────────── */
+  body[data-theme="blue"] {
+    --bg: #FAFAFA;
+    --ink: #0E0E10;
+    --muted: #6B6B72;
+    --line: #E0E6F0;
+    --line-soft: #EDF1F7;
+    --accent: #2D6CDF;
+    --accent-deep: #1A4FAB;
+    --accent-soft: #EBF1FB;
+    --card-bg: #DDE7F7;
+    --card-bg-soft: #EEF3FB;
+    --card-ink: #1A2540;
+    --card-line: #C8D6EE;
+    --pill-bg: #FFFFFF;
+    --hero-tint: #F4F7FC;
+    --shadow: 0 1px 0 rgba(0,0,0,0.04), 0 12px 30px rgba(20, 40, 90, 0.06);
+  }
+  body[data-theme="graphite"] {
+    --bg: #14141A;
+    --ink: #F0F0F2;
+    --muted: #8D8D95;
+    --line: #2A2A33;
+    --line-soft: #1E1E26;
+    --accent: #B4A7F5;
+    --accent-deep: #D6CEFA;
+    --accent-soft: #1F1B36;
+    --card-bg: #F8F8FA;
+    --card-bg-soft: #1E1E26;
+    --card-ink: #0E0E10;
+    --card-line: #E0E0E5;
+    --pill-bg: #1E1E26;
+    --hero-tint: #1A1A22;
+    --shadow: 0 1px 0 rgba(255,255,255,0.04), 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ─────────── Site nav ─────────── */
+  .site-nav {
+    max-width: 1080px; margin: 0 auto;
+    padding: 32px 32px 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .wordmark {
+    font-family: "Inter", sans-serif;
+    font-size: 22px; color: var(--ink); text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .wordmark .dot { color: var(--accent); }
+  .site-nav nav { display: flex; gap: 28px; align-items: center; }
+  .site-nav nav a {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    transition: color 0.2s; font-family: "Geist", sans-serif;
+  }
+  .site-nav nav a:hover { color: var(--ink); }
+  .site-nav nav a.current { color: var(--ink); font-weight: 500; }
+
+  .theme-toggle {
+    display: inline-grid; place-items: center;
+    width: 32px; height: 32px; border-radius: 999px;
+    margin-left: 8px;
+    background: transparent; border: 1px solid var(--line);
+    color: var(--ink); cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .theme-toggle:hover { border-color: var(--ink); transform: scale(1.04); }
+  .theme-toggle svg { width: 14px; height: 14px; }
+  .theme-toggle .icon-sun, .theme-toggle .icon-moon { display: none; }
+  body[data-theme="blue"] .theme-toggle .icon-moon { display: block; }
+  body[data-theme="graphite"] .theme-toggle .icon-sun { display: block; }
+
+  .back-link {
+    max-width: 1080px; margin: 0 auto;
+    padding: 32px 32px 0;
+    display: block; font-size: 13px; color: var(--muted);
+    text-decoration: none; font-family: "Geist Mono", monospace;
+    letter-spacing: 0.04em;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  /* ─────────── Case study layout ─────────── */
+  .case-study {
+    max-width: 1080px; margin: 0 auto;
+    padding: 0 32px 120px;
+  }
+  .meta-strip {
+    margin-top: 56px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-strip .tag { color: var(--accent); font-weight: 500; }
+  .meta-strip .sep { opacity: 0.4; }
+
+  .case-title {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin-top: 24px;
+    max-width: 22ch;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .case-title em { font-style: italic; color: var(--accent); }
+
+  .case-deck {
+    margin-top: 28px;
+    max-width: 62ch;
+    font-size: 18px; line-height: 1.55;
+    color: var(--muted);
+  }
+
+  /* Hero meta grid */
+  .hero-meta {
+    margin-top: 56px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .meta-cell {
+    padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    border-right: 1px solid var(--line);
+  }
+  .meta-cell:first-child { padding-left: 0; }
+  .meta-cell:last-child { border-right: 0; padding-right: 0; }
+  .meta-cell .k {
+    font-family: "Geist Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-cell .v {
+    font-size: 15px; color: var(--ink); font-weight: 500;
+    line-height: 1.35;
+  }
+
+  /* Jump nav */
+  .jump {
+    margin-top: 40px;
+    display: flex; flex-wrap: wrap; gap: 8px 4px;
+    align-items: center;
+  }
+  .jump-label {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-right: 12px;
+  }
+  .jump a {
+    font-size: 13px; color: var(--ink); text-decoration: none;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    background: var(--pill-bg);
+  }
+  .jump a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─────────── Sections ─────────── */
+  section { margin-top: 96px; scroll-margin-top: 100px; }
+  .section-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .section-eyebrow {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; flex-shrink: 0;
+  }
+  .section-eyebrow .num { color: var(--muted); margin-right: 8px; }
+  h2.section-title {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  h2.section-title em { font-style: italic; color: var(--accent); }
+
+  .prose { max-width: 65ch; font-size: 16.5px; line-height: 1.65; color: var(--ink); }
+  .prose p + p { margin-top: 18px; }
+  .prose strong { font-weight: 600; }
+
+  ul.clean { list-style: none; padding: 0; margin: 12px 0; max-width: 70ch; }
+  ul.clean li {
+    padding: 14px 0 14px 28px; border-top: 1px solid var(--line);
+    position: relative; font-size: 16px; line-height: 1.55;
+  }
+  ul.clean li:last-child { border-bottom: 1px solid var(--line); }
+  ul.clean li::before {
+    content: ""; position: absolute; left: 0; top: 24px;
+    width: 12px; height: 1px; background: var(--accent);
+  }
+  ul.clean li strong { font-weight: 600; }
+
+  /* Impact list, identical to audit */
+  .impact-list {
+    margin-top: 8px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .impact-list li {
+    list-style: none;
+    padding: 28px 32px 28px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex; gap: 24px; align-items: flex-start;
+  }
+  .impact-list li:nth-child(odd) {
+    padding-right: 32px;
+    border-right: 1px solid var(--line);
+  }
+  .impact-list li:nth-child(even) { padding-left: 32px; }
+  .impact-list .imp-num {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 500;
+    padding-top: 4px; flex-shrink: 0; min-width: 24px;
+  }
+  .impact-list .imp-body { flex: 1; }
+  .impact-list h4 { font-size: 15.5px; font-weight: 600; color: var(--ink); margin-bottom: 6px; line-height: 1.4; }
+  .impact-list p { font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+
+  /* Figures */
+  figure.real {
+    margin-top: 40px;
+    background: transparent; padding: 0; overflow: hidden;
+    border: 1px solid var(--card-line);
+    box-shadow: var(--shadow);
+    border-radius: 12px;
+  }
+  body[data-theme="graphite"] figure.real { border-color: var(--line); }
+  figure.real img { display: block; width: 100%; height: auto; }
+  figure.real figcaption {
+    margin: 0; padding: 14px 20px;
+    background: var(--card-bg-soft);
+    border-top: 1px solid var(--card-line);
+    color: var(--muted);
+    font-family: "Geist Mono", monospace;
+    font-size: 11.5px; letter-spacing: 0.04em;
+  }
+  body[data-theme="graphite"] figure.real figcaption { border-color: var(--line); }
+
+  /* Pull quote */
+  .pullquote {
+    margin: 56px 0;
+    max-width: 32ch;
+    font-family: "Inter", sans-serif;
+    font-weight: 400; font-style: italic;
+    font-size: clamp(22px, 2.6vw, 30px); line-height: 1.3;
+    color: var(--accent);
+    letter-spacing: -0.005em;
+    padding-left: 32px;
+    border-left: 3px solid var(--accent);
+    text-wrap: balance;
+  }
+
+  /* Insight callout (the audit's pattern) */
+  .insight {
+    margin-top: 56px;
+    display: grid; grid-template-columns: 80px 1fr;
+    gap: 32px; padding-bottom: 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .insight:last-of-type { border-bottom: 0; padding-bottom: 0; }
+  .insight .ins-num {
+    font-family: "Inter", sans-serif;
+    font-size: 48px; font-weight: 300; line-height: 1;
+    color: var(--accent);
+  }
+  .insight .ins-body { max-width: 65ch; }
+  .insight h3 {
+    font-family: "Inter", sans-serif;
+    font-weight: 400; font-size: 26px; line-height: 1.2;
+    color: var(--ink); margin-bottom: 16px; letter-spacing: -0.005em;
+  }
+  .insight h3 em { font-style: italic; color: var(--accent); }
+  .insight p { font-size: 16px; line-height: 1.65; color: var(--ink); }
+  .insight p + p { margin-top: 14px; }
+  .insight .ins-pill {
+    display: inline-block;
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft);
+    margin-bottom: 14px;
+  }
+
+  /* Chrome changes — three small panels */
+  .chrome-grid {
+    margin-top: 24px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .chrome-card {
+    padding: 24px 22px;
+    background: var(--card-bg-soft);
+    border: 1px solid var(--card-line);
+    border-radius: 12px;
+  }
+  body[data-theme="graphite"] .chrome-card { border-color: var(--line); color: var(--ink); }
+  .chrome-card .ck-num {
+    font-family: "Geist Mono", monospace;
+    font-size: 10.5px; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 500; margin-bottom: 12px;
+  }
+  .chrome-card h4 {
+    font-family: "Inter", sans-serif;
+    font-size: 16px; font-weight: 600; line-height: 1.3;
+    color: var(--card-ink); margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  body[data-theme="graphite"] .chrome-card h4 { color: var(--ink); }
+  .chrome-card p {
+    font-size: 13.5px; line-height: 1.55;
+    color: var(--card-ink); opacity: 0.75;
+  }
+  body[data-theme="graphite"] .chrome-card p { color: var(--ink); opacity: 0.75; }
+
+  /* Step blocks */
+  .step { margin: 48px 0; padding-top: 28px; border-top: 1px dashed var(--line); }
+  .step:first-of-type { border-top: 0; padding-top: 0; }
+  .step-num {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 8px;
+  }
+  .step h3 {
+    font-family: "Inter", sans-serif; font-weight: 400;
+    font-size: 26px; line-height: 1.2; letter-spacing: -0.005em;
+    margin-bottom: 14px; color: var(--ink);
+  }
+
+  /* TBD placeholder */
+  .tbd {
+    border: 1px dashed var(--card-line); border-radius: 12px;
+    padding: 22px 26px; color: var(--muted); font-size: 14px;
+    font-family: "Geist Mono", monospace; letter-spacing: 0.02em;
+    max-width: 70ch;
+  }
+  body[data-theme="graphite"] .tbd { border-color: var(--line); }
+
+  /* Next case card */
+  .next-grid { margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .next-card {
+    display: block; padding: 32px;
+    background: var(--card-bg); border-radius: 14px;
+    text-decoration: none; color: var(--card-ink);
+    transition: transform 0.2s;
+    position: relative; overflow: hidden;
+    min-height: 200px;
+  }
+  .next-card:hover { transform: translateY(-3px); }
+  .next-card .nc-eyebrow {
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--card-ink); opacity: 0.6;
+  }
+  .next-card h3 {
+    font-family: "Inter", sans-serif; font-weight: 400;
+    font-size: 26px; line-height: 1.2; margin-top: 12px; margin-bottom: 12px;
+    color: var(--card-ink); letter-spacing: -0.005em; max-width: 18ch;
+  }
+  .next-card p {
+    font-size: 14px; line-height: 1.5;
+    color: var(--card-ink); opacity: 0.7; max-width: 32ch;
+  }
+  .next-card .nc-arrow {
+    position: absolute; bottom: 28px; right: 32px;
+    width: 32px; height: 32px; border-radius: 999px;
+    background: var(--card-ink); color: var(--card-bg);
+    display: grid; place-items: center;
+    transition: transform 0.2s;
+  }
+  body[data-theme="graphite"] .next-card .nc-arrow { background: var(--accent); color: var(--card-ink); }
+  .next-card:hover .nc-arrow { transform: rotate(-45deg) translateX(3px); }
+
+  /* Footer */
+  footer {
+    max-width: 1080px; margin: 0 auto;
+    padding: 48px 32px 80px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer .f-r { display: flex; gap: 20px; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* Responsive */
+  @media (max-width: 760px) {
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .meta-cell:nth-child(2) { border-right: 0; }
+    .impact-list { grid-template-columns: 1fr; }
+    .impact-list li:nth-child(odd) { border-right: 0; padding-right: 0; }
+    .impact-list li:nth-child(even) { padding-left: 0; }
+    .chrome-grid { grid-template-columns: 1fr; }
+    .next-grid { grid-template-columns: 1fr; }
+    .insight { grid-template-columns: 1fr; gap: 12px; }
+    .insight .ins-num { font-size: 36px; }
+  }
+</style>
+</head>
+<body data-theme="blue" data-screen-label="WSOL Case Study">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('case-palette');
+      document.body.dataset.theme = (t === 'graphite' || t === 'blue') ? t : 'blue';
+    } catch(e) { document.body.dataset.theme = 'blue'; }
+  })();
+</script>
+
+  <!-- Site nav -->
+  <header class="site-nav">
+    <a class="wordmark" href="index.html">Esther Nam<span class="dot"> •</span></a>
+    <nav>
+      <a href="index.html" class="current">Work</a>
+      <a href="#">Resume</a>
+      <a href="#">Contact</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <a href="index.html" class="back-link">← BACK TO WORK</a>
+
+  <main class="case-study">
+
+    <!-- ── Hero (matches audit pattern) ── -->
+    <div class="meta-strip">
+      <span class="tag">WRITING SOLUTIONS</span>
+      <span class="sep">/</span>
+      <span>Pearson Higher Ed · "Generate" portfolio</span>
+      <span class="sep">/</span>
+      <span>April 2026</span>
+    </div>
+
+    <h1 class="case-title">Restructuring assignment creation around <em>how instructors actually think</em>.</h1>
+
+    <p class="case-deck">A redesign of the assignment-creation flow in Writing Solutions, an instructor-facing assessment tool in beta release. Audit findings set the strategic foundation; the redesign extended them to address issues unique to this product.</p>
+
+    <div class="hero-meta">
+      <div class="meta-cell">
+        <span class="k">Role</span>
+        <span class="v">Lead designer</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Timeline</span>
+        <span class="v">April 2026</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Stage</span>
+        <span class="v">Beta · limited release</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Outcome</span>
+        <span class="v">Restructured flow + clearer authoring foundation</span>
+      </div>
+    </div>
+
+    <nav class="jump">
+      <span class="jump-label">Jump to</span>
+      <a href="#impact">Impact</a>
+      <a href="#overview">Overview</a>
+      <a href="#problem">Problem</a>
+      <a href="#constraint">Design constraint</a>
+      <a href="#solution">Solution</a>
+      <a href="#outcomes">A note on outcomes</a>
+      <a href="#next">Next</a>
+    </nav>
+
+    <!-- ── Impact ── -->
+    <section id="impact">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">01</span>Impact</span>
+      </div>
+      <h2 class="section-title">A <em>structural</em> redesign, not surface UI tweaks.</h2>
+
+      <ul class="impact-list" style="margin-top: 48px;">
+        <li>
+          <span class="imp-num">01</span>
+          <div class="imp-body">
+            <h4>Reduced confusion during setup</h4>
+            <p>The redesigned flow better matched instructor expectations and reduced the back-and-forth scrolling that defined the original page.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">02</span>
+          <div class="imp-body">
+            <h4>Clearer foundation for authoring across tools</h4>
+            <p>The four-step pattern is reusable: Freehand Grader and other Generate products can adopt the same chrome and sequence rather than each inventing its own.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">03</span>
+          <div class="imp-body">
+            <h4>Honored system constraints without being dictated by them</h4>
+            <p>The near-term coupling between scoring method and content authorship is real. The redesign surfaces it as a deliberate first step instead of letting it bleed across the page.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">04</span>
+          <div class="imp-body">
+            <h4>Translated platform-level audit insights into structural workflow change</h4>
+            <p>Demonstrated how strategic audit findings turn into concrete IA decisions when the underlying constraints are taken seriously.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ── Overview ── -->
+    <section id="overview">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">02</span>Overview</span>
+      </div>
+      <h2 class="section-title">From <em>audit findings</em> to a redesign.</h2>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>Writing Solutions is an instructor-facing assessment tool for creating and grading typed assignments, in beta release as part of Pearson's "Generate" portfolio. Following a platform-wide UX audit, the assignment-creation flow emerged as a key opportunity to address recurring issues around cognitive load, decision clarity, and misalignment with instructor mental models.</p>
+        <p>This case study focuses on redesigning assignment creation. Audit findings provided the strategic foundation; the redesign extended them to address issues unique to Writing Solutions.</p>
+      </div>
+    </section>
+
+    <!-- ── Problem ── -->
+    <section id="problem">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">03</span>Problem</span>
+      </div>
+      <h2 class="section-title">Every decision <em>on one scroll</em>.</h2>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>The existing assignment-creation page stacked every decision into a single scroll. Because some choices affected others downstream, users had to scroll back constantly to revise.</p>
+      </div>
+
+      <figure class="real">
+        <img src="images/wsol-current.png" alt="The original Assignment Manager page, with every decision stacked into one long scrolling form." />
+        <figcaption>The original Assignment Manager. Every decision lives on one scroll, and some choices change what others mean.</figcaption>
+      </figure>
+
+      <div class="prose" style="margin-top: 36px;">
+        <p>This forced instructors to context-switch constantly while scrolling up and down:</p>
+      </div>
+
+      <div class="pullquote">"What am I assigning?" → "How do I grade?" → "What are the constraints?" → "Wait, am I done?"</div>
+
+      <div class="prose">
+        <p>The structure conflicted with both:</p>
+      </div>
+      <ul class="clean">
+        <li><strong>Learning design sequencing</strong>, outcomes → assessment → feedback.</li>
+        <li><strong>Instructor mental models</strong>, content first, grading implications later.</li>
+      </ul>
+      <div class="prose" style="margin-top: 18px;">
+        <p>Compounding this, several high-impact decisions (e.g., automatic vs. instructor-graded paths) had implications that weren't clearly communicated, leading to confusion, rework, and mismatch between instructional intent and actual assignment behavior.</p>
+      </div>
+    </section>
+
+    <!-- ── Audit-informed insights ── -->
+    <section id="audit-insights">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">04</span>Building on the audit</span>
+      </div>
+      <h2 class="section-title">Three patterns that <em>applied directly here</em>.</h2>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>The platform-wide audit had already surfaced patterns that applied directly to this flow:</p>
+      </div>
+      <ul class="clean">
+        <li>Complexity was front-loaded instead of progressively revealed.</li>
+        <li>Decision points lacked clear explanations of impact.</li>
+        <li>Flow structure followed tool constraints rather than instructor mental models.</li>
+      </ul>
+      <div class="prose" style="margin-top: 18px;">
+        <p>Assignment creation was a clean candidate for applying these findings concretely. <a href="UX Audit Case Study.html" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor;">Read the audit case study →</a></p>
+      </div>
+    </section>
+
+    <!-- ── Design constraint ── -->
+    <section id="constraint">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">05</span>Design constraint</span>
+      </div>
+      <h2 class="section-title">A <em>system coupling</em> that shaped the order.</h2>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>Before designing the ideal flow, I had to account for a near-term system constraint: in WSOL, scoring method determines whether prompts are system-defined or instructor-authored.</p>
+        <p>Practically, that meant scoring intent had to be surfaced first, with content creation following within those constraints. The coupling may loosen long-term, but the near-term redesign had to work within it, and honor it visibly rather than designing around it.</p>
+      </div>
+    </section>
+
+    <!-- ── Design goals ── -->
+    <section id="goals">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">06</span>Design goals</span>
+      </div>
+      <h2 class="section-title">Four <em>principles</em> for the redesign.</h2>
+
+      <ul class="clean" style="margin-top: 32px;">
+        <li>Reduce cognitive load at early stages.</li>
+        <li>Make the consequences of major decisions explicit.</li>
+        <li>Defer advanced or conditional options until they're relevant.</li>
+        <li>Honor system constraints without letting them dictate the entire experience.</li>
+      </ul>
+    </section>
+
+    <!-- ── Solution: chrome changes + four steps ── -->
+    <section id="solution">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">07</span>Solution</span>
+      </div>
+      <h2 class="section-title">Page-level chrome, then a <em>four-step flow</em>.</h2>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>The redesign worked at two levels. First, structural changes to the page itself, the chrome that wraps every step. Then, a re-sequencing of the actual decisions into four steps.</p>
+      </div>
+
+      <!-- Chrome changes -->
+      <h3 style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-top: 48px; margin-bottom: 16px;">Page-level chrome</h3>
+      <div class="chrome-grid">
+        <div class="chrome-card">
+          <div class="ck-num">A</div>
+          <h4>Progress stepper at the top</h4>
+          <p>A persistent 4-step tracker replaces the old single-scroll page. Users always see where they are and what's left.</p>
+        </div>
+        <div class="chrome-card">
+          <div class="ck-num">B</div>
+          <h4>Persistent footer with step controls</h4>
+          <p>"Back / Next / Step X of 4" lives in a sticky footer. Replaces the original Preview / Save / Done buttons that disappeared the moment users scrolled.</p>
+        </div>
+        <div class="chrome-card">
+          <div class="ck-num">C</div>
+          <h4>Removed the iFrame scroll trap</h4>
+          <p>The original page nested its form inside an iFrame, creating two scroll containers. Users frequently scrolled the wrong one. The redesign removes the inner container entirely.</p>
+        </div>
+      </div>
+
+      <figure class="real" style="margin-top: 40px;">
+        <img src="images/wsol-progress-stepper.png" alt="A persistent 4-step progress tracker at the top of the page: 1 Scoring method, 2 Assignment content, 3 Grading & Settings, 4 Review." />
+        <figcaption>The persistent progress tracker. Stays visible across all four steps.</figcaption>
+      </figure>
+
+      <!-- The four steps -->
+      <h3 style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-top: 64px; margin-bottom: 16px;">The four steps</h3>
+
+      <div class="step">
+        <div class="step-num">Step 01</div>
+        <h3>Scoring method</h3>
+        <div class="prose">
+          <p>Instructors first choose between automatic, AI-assisted, or manual / journal / shared writing. Helper text makes clear this choice determines whether the prompt will be system-defined or instructor-authored, and which downstream options are available. All content-related actions (like choosing a prompt) moved into step 2.</p>
+        </div>
+        <figure class="real">
+          <img src="images/wsol-scoring.png" alt="Before/after of the scoring method picker. Before: a stacked list of radio buttons inside a long form. After: two grouped cards titled Evaluation-based scoring and Participation-based scoring." />
+          <figcaption>Before / after. The five flat radio options become two grouped cards that name the underlying intent, evaluation vs. participation, before naming the method.</figcaption>
+        </figure>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 02</div>
+        <h3>Assignment content</h3>
+        <div class="prose">
+          <p>Based on the Step 1 choice, instructors either select a system prompt (automatic / AI-assisted) or write their own (manual / journal / shared). Supporting documents and an optional learning outcome are added here.</p>
+        </div>
+        <figure class="real">
+          <img src="images/wsol-content.png" alt="Before/after of the prompt and content section. Before: a prompt textarea and rubric chooser. After: a clean Select-from-library button and an optional Upload supporting documents area." />
+          <figcaption>Before / after. The content step adapts to what Step 1 selected, library selector for system-scored, free authoring for instructor-scored.</figcaption>
+        </figure>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 03</div>
+        <h3>Evaluation &amp; feedback</h3>
+        <div class="prose">
+          <p>Grading is configured: rubric (if applicable), submission expectations (response length, citations), originality / plagiarism settings, and feedback options.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 04</div>
+        <h3>Review &amp; assign</h3>
+        <div class="prose">
+          <p>Instructors confirm the full setup before making the assignment available to students, then return to scheduling.</p>
+        </div>
+      </div>
+
+      <figure class="real" style="margin-top: 56px;">
+        <img src="images/wsol-screens.png" alt="Two of the redesigned modal screens shown together: the scoring method step and the assignment content step, both with the persistent progress tracker and footer controls." />
+        <figcaption>The redesigned flow in context, two of the four steps shown together with the persistent chrome.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ── Note on learning outcomes ── -->
+    <section id="outcomes">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">08</span>Design note</span>
+      </div>
+      <h2 class="section-title">On <em>learning outcomes</em>.</h2>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>Tying assignments to outcomes is good pedagogical practice, and Pearson's own guidance supports it. But in practice:</p>
+      </div>
+      <ul class="clean">
+        <li>Many instructors don't work this way day-to-day.</li>
+        <li>Many courses already define outcomes elsewhere (syllabus, LMS, course settings).</li>
+        <li>Forcing outcomes upfront measurably reduces adoption.</li>
+      </ul>
+      <div class="prose" style="margin-top: 18px;">
+        <p>Removing the field entirely would weaken pedagogical alignment and limit downstream AI / analytics value. Requiring it would frustrate instructors, slow authoring, and feel bureaucratic.</p>
+      </div>
+      <div class="pullquote" style="margin-top: 36px;">Keeping the field optional within Step 2 was the deliberate middle path: present where natural, never blocking.</div>
+    </section>
+
+    <!-- ── Open questions ── -->
+    <section id="open-questions">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">09</span>Open questions</span>
+      </div>
+      <h2 class="section-title">What I'd <em>dig into next</em>.</h2>
+
+      <div class="tbd" style="margin-top: 32px;">TBD, Esther to fill in.</div>
+    </section>
+
+    <!-- ── Next case study ── -->
+    <section id="next">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">10</span>Continue reading</span>
+      </div>
+      <h2 class="section-title">Where this <em>came from</em>.</h2>
+
+      <div class="next-grid">
+        <a class="next-card" href="UX Audit Case Study.html">
+          <span class="nc-eyebrow">01 · Research foundation</span>
+          <h3>UX Audit</h3>
+          <p>The cross-product audit that surfaced the patterns this redesign acts on.</p>
+          <div class="nc-arrow">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg>
+          </div>
+        </a>
+        <a class="next-card" href="#">
+          <span class="nc-eyebrow">03 · Informed by the audit</span>
+          <h3>Freehand Grader</h3>
+          <p>Re-design of the student experience for hand-worked STEM submissions.</p>
+          <div class="nc-arrow">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>© Esther Nam · 2026</span>
+    <div class="f-r">
+      <a href="mailto:#">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="#" id="top-link">↑ Top</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const body = document.body;
+      const btn = document.getElementById('theme-toggle');
+      function set(theme) {
+        body.dataset.theme = theme;
+        try { localStorage.setItem('case-palette', theme); } catch (e) {}
+      }
+      btn.addEventListener('click', () => {
+        set(body.dataset.theme === 'graphite' ? 'blue' : 'graphite');
+      });
+      document.getElementById('top-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+</body>
+</html>
