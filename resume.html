@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Esther Nam — Résumé · v2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #FBFBFC;
+    --paper: #FFFFFF;
+    --ink: #1A1A1E;
+    --ink-2: #4F4F58;
+    --muted: #76767E;
+    --line: #E6E6EA;
+    --line-soft: #F0F0F2;
+    --field: #F6F6F8;
+    --lav: #E4EFFB;
+    --amber: #1577D6;
+    --violet: #9B8CF0;
+    --accent: #E92E66;
+    --accent-soft: #FCE7EE;
+    --accent-ink: #B11248;
+  }
+  body[data-theme="graphite"] {
+    --bg: #111114;
+    --paper: #1A1A1F;
+    --ink: #E8E8EE;
+    --ink-2: #C7C7CE;
+    --muted: #9A9AA2;
+    --line: #2A2A31;
+    --line-soft: #232329;
+    --field: #202027;
+    --lav: #1F2A38;
+    --amber: #5AA0EA;
+    --accent: #FF6492;
+    --accent-soft: rgba(255,100,146,0.16);
+    --accent-ink: #FF8DAE;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; max-width: 100%; }
+  html { scrollbar-gutter: stable; scroll-behavior: smooth; scroll-padding-top: 64px; }
+  body {
+    font-family: 'Figtree', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: var(--bg); color: var(--ink);
+    min-height: 100vh;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .stage { min-height: 100vh; display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 48px 24px 96px; }
+
+  /* Toolbar */
+  .toolbar { width: 816px; max-width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .toolbar .meta { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .toolbar .nav-left { display: flex; align-items: center; gap: 24px; }
+  .toolbar .brand { font-weight: 800; font-size: 16px; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+  .toolbar .tabs { display: flex; align-items: center; gap: 20px; }
+  .toolbar .tabs a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.18s; }
+  .toolbar .tabs a:hover { color: var(--ink); }
+  .toolbar .tabs a.active { color: var(--ink); font-weight: 600; }
+  .nav-work { position: relative; }
+  .nav-work > a { display: inline-flex; align-items: center; gap: 4px; }
+  .nav-work .caret { width: 9px; height: 9px; opacity: 0.65; transition: transform 0.18s; }
+  .nav-work:hover .caret { transform: rotate(180deg); }
+  .nav-work::after { content: ""; position: absolute; top: 100%; left: -14px; right: -14px; height: 14px; }
+  .work-menu { position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(-4px); min-width: 240px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 44px -18px rgba(0,0,0,0.30); padding: 7px; opacity: 0; visibility: hidden; transition: opacity 0.16s ease, transform 0.16s ease; z-index: 80; }
+  .nav-work:hover .work-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+  .topbar .work-menu a { display: block; padding: 9px 12px; border-radius: 8px; color: var(--ink); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+  .topbar .work-menu a small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 400; margin-top: 1px; }
+  .topbar .work-menu a:hover { background: var(--field); color: var(--ink); }
+  .toolbar .tools { display: flex; align-items: center; gap: 10px; }
+  .btn-primary { background: var(--accent); color: #fff; border: 0; padding: 9px 18px; border-radius: 999px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap; text-decoration: none; transition: filter 0.15s, transform 0.15s; }
+  .btn-primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .theme-toggle { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 999px; background: transparent; border: 1px solid var(--line); color: var(--ink); cursor: pointer; transition: background-color 0.2s; }
+  .theme-toggle:hover { background: var(--field); }
+  .theme-toggle svg { width: 16px; height: 16px; }
+  .theme-toggle .icon-sun { display: none; }
+  body[data-theme="graphite"] .theme-toggle .icon-sun { display: block; }
+  body[data-theme="graphite"] .theme-toggle .icon-moon { display: none; }
+  .toolbar.foot { opacity: 0.7; font-size: 12px; color: var(--muted); }
+  .toolbar.foot a { color: var(--accent); text-decoration: none; font-weight: 500; }
+
+  /* Persistent top nav — identical component across all pages */
+  .topbar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid var(--line); }
+  .topbar .inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 20px; }
+  .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; text-decoration: none; color: var(--ink); display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+  .brand .mk { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 800; }
+  .topbar nav { display: flex; align-items: center; gap: 24px; margin-left: 14px; }
+  .topbar nav a { text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1; transition: color 0.18s; }
+  .topbar nav a:hover, .topbar nav a.active { color: var(--ink); }
+  .topbar .spacer { flex: 1; }
+  .fab-pdf { position: fixed; bottom: 24px; right: 24px; z-index: 60; box-shadow: 0 10px 28px rgba(0,0,0,0.20); transition: opacity 0.25s ease, transform 0.25s ease; }
+  .fab-pdf.hidden { opacity: 0; transform: translateY(12px); pointer-events: none; }
+  @media print { .topbar, .fab-pdf, footer#contact { display: none !important; } }
+
+  /* Contact footer (matches portfolio) */
+  footer#contact { width: 100%; background: #0E0E11; color: #C9C9CF; min-height: calc(100vh - 64px); display: flex; align-items: center; scroll-margin-top: 64px; }
+  footer#contact .fin { width: 100%; max-width: 1080px; margin: 0 auto; padding: 64px 32px 48px; }
+  footer#contact .ft-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: start; gap: 32px 40px; }
+  footer#contact .ft-brand { font-weight: 800; font-size: 19px; color: #fff; display: flex; align-items: center; gap: 8px; }
+  footer#contact .ft-brand .mk { width: 24px; height: 24px; border-radius: 7px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 800; }
+  footer#contact .ft-tag { font-size: 14px; color: #8C8C95; margin-top: 8px; max-width: 30ch; }
+  footer#contact .ft-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  footer#contact .ft-cta > span { color: #C9C9CF; font-size: 15px; line-height: 1.5; }
+  footer#contact .ft-links { display: flex; gap: 12px; }
+  footer#contact .ft-links a { width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--accent); display: grid; place-items: center; color: #fff; text-decoration: none; transition: background-color 0.18s; }
+  footer#contact .ft-links a:hover { background: var(--accent); }
+  footer#contact .ft-cta a { color: #fff; font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+  footer#contact .ft-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 40px; padding-top: 24px; border-top: 1px solid #232329; font-size: 13px; color: #76767E; }
+  @media (max-width: 760px) { footer#contact .ft-top { grid-template-columns: 1fr; } }
+
+  /* Paper */
+  .paper { box-shadow: 0 1px 1px rgba(0,0,0,0.04), 0 18px 44px rgba(0,0,0,0.10), 0 36px 90px rgba(0,0,0,0.06); }
+  .resume-frame { transform-origin: top center; }
+  .resume {
+    width: 816px; height: 1056px; background: var(--paper); color: var(--ink);
+    padding: 38px 52px 30px; display: flex; flex-direction: column; gap: 13px;
+    font-size: 11px; line-height: 1.45;
+  }
+
+  /* Header */
+  .r-head { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+  .r-head h1 { margin: 0; font-size: 33px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .r-head .role { margin: 6px 0 0; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: var(--accent); }
+  .r-head .sub { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+  .r-contact { text-align: right; font-size: 11px; line-height: 1.95; color: var(--ink-2); }
+  .r-contact .tbd { display: inline-block; background: var(--lav); color: var(--ink); padding: 1px 6px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+  .r-contact a { color: inherit; text-decoration: none; }
+
+  /* Summary */
+  .r-summary { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink); max-width: 660px; }
+
+  /* Section label with full-width accent underline */
+  .sec { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: -0.005em; color: var(--ink); position: relative; padding-bottom: 6px; margin-bottom: 0; }
+  .sec::after { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 2.5px; border-radius: 2px; background: var(--accent); }
+
+  /* Experience */
+  .r-exp { display: flex; flex-direction: column; gap: 9px; }
+  .job { display: grid; grid-template-columns: 138px 1fr; gap: 18px; padding-top: 9px; border-top: 1px solid var(--line-soft); }
+  .job:first-of-type { border-top: 0; padding-top: 4px; }
+  .job .when .d { font-size: 10.5px; font-weight: 600; color: var(--ink); }
+  .job .when .co { margin-top: 3px; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .job .when .loc { margin-top: 1px; font-size: 10.5px; color: var(--muted); }
+  .job .body .role { font-size: 15.5px; font-weight: 700; letter-spacing: -0.015em; margin-bottom: 5px; }
+  .job .body ul { margin: 0; padding-left: 15px; display: flex; flex-direction: column; gap: 3px; }
+  .job .body li { font-size: 11px; line-height: 1.5; color: var(--ink-2); }
+  .job .body li::marker { color: var(--amber); }
+
+  /* Footer: skills + education */
+  .r-foot { margin-top: auto; padding-top: 11px; border-top: 1px solid var(--ink); display: grid; grid-template-columns: 1.55fr 1fr; gap: 32px; }
+  .pills { margin-top: 9px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill { font-size: 10.5px; font-weight: 500; color: var(--ink-2); background: var(--card, var(--paper)); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+  .tools { margin-top: 9px; font-size: 10.5px; color: var(--muted); line-height: 1.55; }
+  .tools b { font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 9.5px; color: var(--ink-2); }
+  .edu { margin-top: 9px; display: flex; flex-direction: column; gap: 7px; }
+  .edu .school { font-size: 11.5px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+  .edu .detail { font-size: 11px; color: var(--ink-2); line-height: 1.35; }
+  .edu .dates { font-size: 9.5px; color: var(--muted); letter-spacing: 0.02em; margin-top: 1px; }
+
+  /* Responsive scale-down */
+  @media (max-width: 880px) {
+    .stage { padding: 20px 0 40px; }
+    .toolbar { padding: 0 16px; }
+  }
+
+  /* Mobile: reflow the fixed sheet into a single-column document */
+  @media (max-width: 700px) {
+    .stage { padding: 0; gap: 0; min-height: 0; align-items: stretch; }
+    .resume-frame { transform: none !important; width: 100%; }
+    .paper { box-shadow: none; }
+    .resume { width: 100%; height: auto; padding: 26px 20px 44px; font-size: 14px; line-height: 1.5; gap: 24px; }
+    .r-head { grid-template-columns: 1fr; gap: 12px; align-items: start; padding-bottom: 18px; }
+    .r-head h1 { font-size: 30px; }
+    .r-head .role { font-size: 13px; margin-top: 8px; }
+    .r-head .sub { font-size: 13px; }
+    .r-contact { text-align: left; font-size: 14px; line-height: 1.9; }
+    .r-summary { font-size: 15px; max-width: none; }
+    .sec { font-size: 15px; }
+    .r-exp { gap: 22px; }
+    .job { grid-template-columns: 1fr; gap: 7px; padding-top: 20px; }
+    .job:first-of-type { padding-top: 4px; }
+    .job .when { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 10px; }
+    .job .when .d { font-size: 12.5px; }
+    .job .when .co { margin-top: 0; font-size: 11px; }
+    .job .when .loc { margin-top: 0; font-size: 12.5px; }
+    .job .body .role { font-size: 17px; margin-bottom: 8px; }
+    .job .body ul { padding-left: 18px; gap: 6px; }
+    .job .body li { font-size: 14px; }
+    .r-foot { grid-template-columns: 1fr; gap: 26px; margin-top: 8px; }
+    .pills { gap: 7px; margin-top: 11px; }
+    .pill { font-size: 13px; padding: 5px 12px; }
+    .tools { font-size: 13px; margin-top: 11px; }
+    .tools b { font-size: 11px; }
+    .edu { margin-top: 11px; gap: 10px; }
+    .edu .school { font-size: 14px; }
+    .edu .detail { font-size: 13px; }
+    .edu .dates { font-size: 11.5px; }
+  }
+
+  @media print {
+    body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body[data-theme="graphite"] { --bg:#FBFBFC; --paper:#fff; --ink:#1A1A1E; --ink-2:#4F4F58; --muted:#76767E; --line:#E6E6EA; --line-soft:#F0F0F2; --field:#F6F6F8; --lav:#E4EFFB; --amber:#1577D6; --accent:#E92E66; }
+    .stage { padding: 0; gap: 0; min-height: auto; }
+    .toolbar { display: none !important; }
+    .paper { box-shadow: none !important; }
+    .resume-frame { transform: none !important; }
+    .stage { display: block !important; padding: 0 !important; }
+    .resume { width: 8.5in !important; height: 11in !important; padding: 0.42in 0.5in 0.34in !important; overflow: hidden !important; page-break-after: avoid; }
+    @page { size: letter; margin: 0; }
+  }
+</style>
+<link rel="stylesheet" href="shared.css" />
+</head>
+<body data-theme="blue">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('case-palette');
+      document.body.dataset.theme = (t === 'graphite' || t === 'blue') ? t : 'blue';
+    } catch(e) { document.body.dataset.theme = 'blue'; }
+  })();
+</script>
+
+<!-- ─── Top bar (identical across all pages) ─── -->
+<header class="topbar">
+  <div class="inner">
+    <a class="brand" href="index.html"><span class="mk">E</span>Esther Nam</a>
+    <nav class="tabs">
+      <div class="nav-work">
+        <a href="index.html">Work<svg class="caret" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></a>
+        <div class="work-menu">
+          <a href="ux-audit.html">UX Audit<small>Cross-product diagnostic</small></a>
+          <a href="writing-solutions.html">Writing Solutions<small>Assignment creation redesign</small></a>
+          <a href="job-match.html">Job Match<small>Career tool · POC → MVP</small></a>
+          <a href="focus-gym.html">Focus Gym<small>AI hackathon · Concept</small></a>
+        </div>
+      </div>
+      <a href="resume.html" class="active">Resume</a>
+    </nav>
+    <span class="spacer"></span>
+    <a href="#contact" class="btn-primary">Get in touch</a>
+    <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</header>
+
+<button class="btn-primary fab-pdf" type="button" onclick="window.print()">↓ Save as PDF</button>
+
+<div class="stage">
+
+  <div class="resume-frame paper">
+    <div class="resume">
+
+      <!-- Header -->
+      <header class="r-head">
+        <div>
+          <h1>Esther Nam</h1>
+          <p class="role">Senior Product Designer</p>
+          <p class="sub">Boston, MA</p>
+        </div>
+        <div class="r-contact">
+          <div><a href="mailto:enam0491@gmail.com">enam0491@gmail.com</a></div>
+          <div><a href="#">linkedin.com/in/esther-nam</a></div>
+        </div>
+      </header>
+
+      <!-- Summary -->
+      <p class="r-summary">Nine years in ed-tech, most recently designing AI-assisted tools for higher education.</p>
+
+      <!-- Experience -->
+      <section>
+        <span class="sec">Experience</span>
+        <div class="r-exp" style="margin-top: 9px;">
+
+          <article class="job">
+            <div class="when">
+              <div class="d">Mar 2024 — May 2026</div>
+              <div class="co">Pearson</div>
+              <div class="loc">Remote · Higher Ed</div>
+            </div>
+            <div class="body">
+              <div class="role">Senior Product Designer</div>
+              <ul>
+                <li>Led a cross-product UX audit of Pearson's “Generate” AI assessment portfolio (Writing Solutions + Freehand Grader), anchoring roadmap planning across product, engineering, and design.</li>
+                <li>Led v1 redesigns within the Generate suite, including the Writing Solutions assignment-creation flow.</li>
+                <li>Won Best Solution for User Impact at Pearson's 48-hour AI Training &amp; Hackathon (2025) for Focus Gym — a gamified environment where students “level up” their ability to sustain concentration through spaced, progressive training.</li>
+                <li>Presented design decisions in bi-weekly DTC UX shareouts to keep cross-team work aligned.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="job">
+            <div class="when">
+              <div class="d">Apr 2021 — Mar 2024</div>
+              <div class="co">Pearson</div>
+              <div class="loc">Remote · Higher Ed</div>
+            </div>
+            <div class="body">
+              <div class="role">Interaction Designer</div>
+              <ul>
+                <li>Re-designed Pearson Collections, driving an 85% YoY increase in total subscriptions and a 15% lift in digital conversions.</li>
+                <li>Shaped Pearson+ Job Match from closed POC to public MVP — shipped the unauthenticated home, Careers section, and Work Style Lens™ assessment, with WCAG 2.1 AA accessibility annotations owned end-to-end.</li>
+                <li>Moderated user-testing on personalized feedback and contributed to a scalable design system aligning typography, color, and components across UX teams.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="job">
+            <div class="when">
+              <div class="d">Nov 2017 — Apr 2021</div>
+              <div class="co">Pearson</div>
+              <div class="loc">Boston, MA</div>
+            </div>
+            <div class="body">
+              <div class="role">Associate Interaction Designer</div>
+              <ul>
+                <li>Produced wireframes, interactive prototypes, and high-fidelity mockups across instructor- and student-facing learning products.</li>
+                <li>Advocated for user-centered design — folded usability testing and accessibility insights into team process.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="job">
+            <div class="when">
+              <div class="d">May — Nov 2017</div>
+              <div class="co">General Assembly</div>
+              <div class="loc">Boston, MA</div>
+            </div>
+            <div class="body">
+              <div class="role">UX Teaching Assistant · UXDI</div>
+              <ul>
+                <li>Mentored students through research, wireframing, and prototyping; gave portfolio-level feedback in cohort reviews.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="job">
+            <div class="when">
+              <div class="d">Apr 2017</div>
+              <div class="co">Voatz</div>
+              <div class="loc">Boston, MA</div>
+            </div>
+            <div class="body">
+              <div class="role">Product Designer</div>
+              <ul>
+                <li>Designed mobile-first flows and prototypes for a secure mobile voting platform.</li>
+              </ul>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Footer: Skills + Education -->
+      <section class="r-foot">
+        <div>
+          <span class="sec">Skills</span>
+          <div class="pills">
+            <span class="pill">Interaction design</span>
+            <span class="pill">Visual design</span>
+            <span class="pill">Design systems</span>
+            <span class="pill">Information architecture</span>
+            <span class="pill">Heuristic audits</span>
+            <span class="pill">Moderated user testing</span>
+            <span class="pill">Usability testing</span>
+            <span class="pill">Funnel &amp; attrition analysis</span>
+            <span class="pill">Accessibility (WCAG 2.1 AA)</span>
+            <span class="pill">AI product design</span>
+            <span class="pill">Rapid prototyping</span>
+            <span class="pill">Cross-functional facilitation</span>
+            <span class="pill">HTML / CSS / JS</span>
+            <span class="pill">React (working)</span>
+          </div>
+          <div class="tools"><b>Tools — </b>Figma · FigJam · UserTesting.com · Pendo · Claude Design · VS Code</div>
+        </div>
+        <div>
+          <span class="sec">Education</span>
+          <div class="edu">
+            <div>
+              <div class="school">Wellesley College</div>
+              <div class="detail">BA, Economics</div>
+              <div class="dates">Wellesley, MA</div>
+            </div>
+            <div>
+              <div class="school">Open Vector</div>
+              <div class="detail">Curriculum for design-led engineering</div>
+              <div class="dates">In progress</div>
+            </div>
+            <div>
+              <div class="school">Codecademy</div>
+              <div class="detail">HTML, CSS, JavaScript</div>
+              <div class="dates">2021 — 2022</div>
+            </div>
+            <div>
+              <div class="school">General Assembly</div>
+              <div class="detail">UXDI Bootcamp · full-time</div>
+              <div class="dates">Boston, MA · 2017</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</div>
+
+<footer id="contact">
+  <div class="fin">
+    <div class="ft-top">
+      <div>
+        <div class="ft-brand"><span class="mk">E</span>Esther Nam</div>
+        <p class="ft-tag">Product designer working on research-led, AI-assisted tools for education.</p>
+      </div>
+      <div class="ft-cta">
+        <span>Thanks for checking out my portfolio!<br />I’d love to hear from you: <a href="mailto:enam0491@gmail.com">enam0491@gmail.com</a></span>
+        <div class="ft-links">
+          <a href="https://www.linkedin.com/in/esther-nam/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="-1.25 0 24 24" fill="currentColor" width="16" height="16"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.58-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.5V23h-4V8z"/></svg></a>
+          <a href="mailto:enam0491@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 Esther Nam</span>
+      <span>UX Portfolio</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    // Theme toggle (shared key with portfolio)
+    var body = document.body;
+    var btn = document.querySelector('.theme-toggle');
+    btn.addEventListener('click', function(){
+      var next = body.dataset.theme === 'graphite' ? 'blue' : 'graphite';
+      body.dataset.theme = next;
+      try { localStorage.setItem('case-palette', next); } catch(e){}
+    });
+    // Scale the fixed 816px page down on narrow screens
+    var frame = document.querySelector('.resume-frame');
+    function fit(){
+      var w = window.innerWidth;
+      if (w <= 700) { frame.style.transform = 'none'; return; }
+      var s = w >= 880 ? 1 : Math.min(1, (w - 24) / 816);
+      frame.style.transform = 'scale(' + s + ')';
+    }
+    fit();
+    window.addEventListener('resize', fit);
+
+    // Hide the Save-as-PDF button when the resume sheet scrolls out of view
+    var fab = document.querySelector('.fab-pdf');
+    var sheet = document.querySelector('.resume-frame');
+    if (fab && sheet && 'IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        fab.classList.toggle('hidden', !entries[0].isIntersecting);
+      }, { rootMargin: '-64px 0px -40% 0px' });
+      io.observe(sheet);
+    }
+  })();
+</script>
+<style id="mobile-opt">
+@keyframes contact-jiggle { 0%,100%{transform:translateX(0)} 18%{transform:translateX(-5px)} 38%{transform:translateX(5px)} 58%{transform:translateX(-3px)} 78%{transform:translateX(3px)} }
+.ft-cta.jiggle > span { animation: contact-jiggle .5s ease; display:inline-block; }
+.ft-cta.jiggle .ft-links a { animation: contact-jiggle .55s ease; }
+.ft-cta.jiggle .ft-links a:nth-child(2){ animation-delay:.06s; }
+@media (prefers-reduced-motion: reduce){ .ft-cta.jiggle > span, .ft-cta.jiggle .ft-links a { animation:none; } }
+.nav-work.open .work-menu { opacity:1 !important; visibility:visible !important; transform:translateX(-50%) translateY(0) !important; }
+.nav-work.open .caret { transform: rotate(180deg); }
+@media (hover: none) and (max-width: 600px){
+  .work-menu { left:0 !important; right:auto !important; transform:translateX(0) translateY(-4px) !important; min-width:210px !important; }
+  .nav-work.open .work-menu { transform:translateX(0) translateY(0) !important; }
+}
+</style>
+<script>
+(function(){
+  document.querySelectorAll('.nav-work > a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      if (window.matchMedia('(hover: none)').matches){ e.preventDefault(); a.parentElement.classList.toggle('open'); }
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.nav-work')){ document.querySelectorAll('.nav-work.open').forEach(function(n){n.classList.remove('open');}); }
+  });
+  var foot = document.getElementById('contact');
+  document.querySelectorAll('a.btn-primary[href="#contact"]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      if(!foot) return;
+      var r = foot.getBoundingClientRect();
+      if(r.top < window.innerHeight*0.5 && r.bottom > 0){
+        e.preventDefault();
+        var cta = foot.querySelector('.ft-cta');
+        if(cta){ cta.classList.remove('jiggle'); void cta.offsetWidth; cta.classList.add('jiggle'); }
+      }
+    });
+  });
+})();
+</script>
+<style id="mobile-nav">
+.nav-toggle{display:none;background:none;border:0;cursor:pointer;padding:8px;color:var(--ink);}
+.nav-toggle svg{width:24px;height:24px;display:block;}
+.mobile-menu{display:none;}
+@media (max-width:700px){
+  .topbar nav{display:none!important;}
+  .topbar .btn-primary{display:none!important;}
+  .nav-toggle{display:grid;place-items:center;}
+  .mobile-menu{display:block;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 20px 44px -22px rgba(0,0,0,.4);padding:10px;z-index:90;max-height:calc(100vh - 64px);overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .2s,transform .2s,visibility .2s;}
+  .mobile-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
+  .mobile-menu a{display:block;padding:13px 14px;border-radius:10px;text-decoration:none;color:var(--ink);font-size:16px;font-weight:600;}
+  .mobile-menu a small{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:2px;}
+  .mobile-menu a:active{background:var(--field);}
+  .mobile-menu .mm-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:14px 14px 4px;}
+  .mobile-menu .mm-cta{margin-top:8px;background:var(--accent);color:#fff;text-align:center;}
+  .mobile-menu .mm-sep{height:1px;background:var(--line);margin:8px 6px;}
+}
+</style>
+<script>
+(function(){
+  var bar=document.querySelector('.topbar .inner');
+  if(!bar||bar.querySelector('.nav-toggle'))return;
+  var btn=document.createElement('button');
+  btn.className='nav-toggle';btn.setAttribute('aria-label','Open menu');btn.setAttribute('aria-expanded','false');
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+  bar.appendChild(btn);
+  var menu=document.createElement('div');menu.className='mobile-menu';
+  var html='<div class="mm-label">Work</div>';
+  document.querySelectorAll('.work-menu a').forEach(function(a){html+='<a href="'+a.getAttribute('href')+'">'+a.innerHTML+'</a>';});
+  html+='<div class="mm-sep"></div><a href="resume.html">Resume</a><a class="mm-cta" href="#contact">Get in touch</a>';
+  menu.innerHTML=html;document.body.appendChild(menu);
+  function close(){menu.classList.remove('open');btn.setAttribute('aria-expanded','false');btn.querySelector('svg').innerHTML='<path d="M3 6h18M3 12h18M3 18h18"/>';}
+  function open(){menu.classList.add('open');btn.setAttribute('aria-expanded','true');btn.querySelector('svg').innerHTML='<path d="M5 5l14 14M19 5L5 19"/>';}
+  btn.addEventListener('click',function(e){e.stopPropagation();menu.classList.contains('open')?close():open();});
+  menu.addEventListener('click',function(e){if(e.target.closest('a'))close();});
+  document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!e.target.closest('.mobile-menu')&&!e.target.closest('.nav-toggle'))close();});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Writing Solutions · Esther Nam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; scrollbar-gutter: stable; }
+  body {
+    font-family: "Figtree", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 16px; line-height: 1.6;
+    background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    max-width: 100%;
+  }
+  img { max-width: 100%; }
+
+  /* ─────────── Palette systems (identical to UX Audit Case Study) ─────────── */
+  body[data-theme="blue"] {
+    --bg: #FBFBFC;
+    --ink: #1A1A1E;
+    --muted: #6A6A72;
+    --line: #E6E6EA;
+    --line-soft: #F0F0F2;
+    --accent: #E92E66;
+    --accent-deep: #B11248;
+    --accent-soft: #FCE7EE;
+    --card-bg: #FFFFFF;
+    --card-bg-soft: #F6F6F8;
+    --card-ink: #1A1A1E;
+    --card-line: #E6E6EA;
+    --pill-bg: #FFFFFF;
+    --hero-tint: #F7F4F6;
+    --highlight: #FBF1DA;
+    --shadow: 0 1px 0 rgba(0,0,0,0.04), 0 12px 30px rgba(20, 20, 30, 0.07);
+  }
+  body[data-theme="graphite"] {
+    --bg: #14141A;
+    --ink: #E8E8EE;
+    --muted: #8D8D95;
+    --line: #2A2A33;
+    --line-soft: #1E1E26;
+    --accent: #FF6492;
+    --accent-deep: #FF8DAE;
+    --accent-soft: rgba(255,100,146,0.16);
+    --card-bg: #F8F8FA;
+    --card-bg-soft: #1E1E26;
+    --card-ink: #0E0E10;
+    --card-line: #E0E0E5;
+    --pill-bg: #1E1E26;
+    --hero-tint: #1A1A22;
+    --shadow: 0 1px 0 rgba(255,255,255,0.04), 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ─────────── Site nav ─────────── */
+  .site-nav {
+    max-width: 1080px; margin: 0 auto;
+    padding: 32px 32px 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .wordmark {
+    font-family: "Figtree", sans-serif;
+    font-size: 22px; color: var(--ink); text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .wordmark .dot { color: var(--accent); }
+  .site-nav nav { display: flex; gap: 28px; align-items: center; }
+  .site-nav nav a {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    transition: color 0.2s; font-family: "Figtree", sans-serif;
+  }
+  .site-nav nav a:hover { color: var(--ink); }
+  .site-nav nav a.current { color: var(--ink); font-weight: 500; }
+
+  .theme-toggle {
+    display: inline-grid; place-items: center;
+    width: 32px; height: 32px; border-radius: 999px;
+    margin-left: 8px;
+    background: transparent; border: 1px solid var(--line);
+    color: var(--ink); cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .theme-toggle:hover { border-color: var(--ink); transform: scale(1.04); }
+  .theme-toggle svg { width: 14px; height: 14px; }
+  .theme-toggle .icon-sun, .theme-toggle .icon-moon { display: none; }
+  body[data-theme="blue"] .theme-toggle .icon-moon { display: block; }
+  body[data-theme="graphite"] .theme-toggle .icon-sun { display: block; }
+
+  /* ─────────── Persistent top nav (identical across all pages) ─────────── */
+  .topbar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid var(--line); }
+  .topbar .inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 20px; }
+  .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; text-decoration: none; color: var(--ink); display: flex; align-items: center; gap: 7px; }
+  .brand .mk { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 800; }
+  .topbar nav { display: flex; align-items: center; gap: 24px; margin-left: 14px; }
+  .topbar nav a { text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1; transition: color 0.18s; }
+  .topbar nav a:hover, .topbar nav a.active { color: var(--ink); }
+  .nav-work { position: relative; }
+  .nav-work > a { display: inline-flex; align-items: center; gap: 4px; }
+  .nav-work .caret { width: 9px; height: 9px; opacity: 0.65; transition: transform 0.18s; }
+  .nav-work:hover .caret { transform: rotate(180deg); }
+  .nav-work::after { content: ""; position: absolute; top: 100%; left: -14px; right: -14px; height: 14px; }
+  .work-menu { position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(-4px); min-width: 240px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 44px -18px rgba(0,0,0,0.30); padding: 7px; opacity: 0; visibility: hidden; transition: opacity 0.16s ease, transform 0.16s ease; z-index: 80; }
+  .nav-work:hover .work-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+  .topbar .work-menu a { display: block; padding: 9px 12px; border-radius: 8px; color: var(--ink); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+  .topbar .work-menu a small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 400; margin-top: 1px; }
+  .topbar .work-menu a:hover { background: var(--field); color: var(--ink); }
+  .topbar .spacer { flex: 1; }
+  .topbar .btn-primary { background: var(--accent); color: #fff; border: 0; padding: 9px 18px; border-radius: 999px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; white-space: nowrap; transition: filter 0.18s, transform 0.15s; }
+  .topbar .btn-primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .topbar .theme-toggle { margin-left: 0; }
+
+  .back-link {
+    max-width: 1080px; margin: 0 auto;
+    padding: 32px 32px 0;
+    display: block; font-size: 12px; font-weight: 600; color: var(--muted);
+    text-decoration: none; font-family: "Figtree", sans-serif;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  /* ─────────── Case study layout ─────────── */
+  .case-study {
+    max-width: 720px; margin: 0 auto;
+    padding: 0 32px 120px;
+  }
+  .meta-strip {
+    margin-top: 56px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-strip .tag { color: var(--accent); font-weight: 500; }
+  .meta-strip .sep { opacity: 0.4; }
+
+  .case-title {
+    font-family: "Figtree", sans-serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin-top: 24px;
+    max-width: 22ch;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .case-title em { font-style: normal; color: inherit; }
+
+  .case-deck {
+    margin-top: 28px;
+    max-width: none;
+    font-size: 16px; line-height: 1.55; color: var(--muted);
+  }
+
+  /* Hero meta grid */
+  .hero-meta {
+    margin-top: 56px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .meta-cell {
+    padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    border-right: 1px solid var(--line);
+  }
+  .meta-cell:first-child { padding-left: 0; }
+  .meta-cell:last-child { border-right: 0; padding-right: 0; }
+  .meta-cell .k {
+    font-family: "Figtree", sans-serif;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-cell .v {
+    font-size: 15px; color: var(--ink); font-weight: 500;
+    line-height: 1.35;
+  }
+
+  /* Jump nav */
+  .jump {
+    margin-top: 40px;
+    display: flex; flex-wrap: wrap; gap: 8px 4px;
+    align-items: center;
+  }
+  .jump-label {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-right: 12px;
+  }
+  .jump a {
+    font-size: 13px; color: var(--ink); text-decoration: none;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    background: var(--pill-bg);
+  }
+  .jump a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─────────── Sections ─────────── */
+  section { margin-top: 96px; scroll-margin-top: 100px; }
+  .section-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-eyebrow {
+    font-family: "Figtree", sans-serif;
+    font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink); font-weight: 500; flex-shrink: 0;
+  }
+  .section-eyebrow .num { color: var(--accent); margin-right: 14px; }
+  h2.section-title {
+    font-family: "Figtree", sans-serif;
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  h2.section-title em { font-style: normal; color: inherit; }
+
+  .prose { max-width: none; font-size: 15px; line-height: 1.65; color: var(--ink); }
+  .prose p + p { margin-top: 18px; }
+  .prose strong { font-weight: 600; }
+
+  ul.clean { list-style: none; padding: 0; margin: 12px 0; max-width: none; }
+  ul.clean li {
+    padding: 14px 0 14px 28px; border-top: 1px solid var(--line);
+    position: relative; font-size: 14.5px; line-height: 1.55;
+  }
+  ul.clean li:last-child { border-bottom: 1px solid var(--line); }
+  ul.clean li::before {
+    content: "•"; position: absolute; left: 8px; top: 14px;
+    color: var(--accent); font-size: 15px; line-height: 1.55;
+  }
+  ul.clean li strong { font-weight: 600; }
+  /* Indented bullet list inside prose */
+  .prose ul.bullets {
+    list-style: disc; margin: 14px 0 0; padding-left: 24px; max-width: none;
+  }
+  .prose ul.bullets li {
+    font-size: 14.5px; line-height: 1.6; color: var(--ink);
+    margin-bottom: 8px; padding-left: 4px;
+  }
+  .prose ul.bullets li::marker { color: var(--accent); }
+  /* Goals list sits right under the section divider, drop its first top border to avoid a doubled line */
+  #goals ul.clean li:first-child { border-top: 0; padding-top: 4px; }
+  #goals ul.clean li:first-child::before { top: 4px; }
+
+  /* Impact list, identical to audit */
+  .impact-list {
+    margin-top: 8px;
+    display: flex; flex-direction: column;
+  }
+  .impact-list li {
+    list-style: none;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex; gap: 24px; align-items: flex-start;
+  }
+  .impact-list li:first-child { padding-top: 8px; }
+  .impact-list .imp-num {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 500;
+    padding-top: 4px; flex-shrink: 0; min-width: 24px;
+  }
+  .impact-list .imp-body { flex: 1; }
+  .impact-list h4 { font-size: 15.5px; font-weight: 600; color: var(--ink); margin-bottom: 6px; line-height: 1.4; }
+  .impact-list p { font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+
+  /* Figures */
+  figure.real {
+    margin-top: 40px;
+    background: transparent; padding: 0; overflow: hidden;
+    border: 1px solid var(--card-line);
+    box-shadow: var(--shadow);
+    border-radius: 12px;
+  }
+  body[data-theme="graphite"] figure.real { border-color: var(--line); }
+  figure.real img { display: block; width: 100%; height: auto; cursor: zoom-in; }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 1000;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(8, 12, 28, 0.86);
+    padding: 32px;
+    cursor: zoom-out;
+    opacity: 0; transition: opacity 0.2s ease;
+  }
+  .lightbox.open { display: flex; opacity: 1; }
+  .lightbox img {
+    max-width: 96vw; max-height: 92vh;
+    width: auto; height: auto;
+    border-radius: 8px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    cursor: default;
+  }
+  .lightbox .lb-close {
+    position: absolute; top: 20px; right: 24px;
+    width: 40px; height: 40px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    color: #fff; font-size: 20px; line-height: 1;
+    display: grid; place-items: center; cursor: pointer;
+    transition: background 0.18s;
+  }
+  .lightbox .lb-close:hover { background: rgba(255,255,255,0.18); }
+  .lightbox .lb-hint {
+    position: absolute; bottom: 24px; left: 0; right: 0;
+    text-align: center; color: rgba(255,255,255,0.5);
+    font-family: "Figtree", sans-serif; font-size: 11px; letter-spacing: 0.08em;
+  }
+  @media (prefers-reduced-motion: reduce) { .lightbox { transition: none; } }
+  figure.real figcaption {
+    margin: 0; padding: 14px 20px;
+    background: var(--card-bg-soft);
+    border-top: 1px solid var(--card-line);
+    color: var(--muted);
+    font-family: "Figtree", sans-serif;
+    font-size: 11.5px; letter-spacing: 0.04em;
+  }
+  body[data-theme="graphite"] figure.real figcaption { border-color: var(--line); }
+
+  /* Pull quote */
+  .pullquote {
+    margin: 56px 0;
+    max-width: 32ch;
+    font-family: "Figtree", sans-serif;
+    font-weight: 400; font-style: italic;
+    font-size: clamp(22px, 2.6vw, 30px); line-height: 1.3;
+    color: var(--accent);
+    letter-spacing: -0.005em;
+    padding-left: 32px;
+    border-left: 3px solid var(--accent);
+    text-wrap: balance;
+  }
+
+  /* Insight callout (the audit's pattern) */
+  .insight {
+    margin-top: 56px;
+    display: grid; grid-template-columns: 80px 1fr;
+    gap: 32px; padding-bottom: 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .insight:last-of-type { border-bottom: 0; padding-bottom: 0; }
+  .insight .ins-num {
+    font-family: "Figtree", sans-serif;
+    font-size: 48px; font-weight: 300; line-height: 1;
+    color: var(--accent);
+  }
+  .insight .ins-body { max-width: none; }
+  .insight h3 {
+    font-family: "Figtree", sans-serif;
+    font-weight: 400; font-size: 26px; line-height: 1.2;
+    color: var(--ink); margin-bottom: 16px; letter-spacing: -0.005em;
+  }
+  .insight h3 em { font-style: normal; color: inherit; }
+  .insight p { font-size: 14.5px; line-height: 1.65; color: var(--ink); }
+  .insight p + p { margin-top: 14px; }
+  .insight .ins-pill {
+    display: inline-block;
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft);
+    margin-bottom: 14px;
+  }
+
+  /* Chrome changes — three small panels */
+  .chrome-grid {
+    margin-top: 24px;
+    display: flex; flex-direction: column;
+    gap: 14px;
+  }
+  .chrome-card {
+    padding: 24px 22px;
+    background: var(--card-bg-soft);
+    border: 1px solid var(--card-line);
+    border-radius: 12px;
+  }
+  body[data-theme="graphite"] .chrome-card { border-color: var(--line); color: var(--ink); }
+  .chrome-card .ck-num {
+    font-family: "Figtree", sans-serif;
+    font-size: 10.5px; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 500; margin-bottom: 12px;
+  }
+  .chrome-card h4 {
+    font-family: "Figtree", sans-serif;
+    font-size: 14.5px; font-weight: 600; line-height: 1.3;
+    color: var(--card-ink); margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  body[data-theme="graphite"] .chrome-card h4 { color: var(--ink); }
+  .chrome-card p {
+    font-size: 13.5px; line-height: 1.55;
+    color: var(--card-ink); opacity: 0.75;
+  }
+  body[data-theme="graphite"] .chrome-card p { color: var(--ink); opacity: 0.75; }
+
+  /* Step blocks */
+  .step { margin: 48px 0; padding-top: 28px; border-top: 1px dashed var(--line); }
+  .step:first-of-type { border-top: 0; padding-top: 0; }
+  .step-num {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 8px;
+  }
+  .step h3 {
+    font-family: "Figtree", sans-serif; font-weight: 400;
+    font-size: 26px; line-height: 1.2; letter-spacing: -0.005em;
+    margin-bottom: 14px; color: var(--ink);
+  }
+
+  /* TBD placeholder */
+  .tbd {
+    border: 1px dashed var(--card-line); border-radius: 12px;
+    padding: 22px 26px; color: var(--muted); font-size: 14px;
+    font-family: "Figtree", sans-serif; letter-spacing: 0.02em;
+    max-width: none;
+  }
+  body[data-theme="graphite"] .tbd { border-color: var(--line); }
+
+  /* Next case card */
+  .next-grid { margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .next-card {
+    display: block; padding: 32px;
+    background: var(--card-bg); border-radius: 14px;
+    text-decoration: none; color: var(--card-ink);
+    transition: transform 0.2s;
+    position: relative; overflow: hidden;
+    min-height: 200px;
+  }
+  .next-card:hover { transform: translateY(-3px); }
+  .next-card .nc-eyebrow {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--card-ink); opacity: 0.6;
+  }
+  .next-card h3 {
+    font-family: "Figtree", sans-serif; font-weight: 400;
+    font-size: 26px; line-height: 1.2; margin-top: 12px; margin-bottom: 12px;
+    color: var(--card-ink); letter-spacing: -0.005em; max-width: 18ch;
+  }
+  .next-card p {
+    font-size: 14px; line-height: 1.5;
+    color: var(--card-ink); opacity: 0.7; max-width: 32ch;
+  }
+  .next-card .nc-arrow {
+    position: absolute; bottom: 28px; right: 32px;
+    width: 36px; height: 36px; border-radius: 999px;
+    background: color-mix(in srgb, var(--card-ink) 7%, var(--card-bg));
+    border: 1px solid var(--card-line); color: var(--card-ink);
+    display: grid; place-items: center;
+    transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .next-card .nc-arrow svg { stroke: currentColor; }
+  .next-card:hover .nc-arrow { background: var(--accent); border-color: var(--accent); color: #fff; transform: translate(2px, -2px); }
+
+  /* Footer */
+  footer#contact { max-width: none; margin: 64px 0 0; padding: 0; background: #0E0E11; color: #C9C9CF; min-height: calc(100vh - 64px); display: flex; align-items: center; }
+  footer#contact .fin { width: 100%; max-width: 1080px; margin: 0 auto; padding: 64px 32px 48px; }
+  footer#contact .ft-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: start; gap: 32px 40px; }
+  footer#contact .ft-brand { font-weight: 800; font-size: 19px; color: #fff; display: flex; align-items: center; gap: 8px; }
+  footer#contact .ft-brand .mk { width: 24px; height: 24px; border-radius: 7px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 800; }
+  footer#contact .ft-tag { font-size: 14px; color: #8C8C95; margin-top: 8px; max-width: 30ch; }
+  footer#contact .ft-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  footer#contact .ft-cta > span { color: #C9C9CF; font-size: 15px; line-height: 1.5; }
+  footer#contact .ft-links { display: flex; gap: 12px; }
+  footer#contact .ft-links a { width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--accent); display: grid; place-items: center; color: #fff; text-decoration: none; transition: background-color 0.18s; }
+  footer#contact .ft-links a:hover { background: var(--accent); }
+  footer#contact .ft-cta a { color: #fff; font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+  footer#contact .ft-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 40px; padding-top: 24px; border-top: 1px solid #232329; font-size: 13px; color: #76767E; }
+  @media (max-width: 760px) { footer#contact .ft-top { grid-template-columns: 1fr; } }
+  footer.legacy {
+    max-width: 1080px; margin: 0 auto;
+    padding: 48px 32px 80px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer .f-r { display: flex; gap: 20px; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* Responsive */
+  @media (max-width: 760px) {
+    .site-nav, .back-link, footer { padding-left: 20px; padding-right: 20px; }
+    .case-study { padding: 0 20px 80px; }
+    .nav-links { gap: 18px; }
+    .nav-links a { font-size: 12px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .meta-cell { padding: 18px 16px; }
+    .meta-cell:nth-child(2) { border-right: 0; }
+    .impact-list li:nth-child(odd) { padding-right: 0; }
+    .impact-list li:nth-child(even) { padding-left: 0; }
+    .chrome-grid { grid-template-columns: 1fr; }
+    .next-grid { grid-template-columns: 1fr; }
+    .insight { grid-template-columns: 1fr; gap: 12px; padding-bottom: 40px; }
+    .insight .ins-num { font-size: 36px; }
+    .jump { flex-wrap: wrap; }
+    footer { flex-direction: column; gap: 16px; align-items: flex-start; }
+  }
+  @media (max-width: 460px) {
+    .site-nav, .back-link, footer, .case-study { padding-left: 16px; padding-right: 16px; }
+    .hero-meta { grid-template-columns: 1fr; }
+    .meta-cell { border-right: 0; }
+    .meta-cell:not(:last-child) { border-bottom: 1px solid var(--line); }
+    .jump a { font-size: 12px; padding: 5px 10px; }
+  }
+
+  /* ─── Display type unified to Geist (was Poppins) ─── */
+  .case-title { font-family: 'Figtree', -apple-system, system-ui, sans-serif !important; font-weight: 700 !important; letter-spacing: -0.03em !important; }
+  .case-study :is(h2,h3,h4,h5,h6,blockquote), .insight .ins-num, figure.placeholder .ph-headline, .pull-quote { font-family: 'Figtree', -apple-system, system-ui, sans-serif !important; }
+</style>
+<link rel="stylesheet" href="shared.css" />
+</head>
+<body data-theme="blue" data-screen-label="WSOL Case Study">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('case-palette');
+      document.body.dataset.theme = (t === 'graphite' || t === 'blue') ? t : 'blue';
+    } catch(e) { document.body.dataset.theme = 'blue'; }
+  })();
+</script>
+
+  <!-- Site nav (identical across all pages) -->
+  <header class="topbar">
+    <div class="inner">
+      <a class="brand" href="index.html"><span class="mk">E</span>Esther Nam</a>
+      <nav>
+        <div class="nav-work">
+          <a href="index.html" class="active">Work<svg class="caret" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></a>
+          <div class="work-menu">
+            <a href="ux-audit.html">UX Audit<small>Cross-product diagnostic</small></a>
+            <a href="writing-solutions.html">Writing Solutions<small>Assignment creation redesign</small></a>
+            <a href="job-match.html">Job Match<small>Career tool · POC → MVP</small></a>
+            <a href="focus-gym.html">Focus Gym<small>AI hackathon · Concept</small></a>
+          </div>
+        </div>
+        <a href="resume.html">Resume</a>
+      </nav>
+      <span class="spacer"></span>
+      <a href="#contact" class="btn-primary">Get in touch</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <a href="index.html" class="back-link">← Back to work</a>
+
+  <main class="case-study">
+
+    <!-- ── Hero (matches audit pattern) ── -->
+    <div class="meta-strip">
+      <span class="tag">WRITING SOLUTIONS</span>
+      <span class="sep">/</span>
+      <span>Pearson Higher Ed · "Generate" portfolio</span>
+      <span class="sep">/</span>
+      <span>April 2026</span>
+    </div>
+
+    <h1 class="case-title">Restructuring assignment creation around <em>how instructors actually think</em>.</h1>
+
+    <p class="case-deck">I redesigned the assignment creation flow in Writing Solutions, an instructor-facing assessment tool in beta. While the audit set the strategic foundation, I extended those findings to tackle the issues specific to Writing Solutions.</p>
+
+    <div class="hero-meta">
+      <div class="meta-cell">
+        <span class="k">Role</span>
+        <span class="v">Lead designer</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Timeline</span>
+        <span class="v">April 2026</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Stage</span>
+        <span class="v">Beta · limited release</span>
+      </div>
+      <div class="meta-cell">
+        <span class="k">Outcome</span>
+        <span class="v">Restructured flow + clearer authoring foundation</span>
+      </div>
+    </div>
+
+    <figure class="real" style="margin-top: 48px;">
+      <img src="images/wsol-hero.png" alt="The redesigned assignment-creation flow: four steps shown together, Scoring method, Assignment content, Grading & Settings, and Review, each sharing a persistent progress tracker." />
+      <figcaption>Core screens of the redesigned flow, replacing one long scroll with four focused steps.</figcaption>
+    </figure>
+
+    <nav class="jump">
+      <span class="jump-label">Jump to</span>
+      <a href="#impact">Impact</a>
+      <a href="#overview">Overview</a>
+      <a href="#problem">Problem</a>
+      <a href="#constraint">Design constraint</a>
+      <a href="#solution">Solution</a>
+      <a href="#outcomes">A note on outcomes</a>
+      <a href="#next">Next</a>
+    </nav>
+
+    <!-- ── Impact ── -->
+    <section id="impact">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">01</span>Impact</span>
+      </div>
+
+      <ul class="impact-list" style="margin-top: 48px;">
+        <li>
+          <span class="imp-num">01</span>
+          <div class="imp-body">
+            <h4>Reduced confusion during setup</h4>
+            <p>The redesigned flow better matched instructor expectations and reduced the back-and-forth scrolling that defined the original page.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">02</span>
+          <div class="imp-body">
+            <h4>Clearer, scalable foundation for authoring across tools</h4>
+            <p>The four-step pattern is reusable: Freehand Grader and other Generate products can adopt the same chrome and sequence rather than each inventing its own.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">03</span>
+          <div class="imp-body">
+            <h4>Worked within the system's constraints, not around them</h4>
+            <p>Scoring method and content setup are technically linked for now. Respecting that constraint, the redesign made scoring choice the explicit first step, but in a clear and simplified manner.</p>
+          </div>
+        </li>
+        <li>
+          <span class="imp-num">04</span>
+          <div class="imp-body">
+            <h4>Translated platform-level audit insights into structural workflow change</h4>
+            <p>Demonstrated how strategic audit findings can turn into concrete IA decisions while taking underlying constraints seriously.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ── Overview ── -->
+    <section id="overview">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">02</span>Overview</span>
+      </div>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>Writing Solutions is an instructor-facing assessment tool for creating and grading typed assignments, in beta release as part of Pearson's "Generate" portfolio. Following a platform-wide UX audit, the assignment-creation flow emerged as a key opportunity to address recurring issues around cognitive load, decision clarity, and misalignment with instructor mental models.</p>
+        <p>This case study focuses on the assignment-creation redesign. The audit gave me the strategic foundation, and I extended those findings to tackle the issues specific to Writing Solutions.</p>
+      </div>
+    </section>
+
+    <!-- ── Problem ── -->
+    <section id="problem">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">03</span>Problem</span>
+      </div>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>The existing assignment-creation page stacked every decision into a single scroll. Because some choices affected others downstream, users had to scroll back constantly to revise.</p>
+      </div>
+
+      <figure class="real">
+        <img src="images/wsol-current.png" alt="The original Assignment Manager page, with every decision stacked into one long scrolling form." style="width: 70%; height: auto; display: block; margin: 0 auto;" />
+        <figcaption>The original assignment creation portion of Writing Solutions. Every decision lives on one scroll, and some choices change what others mean. </figcaption>
+      </figure>
+
+      <div class="prose" style="margin-top: 36px;">
+        <p>This forced instructors to context-switch constantly while scrolling up and down:</p>
+      </div>
+
+      <div class="pullquote">"What am I assigning?" → "How do I grade?" → "What are the constraints?" → "Wait, am I done?"</div>
+
+      <div class="prose">
+        <p>The structure conflicted with both:</p>
+      </div>
+      <ul class="clean">
+        <li>Learning design sequencing: Desired outcomes → assessment → feedback.</li>
+        <li>Instructor mental models: Content first, grading implications later.</li>
+      </ul>
+      <div class="prose" style="margin-top: 18px;">
+        <p>On top of that, a few high-impact decisions, like the choice between automatic and instructor-graded paths, carried consequences the page never spelled out. That left instructors confused, redoing work, and ending up with assignments that didn't behave the way they intended.</p>
+      </div>
+    </section>
+
+    <!-- ── Audit-informed insights ── -->
+    <section id="audit-insights">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">04</span>Building on the audit</span>
+      </div>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>The platform-wide audit had already surfaced patterns that applied directly to this flow:</p>
+      </div>
+      <ul class="clean">
+        <li>Complexity was front-loaded instead of progressively revealed.</li>
+        <li>Decision points lacked clear explanations of impact.</li>
+        <li>Flow structure followed tool constraints rather than instructor mental models.</li>
+      </ul>
+      <div class="prose" style="margin-top: 18px;">
+        <p>Assignment creation was a clean place to put those findings into practice. <a href="ux-audit.html" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor;">Read the audit case study →</a></p>
+      </div>
+    </section>
+
+    <!-- ── Design constraint ── -->
+    <section id="constraint">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">05</span>Design constraint</span>
+      </div>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>Before designing the ideal flow, I had to account for a near-term system constraint: in WSOL, scoring method determines whether prompts are system-defined or instructor-authored.</p>
+        <p>Practically, that meant scoring intent had to be surfaced first, with content creation following within those constraints. The coupling may loosen long-term, but the near-term redesign had to work within it, and honor it visibly rather than designing around it.</p>
+      </div>
+    </section>
+
+    <!-- ── Design goals ── -->
+    <section id="goals">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">06</span>Design goals</span>
+      </div>
+
+      <ul class="clean" style="margin-top: 32px;">
+        <li>Reduce cognitive load at early stages.</li>
+        <li>Make the consequences of major decisions explicit.</li>
+        <li>Defer advanced or conditional options until they're relevant.</li>
+        <li>Honor system constraints without letting them dictate the entire experience.</li>
+      </ul>
+    </section>
+
+    <!-- ── Solution: chrome changes + four steps ── -->
+    <section id="solution">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">07</span>Solution</span>
+      </div>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>The redesign worked at three levels.</p>
+        <ul class="bullets">
+          <li>Structural changes to the page itself, the chrome that wraps every step.</li>
+          <li>A re-sequencing of the actual decisions into four steps.</li>
+          <li>Visual treatment that followed Nebula, the up-and-coming design system. Since the department planned to update Nebula by the end of 2026, I designed against where it was heading, so the work would still be aligned after the update rather than need reworking.</li>
+        </ul>
+      </div>
+
+      <!-- Chrome changes -->
+      <h3 style="font-family: 'Figtree', sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-top: 48px; margin-bottom: 16px;">Page-level chrome</h3>
+      <div class="chrome-grid">
+        <div class="chrome-card">
+          <div class="ck-num">A</div>
+          <h4>Progress stepper at the top</h4>
+          <p>A persistent 4-step tracker replaces the old single-scroll page. Users always see where they are and what's left.</p>
+        </div>
+        <div class="chrome-card">
+          <div class="ck-num">B</div>
+          <h4>Persistent footer with step controls</h4>
+          <p>"Back / Next / Step X of 4" lives in a sticky footer. Replaces the original Preview / Save / Done buttons that disappeared the moment users scrolled.</p>
+        </div>
+        <div class="chrome-card">
+          <div class="ck-num">C</div>
+          <h4>Removed the iFrame scroll trap</h4>
+          <p>The original page nested its form inside an iFrame, creating two scroll containers. Users frequently scrolled the wrong one. The redesign removes the inner container entirely.</p>
+        </div>
+      </div>
+
+      <figure class="real" style="margin-top: 40px;">
+        <img src="images/wsol-progress-stepper.png" alt="A persistent 4-step progress tracker at the top of the page: 1 Scoring method, 2 Assignment content, 3 Grading & Settings, 4 Review." style="padding: 40px 48px; background: #fff; box-sizing: border-box;" />
+        <figcaption>The persistent progress tracker. Stays visible across all four steps.</figcaption>
+      </figure>
+
+      <figure class="real" style="margin-top: 24px;">
+        <img src="images/wsol-footer-nav.png" alt="A persistent footer bar with a Step 1 of 4 counter and a Next button." style="padding: 40px 48px; background: #fff; box-sizing: border-box;" />
+        <figcaption>A matching footer bar anchors movement, a clear step counter and a single Next action carry instructors through the flow.</figcaption>
+      </figure>
+
+      <!-- The four steps -->
+      <h3 style="font-family: 'Figtree', sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-top: 64px; margin-bottom: 16px;">The four steps</h3>
+
+      <div class="step">
+        <div class="step-num">Step 01</div>
+        <h3>Scoring method</h3>
+        <div class="prose">
+          <p>Based on the technical constraint around scoring method, I presented this option as the first step.</p>
+          <ul class="bullets">
+            <li>Helper text sets downstream expectations.</li>
+            <li>Visual treatment separates evaluation-based vs. participation-based scoring, and highlights which options involve AI assistance.</li>
+            <li>All content-related actions (like choosing a prompt) are separated into step 2, with their settings pre-configured based on step 1.</li>
+          </ul>
+        </div>
+        <figure class="real">
+          <img src="images/wsol-scoring.png" alt="Before/after of the scoring method picker. Before: a stacked list of radio buttons inside a long form. After: two grouped cards titled Evaluation-based scoring and Participation-based scoring." />
+          <figcaption>Before / after. The five flat radio options become two grouped cards that name the underlying intent, evaluation vs. participation, before naming the method.</figcaption>
+        </figure>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 02</div>
+        <h3>Assignment content</h3>
+        <div class="prose">
+          <p>Based on the Step 1 choice, instructors either select a system prompt (automatic / AI-assisted) or write their own (manual / journal / shared). Supporting documents and an optional learning outcome are added here.</p>
+        </div>
+        <figure class="real">
+          <img src="images/wsol-content.png" alt="Before/after of the prompt and content section. Before: a prompt textarea and rubric chooser. After: a clean Select-from-library button and an optional Upload supporting documents area." />
+          <figcaption>Before / after. The content step adapts to what Step 1 selected, library selector for system-scored, free authoring for instructor-scored.</figcaption>
+        </figure>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 03</div>
+        <h3>Evaluation &amp; feedback</h3>
+        <div class="prose">
+          <p>Grading is configured: rubric (if applicable), submission expectations (response length, citations), originality / plagiarism settings, and feedback options.</p>
+        </div>
+        <figure class="real">
+          <img src="images/wsol-grading.png" alt="Before/after of the grading and settings section. Before: scattered citation, response-length, and originality toggles buried at the bottom of the long form. After: a focused Grading & Settings step with citation style, response-length presets, originality presets, and rubric visibility." />
+          <figcaption>Before / after. Scattered grading controls become a single focused step with presets for response length and originality.</figcaption>
+        </figure>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 04</div>
+        <h3>Review &amp; assign</h3>
+        <div class="prose">
+          <p>Instructors confirm the full setup before making the assignment available to students, then return to scheduling.</p>
+        </div>
+        <figure class="real">
+          <img src="images/wsol-review.png" alt="The new Review step: a summary of every choice (scoring method, prompt, supporting documents, citation style, response length, originality safeguards, rubric visibility), each with an inline Edit link, and a Publish action in the footer." />
+          <figcaption>A net-new step with no equivalent in the original flow. A single review surface summarizes every decision, each editable inline, before publishing.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── Note on learning outcomes ── -->
+    <section id="outcomes">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">08</span>Design note</span>
+      </div>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p>Tying assignments to learning outcomes is good pedagogical practice, and Pearson's own guidance supports it. But in practice:</p>
+      </div>
+      <ul class="clean">
+        <li>Many instructors don't work this way day-to-day.</li>
+        <li>Many courses already define outcomes elsewhere (syllabus, LMS, course settings).</li>
+        <li>Forcing outcomes upfront measurably reduces adoption.</li>
+      </ul>
+      <div class="prose" style="margin-top: 18px;">
+        <p>Removing the field entirely would weaken pedagogical alignment and limit downstream AI / analytics value; requiring it could frustrate instructors, slow authoring, and feel rigid. So I kept it optional within Step 2, the deliberate middle path.</p>
+      </div>
+    </section>
+
+    <!-- ── Open questions ── -->
+    <section id="open-questions">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">09</span>Next steps</span>
+      </div>
+
+      <div class="prose" style="margin-top: 32px;">
+        <p><strong>Should scoring method really come before the assignment objective?</strong> Right now a technical constraint forces that order. The open question is whether AI's time savings justify it, or whether instructors should define what they're assigning first.</p>
+        <p>This question matters because time savings is core to the value proposition for Writing Solutions and the other "Generate" products. It's often what decides whether an instructor assigns an authentic assessment at all, rather than a traditional one. So if surfacing the AI path early helps instructors capture that value sooner, the current order may be worth keeping.</p>
+        <p>But early research, three rounds of interviews with distinct panels of higher-ed instructors, suggests instructors don't yet trust AI enough to commit to it that early. The next step I'd explore is twofold. First: are there ways to build that trust, through transparency, previews, or more control? Second, and just as important: is doing so worth it? If earning that trust unlocks the time savings instructors care about, the investment likely pays for itself. If it doesn't, the simpler answer may be to honor how instructors already think and let them define the assignment first.</p>
+      </div>
+    </section>
+
+    <!-- ── Next case study ── -->
+    <section id="next">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">10</span>Continue reading</span>
+      </div>
+
+      <div class="next-grid">
+        <a class="next-card" href="ux-audit.html">
+          <span class="nc-eyebrow">01 · Research foundation</span>
+          <h3>UX Audit</h3>
+          <p>The cross-product audit that surfaced the patterns this redesign acts on.</p>
+          <div class="nc-arrow">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg>
+          </div>
+        </a>
+        <a class="next-card" href="job-match.html">
+          <span class="nc-eyebrow">Pearson+ · 2022–2023</span>
+          <h3>Job Match</h3>
+          <p>Opening a closed career-exploration tool to a public audience at MVP.</p>
+          <div class="nc-arrow">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="contact">
+    <div class="fin">
+      <div class="ft-top">
+        <div>
+          <div class="ft-brand"><span class="mk">E</span>Esther Nam</div>
+          <p class="ft-tag">Product designer working on research-led, AI-assisted tools for education.</p>
+        </div>
+        <div class="ft-cta">
+          <span>Thanks for checking out my portfolio!<br />I’d love to hear from you: <a href="mailto:enam0491@gmail.com">enam0491@gmail.com</a></span>
+          <div class="ft-links">
+            <a href="https://www.linkedin.com/in/esther-nam/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="-1.25 0 24 24" fill="currentColor" width="16" height="16"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.58-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.5V23h-4V8z"/></svg></a>
+            <a href="mailto:enam0491@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="ft-bottom">
+        <span>© 2026 Esther Nam</span>
+        <span>UX Portfolio</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox overlay -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image">
+    <button class="lb-close" type="button" aria-label="Close">&times;</button>
+    <img alt="" />
+    <div class="lb-hint">Click anywhere or press Esc to close</div>
+  </div>
+
+  <script>
+    (function () {
+      const body = document.body;
+      const btn = document.getElementById('theme-toggle');
+      function set(theme) {
+        body.dataset.theme = theme;
+        try { localStorage.setItem('case-palette', theme); } catch (e) {}
+      }
+      btn.addEventListener('click', () => {
+        set(body.dataset.theme === 'graphite' ? 'blue' : 'graphite');
+      });
+      document.getElementById('top-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      const lb = document.getElementById('lightbox');
+      const lbImg = lb.querySelector('img');
+      function open(src, alt) {
+        lbImg.src = src; lbImg.alt = alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function close() {
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.removeAttribute('src');
+      }
+      document.querySelectorAll('figure.real img').forEach(function (img) {
+        img.addEventListener('click', function () { open(img.currentSrc || img.src, img.alt); });
+      });
+      lb.addEventListener('click', function (e) {
+        if (e.target === lbImg) return; // clicks on the image itself don't close
+        close();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lb.classList.contains('open')) close();
+      });
+    })();
+  </script>
+<style id="mobile-opt">
+@keyframes contact-jiggle { 0%,100%{transform:translateX(0)} 18%{transform:translateX(-5px)} 38%{transform:translateX(5px)} 58%{transform:translateX(-3px)} 78%{transform:translateX(3px)} }
+.ft-cta.jiggle > span { animation: contact-jiggle .5s ease; display:inline-block; }
+.ft-cta.jiggle .ft-links a { animation: contact-jiggle .55s ease; }
+.ft-cta.jiggle .ft-links a:nth-child(2){ animation-delay:.06s; }
+@media (prefers-reduced-motion: reduce){ .ft-cta.jiggle > span, .ft-cta.jiggle .ft-links a { animation:none; } }
+.nav-work.open .work-menu { opacity:1 !important; visibility:visible !important; transform:translateX(-50%) translateY(0) !important; }
+.nav-work.open .caret { transform: rotate(180deg); }
+@media (hover: none) and (max-width: 600px){
+  .work-menu { left:0 !important; right:auto !important; transform:translateX(0) translateY(-4px) !important; min-width:210px !important; }
+  .nav-work.open .work-menu { transform:translateX(0) translateY(0) !important; }
+}
+</style>
+<script>
+(function(){
+  document.querySelectorAll('.nav-work > a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      if (window.matchMedia('(hover: none)').matches){ e.preventDefault(); a.parentElement.classList.toggle('open'); }
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.nav-work')){ document.querySelectorAll('.nav-work.open').forEach(function(n){n.classList.remove('open');}); }
+  });
+  var foot = document.getElementById('contact');
+  document.querySelectorAll('a.btn-primary[href="#contact"]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      if(!foot) return;
+      var r = foot.getBoundingClientRect();
+      if(r.top < window.innerHeight*0.5 && r.bottom > 0){
+        e.preventDefault();
+        var cta = foot.querySelector('.ft-cta');
+        if(cta){ cta.classList.remove('jiggle'); void cta.offsetWidth; cta.classList.add('jiggle'); }
+      }
+    });
+  });
+})();
+</script>
+<style id="mobile-nav">
+.nav-toggle{display:none;background:none;border:0;cursor:pointer;padding:8px;color:var(--ink);}
+.nav-toggle svg{width:24px;height:24px;display:block;}
+.mobile-menu{display:none;}
+@media (max-width:700px){
+  .topbar nav{display:none!important;}
+  .topbar .btn-primary{display:none!important;}
+  .nav-toggle{display:grid;place-items:center;}
+  .mobile-menu{display:block;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 20px 44px -22px rgba(0,0,0,.4);padding:10px;z-index:90;max-height:calc(100vh - 64px);overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .2s,transform .2s,visibility .2s;}
+  .mobile-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
+  .mobile-menu a{display:block;padding:13px 14px;border-radius:10px;text-decoration:none;color:var(--ink);font-size:16px;font-weight:600;}
+  .mobile-menu a small{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:2px;}
+  .mobile-menu a:active{background:var(--field);}
+  .mobile-menu .mm-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:14px 14px 4px;}
+  .mobile-menu .mm-cta{margin-top:8px;background:var(--accent);color:#fff;text-align:center;}
+  .mobile-menu .mm-sep{height:1px;background:var(--line);margin:8px 6px;}
+}
+</style>
+<script>
+(function(){
+  var bar=document.querySelector('.topbar .inner');
+  if(!bar||bar.querySelector('.nav-toggle'))return;
+  var btn=document.createElement('button');
+  btn.className='nav-toggle';btn.setAttribute('aria-label','Open menu');btn.setAttribute('aria-expanded','false');
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+  bar.appendChild(btn);
+  var menu=document.createElement('div');menu.className='mobile-menu';
+  var html='<div class="mm-label">Work</div>';
+  document.querySelectorAll('.work-menu a').forEach(function(a){html+='<a href="'+a.getAttribute('href')+'">'+a.innerHTML+'</a>';});
+  html+='<div class="mm-sep"></div><a href="resume.html">Resume</a><a class="mm-cta" href="#contact">Get in touch</a>';
+  menu.innerHTML=html;document.body.appendChild(menu);
+  function close(){menu.classList.remove('open');btn.setAttribute('aria-expanded','false');btn.querySelector('svg').innerHTML='<path d="M3 6h18M3 12h18M3 18h18"/>';}
+  function open(){menu.classList.add('open');btn.setAttribute('aria-expanded','true');btn.querySelector('svg').innerHTML='<path d="M5 5l14 14M19 5L5 19"/>';}
+  btn.addEventListener('click',function(e){e.stopPropagation();menu.classList.contains('open')?close():open();});
+  menu.addEventListener('click',function(e){if(e.target.closest('a'))close();});
+  document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!e.target.closest('.mobile-menu')&&!e.target.closest('.nav-toggle'))close();});
+})();
+</script>
+</body>
+</html>
+
+<style id="__om-edit-overrides">
+#solution :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) >div { padding: 0px 0px 0px 8px !important }
+#solution :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) >div { padding: 0px 0px 0px 12px !important }
+#solution :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) >div { padding: 0px 0px 0px 24px !important }
+</style>
