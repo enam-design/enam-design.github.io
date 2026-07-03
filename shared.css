@@ -7,6 +7,9 @@
    --accent --card --card-line --accent-soft.
    ============================================================ */
 
+/* ---- Global scale (match the fuller feel of the design preview; tune 1.0–1.2) ---- */
+@media (min-width: 700px) { html { zoom: 1.1; } }
+
 /* ---- Top bar ---- */
 .topbar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid var(--line); }
 .topbar .inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 20px; }
