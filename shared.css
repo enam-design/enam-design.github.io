@@ -7,11 +7,20 @@
    --accent --card --card-line --accent-soft.
    ============================================================ */
 
-/* ---- Global scale (match the fuller feel of the design preview; tune per tier) ---- */
-@media (min-width: 700px)  { html { zoom: 1.1; } }
-@media (min-width: 1600px) { html { zoom: 1.25; } }
-@media (min-width: 2000px) { html { zoom: 1.45; } }
-@media (min-width: 2560px) { html { zoom: 1.7; } }
+/* ---- Global scale + wide-screen fill ----
+   Single safe baseline zoom (tiered zoom + min-width MQs feed back on each
+   other and don't stick, so wide screens use max-width expansion instead). */
+@media (min-width: 800px) { html { zoom: 1.1; } }
+/* On large/ultra-wide displays, let the content columns grow so the page
+   fills the screen instead of stranding a narrow column in empty margins. */
+@media (min-width: 1600px) {
+  .topbar .inner, .wrap, footer .fin, .back-link,
+  main.case-study, .case-study > main, .stage .resume-frame { max-width: 1320px; }
+}
+@media (min-width: 2200px) {
+  .topbar .inner, .wrap, footer .fin, .back-link,
+  main.case-study, .case-study > main, .stage .resume-frame { max-width: 1520px; }
+}
 
 /* ---- Top bar ---- */
 .topbar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid var(--line); }
