@@ -7,20 +7,12 @@
    --accent --card --card-line --accent-soft.
    ============================================================ */
 
-/* ---- Global scale + wide-screen fill ----
-   Single safe baseline zoom (tiered zoom + min-width MQs feed back on each
-   other and don't stick, so wide screens use max-width expansion instead). */
-@media (min-width: 800px) { html { zoom: 1.1; } }
-/* On large/ultra-wide displays, let the content columns grow so the page
-   fills the screen instead of stranding a narrow column in empty margins. */
-@media (min-width: 1600px) {
-  .topbar .inner, .wrap, footer .fin, .back-link,
-  main.case-study, .case-study > main, .stage .resume-frame { max-width: 1320px; }
-}
-@media (min-width: 2200px) {
-  .topbar .inner, .wrap, footer .fin, .back-link,
-  main.case-study, .case-study > main, .stage .resume-frame { max-width: 1520px; }
-}
+/* ---- Global zoom (scales everything uniformly — text, images, chrome — with
+   no reflow. Applied to BODY not HTML so it doesn't feed back into the
+   media-query viewport, which lets the tiers actually stick). ---- */
+@media (min-width: 800px)  { body { zoom: 1.12; } }
+@media (min-width: 1600px) { body { zoom: 1.32; } }
+@media (min-width: 2200px) { body { zoom: 1.6; } }
 
 /* ---- Top bar ---- */
 .topbar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid var(--line); }
