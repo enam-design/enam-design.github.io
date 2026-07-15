@@ -1365,10 +1365,10 @@
           <p class="ft-tag">Product designer working on research-led, AI-assisted tools for education.</p>
         </div>
         <div class="ft-cta">
-          <span>Thanks for checking out my portfolio!<br />I’d love to hear from you: <a href="mailto:enam0491@gmail.com">enam0491@gmail.com</a></span>
+          <span>Thanks for checking out my portfolio!<br />I’d love to hear from you: <span class="email-out"></span></span>
           <div class="ft-links">
             <a href="https://www.linkedin.com/in/esther-nam/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="-1.25 0 24 24" fill="currentColor" width="16" height="16"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.58-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.5V23h-4V8z"/></svg></a>
-            <a href="mailto:enam0491@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></a>
+            <a href="#" class="email-link" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></a>
           </div>
         </div>
       </div>
@@ -1494,5 +1494,6 @@
   document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!e.target.closest('.mobile-menu')&&!e.target.closest('.nav-toggle'))close();});
 })();
 </script>
+<script>(function(){var e="enam0491"+String.fromCharCode(64)+"gmail.com";document.querySelectorAll(".email-out").forEach(function(s){s.textContent=e;});document.querySelectorAll(".email-link").forEach(function(a){a.setAttribute("href","mailto:"+e);});})();</script>
 </body>
 </html>
