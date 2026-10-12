@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MR0TVY28CQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MR0TVY28CQ');
+</script>
+<meta charset="utf-8" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="favicon.svg" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dance Coach · Esther Nam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; scrollbar-gutter: stable; }
+  body {
+    font-family: "Figtree", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 16px; line-height: 1.6;
+    background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    max-width: 100%;
+  }
+  img { max-width: 100%; }
+
+  /* ─────────── Palette systems (identical to UX Audit Case Study) ─────────── */
+  body[data-theme="blue"] {
+    --bg: #FBFBFC;
+    --ink: #1A1A1E;
+    --muted: #6A6A72;
+    --line: #E6E6EA;
+    --line-soft: #F0F0F2;
+    --accent: #E92E66;
+    --accent-deep: #B11248;
+    --accent-soft: #FCE7EE;
+    --card-bg: #FFFFFF;
+    --card-bg-soft: #F6F6F8;
+    --card-ink: #1A1A1E;
+    --card-line: #E6E6EA;
+    --pill-bg: #FFFFFF;
+    --hero-tint: #F7F4F6;
+    --highlight: #FBF1DA;
+    --shadow: 0 1px 0 rgba(0,0,0,0.04), 0 12px 30px rgba(20, 20, 30, 0.07);
+  }
+  body[data-theme="graphite"] {
+    --bg: #14141A;
+    --ink: #E8E8EE;
+    --muted: #8D8D95;
+    --line: #2A2A33;
+    --line-soft: #1E1E26;
+    --accent: #FF6492;
+    --accent-deep: #FF8DAE;
+    --accent-soft: rgba(255,100,146,0.16);
+    --card-bg: #F8F8FA;
+    --card-bg-soft: #1E1E26;
+    --card-ink: #0E0E10;
+    --card-line: #E0E0E5;
+    --pill-bg: #1E1E26;
+    --hero-tint: #1A1A22;
+    --shadow: 0 1px 0 rgba(255,255,255,0.04), 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ─────────── Site nav ─────────── */
+  .site-nav {
+    max-width: 1080px; margin: 0 auto;
+    padding: 32px 32px 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .wordmark {
+    font-family: "Figtree", sans-serif;
+    font-size: 22px; color: var(--ink); text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .wordmark .dot { color: var(--accent); }
+  .site-nav nav { display: flex; gap: 28px; align-items: center; }
+  .site-nav nav a {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    transition: color 0.2s; font-family: "Figtree", sans-serif;
+  }
+  .site-nav nav a:hover { color: var(--ink); }
+  .site-nav nav a.current { color: var(--ink); font-weight: 500; }
+
+  .theme-toggle {
+    display: inline-grid; place-items: center;
+    width: 32px; height: 32px; border-radius: 999px;
+    margin-left: 8px;
+    background: transparent; border: 1px solid var(--line);
+    color: var(--ink); cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .theme-toggle:hover { border-color: var(--ink); transform: scale(1.04); }
+  .theme-toggle svg { width: 14px; height: 14px; }
+  .theme-toggle .icon-sun, .theme-toggle .icon-moon { display: none; }
+  body[data-theme="blue"] .theme-toggle .icon-moon { display: block; }
+  body[data-theme="graphite"] .theme-toggle .icon-sun { display: block; }
+
+  /* ─────────── Persistent top nav (identical across all pages) ─────────── */
+  .topbar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid var(--line); }
+  .topbar .inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 20px; }
+  .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; text-decoration: none; color: var(--ink); display: flex; align-items: center; gap: 7px; }
+  .brand .mk { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 800; }
+  .topbar nav { display: flex; align-items: center; gap: 24px; margin-left: 14px; }
+  .topbar nav a { text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1; transition: color 0.18s; }
+  .topbar nav a:hover, .topbar nav a.active { color: var(--ink); }
+  .nav-work { position: relative; }
+  .nav-work > a { display: inline-flex; align-items: center; gap: 4px; }
+  .nav-work .caret { width: 9px; height: 9px; opacity: 0.65; transition: transform 0.18s; }
+  .nav-work:hover .caret { transform: rotate(180deg); }
+  .nav-work::after { content: ""; position: absolute; top: 100%; left: -14px; right: -14px; height: 14px; }
+  .work-menu { position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(-4px); min-width: 240px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 44px -18px rgba(0,0,0,0.30); padding: 7px; opacity: 0; visibility: hidden; transition: opacity 0.16s ease, transform 0.16s ease; z-index: 80; }
+  .nav-work:hover .work-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+  .topbar .work-menu a { display: block; padding: 9px 12px; border-radius: 8px; color: var(--ink); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+  .topbar .work-menu a small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 400; margin-top: 1px; }
+  .topbar .work-menu a:hover { background: var(--field); color: var(--ink); }
+  .topbar .spacer { flex: 1; }
+  .topbar .btn-primary { background: var(--accent); color: #fff; border: 0; padding: 9px 18px; border-radius: 999px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; white-space: nowrap; transition: filter 0.18s, transform 0.15s; }
+  .topbar .btn-primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .topbar .theme-toggle { margin-left: 0; }
+
+  .back-link {
+    max-width: 1080px; margin: 0 auto;
+    padding: 32px 32px 0;
+    display: block; font-size: 12px; font-weight: 600; color: var(--muted);
+    text-decoration: none; font-family: "Figtree", sans-serif;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  /* ─────────── Case study layout ─────────── */
+  .case-study {
+    max-width: 720px; margin: 0 auto;
+    padding: 0 32px 120px;
+  }
+  .meta-strip {
+    margin-top: 56px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-strip .tag { color: var(--accent); font-weight: 500; }
+  .meta-strip .sep { opacity: 0.4; }
+
+  .case-title {
+    font-family: "Figtree", sans-serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin-top: 24px;
+    max-width: 22ch;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .case-title em { font-style: normal; color: inherit; }
+
+  .case-deck {
+    margin-top: 28px;
+    max-width: none;
+    font-size: 16px; line-height: 1.55; color: var(--muted);
+  }
+
+  /* Sizzle reel */
+  .reel { margin: 56px 0 0; }
+
+  /* Concept carousel */
+  .carousel { margin-top: 28px; }
+  .carousel-viewport { position: relative; overflow: hidden; border-radius: 14px; border: 1px solid var(--card-line); background: var(--field); }
+  .carousel-track { display: flex; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .carousel-slide { min-width: 100%; }
+  .carousel-slide img { width: 100%; height: auto; display: block; }
+  .carousel-side { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.92); color: #14141a; display: grid; place-items: center; cursor: pointer; z-index: 3; transition: background 0.18s, border-color 0.18s, color 0.18s; box-shadow: 0 4px 14px rgba(0,0,0,0.28); }
+  .carousel-side:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .carousel-side svg { width: 18px; height: 18px; }
+  .carousel-side.prev { left: 12px; }
+  .carousel-side.next { right: 12px; }
+  .carousel-cap { min-height: 46px; margin-top: 14px; font-size: 13px; line-height: 1.5; color: var(--muted); font-family: "Figtree", sans-serif; }
+  .carousel-cap a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+  .carousel-controls { display: flex; align-items: center; justify-content: center; margin-top: 14px; }
+  .carousel-dots { display: flex; gap: 8px; }
+  .carousel-dots button { width: 8px; height: 8px; border-radius: 999px; border: 0; padding: 0; background: var(--card-line); cursor: pointer; transition: background 0.2s, transform 0.2s; }
+  .carousel-dots button.active { background: var(--accent); transform: scale(1.25); }
+  .carousel-counter { font-size: 12.5px; color: var(--muted); font-family: "Figtree", sans-serif; font-variant-numeric: tabular-nums; }
+  @media (max-width: 560px) { .carousel-side { width: 34px; height: 34px; } .carousel-side.prev { left: 6px; } .carousel-side.next { right: 6px; } }
+  .reel-frame { position: relative; padding-top: 56.25%; border-radius: 14px; overflow: hidden; background: #000; box-shadow: var(--shadow); border: 1px solid var(--card-line); }
+  .reel-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .reel figcaption { margin-top: 14px; font-size: 13px; color: var(--muted); font-family: "Figtree", sans-serif; }
+  /* Prototype link button */
+  .proto-link { display: inline-flex; align-items: center; gap: 9px; margin-top: 28px; padding: 12px 22px; border-radius: 999px; background: var(--accent); color: #fff; text-decoration: none; font-weight: 600; font-size: 14px; transition: filter 0.18s, transform 0.15s; }
+  .proto-link:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .proto-link svg { width: 14px; height: 14px; }
+
+  .tools-list { display: flex; flex-direction: column; gap: 4px; }
+  .tools-list em { font-style: normal; color: var(--muted); font-weight: 400; }
+
+  /* Hero meta grid */
+  .hero-meta {
+    margin-top: 56px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .meta-cell {
+    padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    border-right: 1px solid var(--line);
+  }
+  .meta-cell:first-child { padding-left: 0; }
+  .meta-cell:last-child { border-right: 0; padding-right: 0; }
+  .meta-cell .k {
+    font-family: "Figtree", sans-serif;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-cell .v {
+    font-size: 15px; color: var(--ink); font-weight: 500;
+    line-height: 1.35;
+  }
+
+  /* Jump nav */
+  .jump {
+    margin-top: 40px;
+    display: flex; flex-wrap: wrap; gap: 8px 4px;
+    align-items: center;
+  }
+  .jump-label {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-right: 12px;
+  }
+  .jump a {
+    font-size: 13px; color: var(--ink); text-decoration: none;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    background: var(--pill-bg);
+  }
+  .jump a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─────────── Sections ─────────── */
+  section { margin-top: 96px; scroll-margin-top: 100px; }
+  .section-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-eyebrow {
+    font-family: "Figtree", sans-serif;
+    font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink); font-weight: 500; flex-shrink: 0;
+  }
+  .section-eyebrow .num { color: var(--accent); margin-right: 14px; }
+  h2.section-title {
+    font-family: "Figtree", sans-serif;
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  h2.section-title em { font-style: normal; color: inherit; }
+
+  .prose { max-width: none; font-size: 15px; line-height: 1.65; color: var(--ink); }
+  .prose p + p { margin-top: 18px; }
+  .prose strong { font-weight: 600; }
+
+  ul.clean { list-style: none; padding: 0; margin: 12px 0; max-width: none; }
+  ul.clean li {
+    padding: 14px 0 14px 28px; border-top: 1px solid var(--line);
+    position: relative; font-size: 14.5px; line-height: 1.55;
+  }
+  ul.clean li:last-child { border-bottom: 1px solid var(--line); }
+  ul.clean li::before {
+    content: "•"; position: absolute; left: 8px; top: 14px;
+    color: var(--accent); font-size: 15px; line-height: 1.55;
+  }
+  ul.clean li strong { font-weight: 600; }
+  /* Indented bullet list inside prose */
+  .prose ul.bullets {
+    list-style: disc; margin: 14px 0 0; padding-left: 24px; max-width: none;
+  }
+  .prose ul.bullets li {
+    font-size: 14.5px; line-height: 1.6; color: var(--ink);
+    margin-bottom: 8px; padding-left: 4px;
+  }
+  .prose ul.bullets li::marker { color: var(--accent); }
+  /* Clean lists: drop the first item's top border so it never doubles the section divider above it */
+  ul.clean li:first-child { border-top: 0; padding-top: 4px; }
+  ul.clean li:first-child::before { top: 4px; }
+
+  /* Impact list, identical to audit */
+  .impact-list {
+    margin-top: 8px;
+    display: flex; flex-direction: column;
+  }
+  .impact-list li {
+    list-style: none;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex; gap: 24px; align-items: flex-start;
+  }
+  .impact-list li:first-child { padding-top: 8px; }
+  .impact-list .imp-num {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 500;
+    padding-top: 4px; flex-shrink: 0; min-width: 24px;
+  }
+  .impact-list .imp-body { flex: 1; }
+  .impact-list h4 { font-size: 15.5px; font-weight: 600; color: var(--ink); margin-bottom: 6px; line-height: 1.4; }
+  .impact-list p { font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+
+  /* Figures */
+  figure.real {
+    margin-top: 40px;
+    background: transparent; padding: 0; overflow: hidden;
+    border: 1px solid var(--card-line);
+    box-shadow: var(--shadow);
+    border-radius: 12px;
+  }
+  body[data-theme="graphite"] figure.real { border-color: var(--line); }
+  figure.real img { display: block; width: 100%; height: auto; cursor: zoom-in; }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 1000;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(8, 12, 28, 0.86);
+    padding: 32px;
+    cursor: zoom-out;
+    opacity: 0; transition: opacity 0.2s ease;
+  }
+  .lightbox.open { display: flex; opacity: 1; }
+  .lightbox img {
+    max-width: 96vw; max-height: 92vh;
+    width: auto; height: auto;
+    border-radius: 8px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    cursor: default;
+  }
+  .lightbox .lb-close {
+    position: absolute; top: 20px; right: 24px;
+    width: 40px; height: 40px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    color: #fff; font-size: 20px; line-height: 1;
+    display: grid; place-items: center; cursor: pointer;
+    transition: background 0.18s;
+  }
+  .lightbox .lb-close:hover { background: rgba(255,255,255,0.18); }
+  .lightbox .lb-hint {
+    position: absolute; bottom: 24px; left: 0; right: 0;
+    text-align: center; color: rgba(255,255,255,0.5);
+    font-family: "Figtree", sans-serif; font-size: 11px; letter-spacing: 0.08em;
+  }
+  @media (prefers-reduced-motion: reduce) { .lightbox { transition: none; } }
+  figure.real figcaption {
+    margin: 0; padding: 14px 20px;
+    background: var(--card-bg-soft);
+    border-top: 1px solid var(--card-line);
+    color: var(--muted);
+    font-family: "Figtree", sans-serif;
+    font-size: 11.5px; letter-spacing: 0.04em;
+  }
+  body[data-theme="graphite"] figure.real figcaption { border-color: var(--line); }
+
+  /* Pull quote */
+  .pullquote {
+    margin: 56px 0;
+    max-width: 32ch;
+    font-family: "Figtree", sans-serif;
+    font-weight: 400; font-style: italic;
+    font-size: clamp(22px, 2.6vw, 30px); line-height: 1.3;
+    color: var(--accent);
+    letter-spacing: -0.005em;
+    padding-left: 32px;
+    border-left: 3px solid var(--accent);
+    text-wrap: balance;
+  }
+
+  /* Insight callout (the audit's pattern) */
+  .insight {
+    margin-top: 56px;
+    display: grid; grid-template-columns: 80px 1fr;
+    gap: 32px; padding-bottom: 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .insight:last-of-type { border-bottom: 0; padding-bottom: 0; }
+  .insight .ins-num {
+    font-family: "Figtree", sans-serif;
+    font-size: 48px; font-weight: 300; line-height: 1;
+    color: var(--accent);
+  }
+  .insight .ins-body { max-width: none; }
+  .insight h3 {
+    font-family: "Figtree", sans-serif;
+    font-weight: 400; font-size: 26px; line-height: 1.2;
+    color: var(--ink); margin-bottom: 16px; letter-spacing: -0.005em;
+  }
+  .insight h3 em { font-style: normal; color: inherit; }
+  .insight p { font-size: 14.5px; line-height: 1.65; color: var(--ink); }
+  .insight p + p { margin-top: 14px; }
+  .insight .ins-pill {
+    display: inline-block;
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--accent-soft);
+    margin-bottom: 14px;
+  }
+
+  /* Chrome changes — three small panels */
+  .chrome-grid {
+    margin-top: 24px;
+    display: flex; flex-direction: column;
+    gap: 14px;
+  }
+  .chrome-card {
+    padding: 24px 22px;
+    background: var(--card-bg-soft);
+    border: 1px solid var(--card-line);
+    border-radius: 12px;
+  }
+  body[data-theme="graphite"] .chrome-card { border-color: var(--line); color: var(--ink); }
+  .chrome-card .ck-num {
+    font-family: "Figtree", sans-serif;
+    font-size: 10.5px; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 500; margin-bottom: 12px;
+  }
+  .chrome-card h4 {
+    font-family: "Figtree", sans-serif;
+    font-size: 14.5px; font-weight: 600; line-height: 1.3;
+    color: var(--card-ink); margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  body[data-theme="graphite"] .chrome-card h4 { color: var(--ink); }
+  .chrome-card p {
+    font-size: 13.5px; line-height: 1.55;
+    color: var(--card-ink); opacity: 0.75;
+  }
+  body[data-theme="graphite"] .chrome-card p { color: var(--ink); opacity: 0.75; }
+
+  /* Step blocks */
+  .step { margin: 48px 0; padding-top: 28px; border-top: 1px dashed var(--line); }
+  .step:first-of-type { border-top: 0; padding-top: 0; }
+  .step-num {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 8px;
+  }
+  .step h3 {
+    font-family: "Figtree", sans-serif; font-weight: 400;
+    font-size: 26px; line-height: 1.2; letter-spacing: -0.005em;
+    margin-bottom: 14px; color: var(--ink);
+  }
+
+  /* TBD placeholder */
+  .tbd {
+    border: 1px dashed var(--card-line); border-radius: 12px;
+    padding: 22px 26px; color: var(--muted); font-size: 14px;
+    font-family: "Figtree", sans-serif; letter-spacing: 0.02em;
+    max-width: none;
+  }
+  body[data-theme="graphite"] .tbd { border-color: var(--line); }
+
+  /* Next case card */
+  .next-grid { margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .next-card {
+    display: block; padding: 32px;
+    background: var(--card-bg); border-radius: 14px;
+    text-decoration: none; color: var(--card-ink);
+    transition: transform 0.2s;
+    position: relative; overflow: hidden;
+    min-height: 200px;
+  }
+  .next-card:hover { transform: translateY(-3px); }
+  .next-card .nc-eyebrow {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--card-ink); opacity: 0.6;
+  }
+  .next-card h3 {
+    font-family: "Figtree", sans-serif; font-weight: 400;
+    font-size: 26px; line-height: 1.2; margin-top: 12px; margin-bottom: 12px;
+    color: var(--card-ink); letter-spacing: -0.005em; max-width: 18ch;
+  }
+  .next-card p {
+    font-size: 14px; line-height: 1.5;
+    color: var(--card-ink); opacity: 0.7; max-width: 32ch;
+  }
+  .next-card .nc-arrow {
+    position: absolute; bottom: 28px; right: 32px;
+    width: 36px; height: 36px; border-radius: 999px;
+    background: color-mix(in srgb, var(--card-ink) 7%, var(--card-bg));
+    border: 1px solid var(--card-line); color: var(--card-ink);
+    display: grid; place-items: center;
+    transition: transform 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .next-card .nc-arrow svg { stroke: currentColor; }
+  .next-card:hover .nc-arrow { background: var(--accent); border-color: var(--accent); color: #fff; transform: translate(2px, -2px); }
+
+  /* Footer */
+  footer#contact { max-width: none; margin: 64px 0 0; padding: 0; background: #0E0E11; color: #C9C9CF; min-height: calc(100vh - 64px); display: flex; align-items: center; }
+  footer#contact .fin { width: 100%; max-width: 1080px; margin: 0 auto; padding: 64px 32px 48px; }
+  footer#contact .ft-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: start; gap: 32px 40px; }
+  footer#contact .ft-brand { font-weight: 800; font-size: 19px; color: #fff; display: flex; align-items: center; gap: 8px; }
+  footer#contact .ft-brand .mk { width: 24px; height: 24px; border-radius: 7px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 800; }
+  footer#contact .ft-tag { font-size: 14px; color: #8C8C95; margin-top: 8px; max-width: 30ch; }
+  footer#contact .ft-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  footer#contact .ft-cta > span { color: #C9C9CF; font-size: 15px; line-height: 1.5; }
+  footer#contact .ft-links { display: flex; gap: 12px; }
+  footer#contact .ft-links a { width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--accent); display: grid; place-items: center; color: #fff; text-decoration: none; transition: background-color 0.18s; }
+  footer#contact .ft-links a:hover { background: var(--accent); }
+  footer#contact .ft-cta a { color: #fff; font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+  footer#contact .ft-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 40px; padding-top: 24px; border-top: 1px solid #232329; font-size: 13px; color: #76767E; }
+  @media (max-width: 760px) { footer#contact .ft-top { grid-template-columns: 1fr; } }
+  footer.legacy {
+    max-width: 1080px; margin: 0 auto;
+    padding: 48px 32px 80px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer .f-r { display: flex; gap: 20px; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* Responsive */
+  @media (max-width: 760px) {
+    .site-nav, .back-link, footer { padding-left: 20px; padding-right: 20px; }
+    .case-study { padding: 0 20px 80px; }
+    .nav-links { gap: 18px; }
+    .nav-links a { font-size: 12px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .meta-cell { padding: 18px 16px; }
+    .meta-cell:nth-child(2) { border-right: 0; }
+    .impact-list li:nth-child(odd) { padding-right: 0; }
+    .impact-list li:nth-child(even) { padding-left: 0; }
+    .chrome-grid { grid-template-columns: 1fr; }
+    .next-grid { grid-template-columns: 1fr; }
+    .insight { grid-template-columns: 1fr; gap: 12px; padding-bottom: 40px; }
+    .insight .ins-num { font-size: 36px; }
+    .jump { flex-wrap: wrap; }
+    footer { flex-direction: column; gap: 16px; align-items: flex-start; }
+  }
+  @media (max-width: 460px) {
+    .site-nav, .back-link, footer, .case-study { padding-left: 16px; padding-right: 16px; }
+    .hero-meta { grid-template-columns: 1fr; }
+    .meta-cell { border-right: 0; }
+    .meta-cell:not(:last-child) { border-bottom: 1px solid var(--line); }
+    .jump a { font-size: 12px; padding: 5px 10px; }
+  }
+
+  /* ─── Display type unified to Geist (was Poppins) ─── */
+  .case-title { font-family: 'Figtree', -apple-system, system-ui, sans-serif !important; font-weight: 700 !important; letter-spacing: -0.03em !important; }
+  .case-study :is(h2,h3,h4,h5,h6,blockquote), .insight .ins-num, figure.placeholder .ph-headline, .pull-quote { font-family: 'Figtree', -apple-system, system-ui, sans-serif !important; }
+
+  /* ── Dance Coach page additions ── */
+  .case-deck p + p { margin-top: 14px; }
+  .case-study .section-eyebrow { white-space: normal; flex-wrap: wrap; line-height: 1.35; max-width: 100%; }
+  .dc-body { margin-top: 32px; display: flex; flex-direction: column; gap: 24px; }
+  .dc-body .prose p + p, .dc-body .prose p + ul, .dc-body .prose p + ol, .dc-body .prose ul + p, .dc-body .prose ol + p { margin-top: 14px; }
+  .dc-body .prose ul.bullets, .dc-body .prose ol.num-list { padding-left: 22px; margin: 10px 0 0; }
+  .dc-body .prose ul.bullets li, .dc-body .prose ol.num-list li { margin: 8px 0; padding-left: 4px; }
+  .dc-body .prose ol.num-list li::marker { color: var(--accent); font-weight: 700; }
+  .dc-body .prose ul.bullets li::marker { color: var(--accent); }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; -webkit-overflow-scrolling: touch; }
+  .dc-table { width: 100%; border-collapse: collapse; font-size: 13.5px; line-height: 1.5; color: var(--ink); min-width: 560px; }
+  .dc-table th, .dc-table td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .dc-table th { background: var(--field); font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+  .dc-table tbody tr:last-child td { border-bottom: 0; }
+  .dc-table td p + p { margin-top: 6px; }
+  .dc-table td ul { padding-left: 18px; margin: 4px 0 0; }
+  .flow { margin: 0; }
+  .flow-steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; counter-reset: none; }
+  .flow-steps li { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card, var(--field)); font-size: 13.5px; line-height: 1.45; color: var(--ink); }
+  .flow-steps .fs-n { flex: none; width: 22px; height: 22px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 11.5px; font-weight: 700; display: grid; place-items: center; }
+  .flow-note { margin-top: 12px; font-size: 13.5px; color: var(--muted); }
+  .flow figcaption { margin-top: 10px; font-size: 13px; color: var(--muted); }
+</style>
+<link rel="stylesheet" href="shared.css" />
+</head>
+<body data-theme="blue" data-screen-label="Dance Coach Case Study">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('case-palette');
+      document.body.dataset.theme = (t === 'graphite' || t === 'blue') ? t : 'blue';
+    } catch(e) { document.body.dataset.theme = 'blue'; }
+  })();
+</script>
+
+  <!-- Site nav (identical across all pages) -->
+  <header class="topbar">
+    <div class="inner">
+      <a class="brand" href="index.html"><span class="mk">E</span>Esther Nam</a>
+      <nav>
+        <div class="nav-work">
+          <a href="index.html" class="active">Work<svg class="caret" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></a>
+          <div class="work-menu">
+            <a href="ux-audit.html">UX Audit<small>Cross-product diagnostic</small></a>
+            <a href="writing-solutions.html">Writing Solutions<small>Assignment creation redesign</small></a>
+            <a href="job-match.html">Job Match<small>Career tool · POC → MVP</small></a>
+            <a href="focus-gym.html">Focus Gym<small>AI hackathon · Concept</small></a>
+            <a href="dance-coach.html">Dance Coach<small>AI practice app · In progress</small></a>
+          </div>
+        </div>
+        <a href="resume.html">Resume</a>
+      </nav>
+      <span class="spacer"></span>
+      <a href="#contact" class="btn-primary">Get in touch</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <a href="index.html" class="back-link">← Back to work</a>
+
+  <main class="case-study">
+    <!-- ── Hero ── -->
+    <div class="meta-strip">
+      <span class="tag">DANCE COACH</span>
+      <span class="sep">/</span>
+      <span>Independent project · Open Vector curriculum</span>
+      <span class="sep">/</span>
+      <span>2026</span>
+    </div>
+
+    <h1 class="case-title">Designing and building an AI practice coach for Latin dance teams, without writing the code myself.</h1>
+
+    <div class="case-deck"><p>Dance Coach is a practice app for Latin dance teams. An instructor uploads a reference video of the week&#x27;s choreography. Students record themselves, get instant AI feedback on timing and movement, and practice as many times as they want. They then submit a final take, and the instructor reviews it, adds notes, and releases feedback.</p><p>I designed and built it alone over about six weeks in summer 2026. I have no coding background, so I directed Claude Code through the Open Vector curriculum. The first iteration runs end to end in production: an Android app for students, a web dashboard for instructors, and a backend that analyzes pose data with MediaPipe.</p><p>I built Dance Coach as the project for working through the Open Vector curriculum, so the case study follows the curriculum&#x27;s order. The build ran ahead of the research pipeline: I had a working app before I&#x27;d done Jobs to Be Done, ideation, or validation. When real student videos showed the AI feedback wasn&#x27;t accurate enough to trust, I paused feature work and went back to the pipeline. This case study covers the curriculum up to that point and what I&#x27;m doing next.</p></div>
+    <div class="hero-meta"><div class="meta-cell"><span class="k">Role</span><span class="v">Research, product design, system design, and AI-directed build</span></div><div class="meta-cell"><span class="k">Timeline</span><span class="v">About six weeks · Summer 2026</span></div><div class="meta-cell"><span class="k">Context</span><span class="v">Solo project for the Open Vector curriculum and Anthropic’s AI Fluency course</span></div><div class="meta-cell"><span class="k">Tools</span><span class="v">Claude Code, Figma, Claude Design, MediaPipe, Expo/React Native, FastAPI, Postgres</span></div></div>
+    <nav class="jump"><span class="jump-label">Jump to</span><a href="#objective">Objective</a><a href="#research-method-and-constraints">Method</a><a href="#hypothesis-and-competitive-landscape">Hypothesis</a><a href="#what-the-research-found">Findings</a><a href="#jobs-to-be-done">JTBD</a><a href="#choosing-a-direction-choreography-over-l">Direction</a><a href="#system-and-data-modeling">System</a><a href="#key-design-decisions">Decisions</a><a href="#building-with-an-ai-agent">Build</a><a href="#testing-whether-the-ai-feedback-is-right">Accuracy</a><a href="#pausing-the-build-to-finish-the-pipeline">Pause</a><a href="#outcome-next-steps-and-what-i-learned">Outcome</a></nav>
+
+    <section id="objective">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">01</span>Objective</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>I built Dance Coach mainly to learn how to build with AI agents. I followed the Open Vector curriculum, which covers the whole process from idea to deployment. I also applied Anthropic&#x27;s AI Fluency course to how I prompted and checked the agent&#x27;s work.</p><p>I approached Dance Coach as an app I would actually want to release. Its main purpose, though, was hands-on practice with the Open Vector curriculum. So I put learning the concepts, practicing with tools like Claude Code, and having solid reasons for each design choice ahead of shipping a polished app. The app is still in progress, so this case study covers my process through the first iteration and my intended next steps.</p><p><strong>What Open Vector taught before any building started.</strong> Open Vector sets itself against &quot;vibe coding&quot;: prompting, seeing what comes out, and nudging until something works. It has you plan the system first, check the output, and understand why it works. The orientation and foundation units covered the terminal, file systems, Git, deployment, DNS, systems thinking, architecture, data modeling, and information architecture. They ended with a VECTOR.md file, a single document describing the product that the agent treats as the source of truth.</p><p><strong>What AI Fluency added.</strong> The course&#x27;s four skills shaped how I worked with Claude Code:</p><ul class="bullets"><li>Delegation: deciding which work to give the agent and which to keep, such as domain judgment about dance technique</li><li>Description: writing prompts with enough context and constraints to build the right thing</li><li>Discernment: checking output instead of trusting it</li><li>Diligence: owning what ships, including security and accuracy</li></ul><p><strong>Why dance.</strong> I chose the dance space for two reasons:</p><ol class="num-list"><li>I  have ready access to instructors and students in the Boston Latin dance community, where I&#x27;ve danced for over 8 years.</li><li>Dance is a form of exercise and community, with physical and mental health benefits. This choice builds on my general interest in health and wellness.</li></ol></div>
+      </div>
+    </section>
+
+    <section id="research-method-and-constraints">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">02</span>Research method and constraints</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>My research was closer to guerrilla testing than to formal studies, and I designed the synthesis around that. I referred to &quot;Just Enough Research&quot; to optimize my research findings, given my constraints.</p><p>Everyone in the local dance community has a busy schedule, and my resources were limited, so I couldn&#x27;t run formal, compensated sessions. Instead, I talked with instructors and students when the chance came up, mostly after class or at dance events, plus a few scheduled interviews. Between Aug 22 and Sep 8, I spoke with six sources:</p></div>
+<div class="table-wrap"><table class="dc-table"><thead><tr><th><p>Source</p></th><th><p>Who</p></th><th><p>Format</p></th></tr></thead><tbody><tr><td><p>Instructor group at Salsa Y Control (SyC) Dance Studio: Andres (owner), Kelly &amp; Tara</p></td><td><p>3 instructors, including the studio owner</p></td><td><p>Group interview + prototype demo (Sep 8)</p></td></tr><tr><td><p>Lumyr - SyC instructor &amp; Independent instructor</p></td><td><p>Coach of a 17-person team</p></td><td><p>Two long sessions (Aug 27)</p></td></tr><tr><td><p>Ashwin</p></td><td><p>Studio owner running three Latin teams; also a software engineer</p></td><td><p>Demo + feedback (Aug 22)</p></td></tr><tr><td><p>Nick</p></td><td><p>Team member, 5–7 seasons</p></td><td><p>Short interview, partly lost to crowd noise (Aug 22)</p></td></tr><tr><td><p>Andres Florez</p></td><td><p>Dancer and technical collaborator</p></td><td><p>Working session (Aug 30)</p></td></tr><tr><td><p>Me</p></td><td><p>Dancer in this scene for 8+ years</p></td><td><p>My own positions, kept separate</p></td></tr></tbody></table></div>
+<div class="prose"><p><strong>Keeping my own view separate.</strong> My experience as a dance student drove the first hypothesis and the first designs to test. That is useful, but it is a bias risk. In the affinity map, I recorded my own positions as a separate, visibly marked source. I left them out of each group&#x27;s source count and out of the insights.</p><p><strong>What this research can and can&#x27;t support.</strong> It is a convenience sample from one scene, and there was no common script. I steered the conversation based on the interviewee&#x27;s background (are they a studio owner? a student wanting to skilll-up? a private instructor) to capture their point of view. So a source saying nothing about a topic usually means the topic never came up, not that they disagreed. The findings support deciding what to build and test next. They don&#x27;t support sizing a market.</p><p><strong>Method.</strong> I broke each interview summary into single observations and grouped them by similarity, regardless of who said them. Then I named each group and wrote insights with a confidence level based on how many independent sources agreed.</p></div>
+      </div>
+    </section>
+
+    <section id="hypothesis-and-competitive-landscape">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">03</span>Hypothesis and competitive landscape</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p><strong>Starting hypothesis:</strong> AI movement analysis could help dance students work on their technique between classes, as a supplement to instructors rather than a substitute.</p><p>Three observations shaped it:</p><ul class="bullets"><li><strong>Teams already share practice videos, but on a general-purpose tool.</strong> Teams post choreography, homework videos, and feedback on Band, alongside announcements and group chat. Nothing there analyzes the videos.</li><li><strong>AI already assists expert judgment in other fields.</strong> AI grading tools in higher education give a first pass that a teacher reviews. I wanted the same model here: the AI does the repetitive work, and the instructor keeps ownership of the relationship.</li><li><strong>Pose analysis is common in fitness and rare in dance.</strong> Fitness apps use it to check exercise form. Dance is harder to judge because correct form is less constrained. That gap looked like an opening.</li></ul><p><strong>Competitive analysis.</strong> Many virtual learning platforms teach dance, but I found only two that use AI movement tracking and analysis: DanceBetter AI and DanceBuddy. Neither is built around a team and its instructor, which is the gap Dance Coach targets.</p><p><strong>Biggest takeaways from the competitive analysis.</strong></p><ol class="num-list"><li><strong>No competitor combines the three things Dance Coach does: the studio&#x27;s own reference video, AI feedback, and instructor review.</strong> Every AI product is sold to individual learners and compares against generic dancers or a video the learner picks. The closest threat is DanceBetter&#x27;s quote-only studio tier, which sends AI reports under the coach&#x27;s name. It has no instructor review step and no team assignments.</li><li><strong>AI dance feedback has not shown that it works or that people will pay for it.</strong> DanceBetter has no reviews, no sample output, and in my July test it returned no result after a full day. DanceBuddy has about 10,000 users, zero paying customers, and no update since November 2025. Dance Coach&#x27;s own accuracy isn&#x27;t reliable yet either. So AI alone can&#x27;t be the pitch. The instructor review step is what makes the product credible while the model improves.</li><li><strong>The real competitor is free solo practice, with Band alongside it.</strong> Students already rewatch class video, slow the music, and use a mirror, and it costs nothing. Band has 4.8 stars from 784k reviews and is already installed, even though students mute it. Dance Coach has to offer something solo practice can&#x27;t, which is feedback. I still need to decide whether it sits next to Band or replaces it.</li><li><strong>Partner work is the largest functional gap.</strong> Most team material is partnered, according to Nick and Lumyr. Dance Coach only detects one person. DanceBetter claims to assess frame and connection from one video, but it shows no evidence.</li><li><strong>The value is speed and cost.</strong> Homework feedback through Band takes about a week. Private lessons give immediate feedback but cost $50–224/hr. Dance Coach sits between the two, and that is the case to make for pricing, which isn&#x27;t set yet.</li><li><strong>Practice-player features are expected, and Dance Coach is missing most of them.</strong> VDanceClub and DanceBuddy both offer mirror, loop, and 8-count segments. Dance Coach only has speed control. These are cheap to add compared to the AI work.</li><li><strong>Nobody assesses named fundamentals or offers level placement.</strong> The course platforms teach fundamentals but never assess them. Scoring named steps, as SyC suggested, is an opening no one has taken.</li></ol></div>
+      </div>
+    </section>
+
+    <section id="what-the-research-found">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">04</span>What the research found</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>Instructors already give individual video feedback by hand. What limits them is time, not willingness. The table below lists the six findings that most shaped the product, strongest evidence first. The full synthesis has 12 insights and 7 tensions.</p></div>
+<div class="table-wrap"><table class="dc-table"><thead><tr><th><p>Finding</p></th><th><p>Evidence</p></th><th><p>What it meant for the design</p></th></tr></thead><tbody><tr><td><p>Video homework already exists and costs instructors hours</p></td><td><p>Lumyr reviews 34 videos a week (1–2 hours) and doesn&#x27;t resent it. One SyC instructor reviewed about 700 videos. Feedback waits until the next class.</p></td><td><p>Speed up feedback instructors already give instead of creating a new habit. An instant AI first pass covers the week-long wait.</p></td></tr><tr><td><p>There is no universal correct technique</p></td><td><p>Lumyr: technique is a path to a particular look, shaped by each teacher. SyC: level names and teaching differ between studios.</p></td><td><p>Every reference video has to come from the studio&#x27;s own instructor. A generic &quot;correct salsa&quot; model would contradict how they teach.</p></td></tr><tr><td><p>Instructors want support, not a verdict</p></td><td><p>SyC: assessment needs human judgment. Lumyr would trust another person&#x27;s read only if they could explain his standard.</p></td><td><p>The AI output is evidence the instructor reviews and releases. No pass/fail scores.</p></td></tr><tr><td><p>Poor accuracy is mostly a recording problem</p></td><td><p>Angle, distance, lighting, and cramped rooms came up from Ashwin, SyC, Lumyr, and Andres.</p></td><td><p>Recording guidance and a quality check before submission come before model tuning.</p></td></tr><tr><td><p>Instructors review on large screens</p></td><td><p>Lumyr reviews only on a laptop with two monitors. On a phone he can&#x27;t see detail or watch and type at once.</p></td><td><p>Instructors review on a web dashboard, not a second mobile app.</p></td></tr><tr><td><p>Students rewatch and repeat; they don&#x27;t record and compare</p></td><td><p>Nick drills with a mirror and slowed music. Recording himself wasn&#x27;t a habit.</p></td><td><p>Recording and comparing is a new habit. Team obligation is the only force found that would drive it.</p></td></tr></tbody></table></div>
+<div class="prose"><p><strong>Leveling was the most consistently raised problem</strong>, even though I didn&#x27;t ask about it. Every SyC instructor named &quot;why don&#x27;t I move up?&quot; as students&#x27; top complaint. This shaped the direction choice in section 06.</p></div>
+      </div>
+    </section>
+
+    <section id="jobs-to-be-done">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">05</span>Jobs to be done</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>After synthesis, I turned the research into job statements in Open Vector&#x27;s format: when [situation], I want to [motivation], so I can [outcome]. Each one comes from the affinity map, so each has evidence behind it.</p></div>
+<div class="table-wrap"><table class="dc-table"><thead><tr><th><p>#</p></th><th><p>Job statement</p></th><th><p>Type</p></th><th><p>Who</p></th><th><p>Evidence</p></th></tr></thead><tbody><tr><td><p>1</p></td><td><p>When my team&#x27;s homework videos come in each week, I want to find each student&#x27;s most important correction quickly, so I can give individual feedback without spending 1–2 hours.</p></td><td><p>Functional</p></td><td><p>Instructor</p></td><td><p>Lumyr reviews 34 videos a week. SyC instructors described an instructor who reviewed about 700 videos by hand.</p></td></tr><tr><td><p>2</p></td><td><p>When I&#x27;m practicing choreography at home between classes, I want to know where I&#x27;m off the count or off the movement, so I can fix it before the next class instead of waiting a week.</p></td><td><p>Functional</p></td><td><p>Student</p></td><td><p>Lumyr: homework feedback waits until the next class. Privates cost $50–75 an hour.</p><p>Andres (F) and Esther: We know there is technique &amp; moves we aren&#x27;t executing properly, but we don&#x27;t know how to fix it without paying for individual corrections through expensive private lessons</p></td></tr><tr><td><p>3</p></td><td><p>When I compare myself to people who started when I did, I want to see what specifically is holding me back, so I can feel I&#x27;m progressing rather than stuck.</p></td><td><p>Emotional</p></td><td><p>Student</p></td><td><p>SyC: &quot;why don&#x27;t I move up?&quot; is the top complaint; students expect fast progress and stall.</p></td></tr><tr><td><p>4</p></td><td><p>When a student asks why they haven&#x27;t moved up, I want to point to clear standards and a record of what I&#x27;ve told them, so I can explain my decision without it feeling personal.</p></td><td><p>Social</p></td><td><p>Instructor</p></td><td><p>SyC: no criteria and no record. Lumyr: documented technique would make placement easier to explain.</p></td></tr><tr><td><p>5</p></td><td><p>When I dance with my team or a social partner, I want to not be the one who&#x27;s visibly off, so I don&#x27;t hold the group back or make a partner&#x27;s dance harder.</p></td><td><p>Social</p></td><td><p>Student</p></td><td><p>Nick: motivated by group accountability. Andres Florez: poor technique gets partners hurt. Thin evidence.</p></td></tr></tbody></table></div>
+<div class="prose"><p><strong>What each job competes with today.</strong> The competitive analysis showed that the real competition is mostly what people already do, not other apps:</p><ul class="bullets"><li><strong>Job 1:</strong> Band plus a laptop and hand-typed timestamped comments. Slow, but free and already trusted.</li><li><strong>Job 2:</strong> rewatching the class video, a mirror and slowed-down music. VDanceClub&#x27;s camera split-screen also shows students themselves next to the teacher, and DanceBetter claims AI feedback on bachata. None of them judges the student against their own instructor&#x27;s standard.</li><li><strong>Jobs 3 and 4:</strong> an ad hoc conversation after class. No product in the analysis offers placement or a level path.</li></ul><p><strong>Ranking.</strong></p></div>
+<div class="table-wrap"><table class="dc-table"><thead><tr><th><p>Question from the exercise</p></th><th><p>Job</p></th><th><p>Why</p></th></tr></thead><tbody><tr><td><p>Most frequent</p></td><td><p>1 and 2</p></td><td><p>Both happen every week during the season</p></td></tr><tr><td><p>Most underserved</p></td><td><p>3 and 4</p></td><td><p>Nothing addresses them today: no criteria, no record, no tool</p></td></tr><tr><td><p>Would make users love it if solved perfectly</p></td><td><p>2</p></td><td><p>It removes the week-long wait, the gap students feel most directly</p></td></tr></tbody></table></div>
+<div class="prose"><p><strong>Primary job: [choose].</strong> Job 2 is the job the practice loop was built for, and it is also where students see AI feedback with no instructor filter, so solving it means solving the trust problem in section 11. Job 4 is the most underserved and belongs to the leveling direction I deferred. Fundamentals judged against fixed criteria are also easier to analyze accurately (section 06). Choosing job 4 would be a defensible pivot, and ideation would start from it.</p><p><strong>What the research changed.</strong> The Aug 7 version of VECTOR.md already listed six jobs, written before any interviews. All six were about the choreography homework loop, and none mentioned leveling. The research added the jobs about progress and placement (3 and 4), which turned out to be the most underserved.</p></div>
+      </div>
+    </section>
+
+    <section id="choosing-a-direction-choreography-over-l">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">06</span>Choosing a direction: choreography over leveling</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>I chose to build for weekly team choreography first and deferred leveling. Later research showed this was a reasonable entry point but not the easiest technical problem.</p></div>
+<div class="table-wrap"><table class="dc-table"><thead><tr><th></th><th><p>Direction 1: Choreo cleanup</p></th><th><p>Direction 2: Fundamentals and leveling</p></th></tr></thead><tbody><tr><td><p>What it does</p></td><td><p>Students compare their take of the week&#x27;s choreography against the instructor&#x27;s reference</p></td><td><p>Students practice named fundamentals (hip movement, spins) against fixed criteria; leveling comes later</p></td></tr><tr><td><p>How often it&#x27;s used</p></td><td><p>Weekly, since new choreography arrives every week</p></td><td><p>Self-directed; progress tracking could bring students back</p></td></tr><tr><td><p>How it spreads</p></td><td><p>The instructor assigns it and the whole team follows</p></td><td><p>Each student has to decide to use it</p></td></tr><tr><td><p>Cold start</p></td><td><p>The homework cycle gives students a reason to open it</p></td><td><p>Depends on self-motivation</p></td></tr></tbody></table></div>
+<div class="prose"><p><strong>Why choreography first.</strong> Three reasons: recurring weekly use, distribution through the instructor, and an easier cold start. I pushed back on the first reason while deciding. Leveling could also bring students back through progress on fundamentals, and that may be stickier because students choose it themselves. Both directions could keep students returning, just in different ways. Choreography was the better entry point, with leveling folded in later.</p><p><strong>What the build later taught me.</strong> The technical work partly undermined that choice. Comparing choreography means aligning two videos filmed on different cameras, in different rooms, at different angles, and that is where most of the accuracy problems came from. Fundamentals are judged against fixed criteria: one video, with no alignment. SyC&#x27;s instructors made the same point on their own: single named steps have clean framing and one clear target. I don&#x27;t regret the choice, but the direction that looked harder to grow may have been easier to make accurate.</p></div>
+      </div>
+    </section>
+
+    <section id="system-and-data-modeling">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">07</span>System and data modeling</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>Before writing any code, I modeled the product as nouns (things the system stores) and verbs (actions that create or change them), following Open Vector&#x27;s data modeling exercise. That model became the spec Claude Code built from.</p></div>
+<figure class="flow"><ol class="flow-steps"><li><span class="fs-n">1</span><span>Instructor uploads reference video</span></li><li><span class="fs-n">2</span><span>Assignment published to team</span></li><li><span class="fs-n">3</span><span>Student records a practice take</span></li><li><span class="fs-n">4</span><span>AI compares poses, scores timing per count</span></li><li><span class="fs-n">5</span><span>Student submits final take</span></li><li><span class="fs-n">6</span><span>Instructor reviews AI analysis, adds notes</span></li><li><span class="fs-n">7</span><span>Instructor releases feedback</span></li><li><span class="fs-n">8</span><span>Student reads feedback</span></li></ol><p class="flow-note">↺ From “AI compares poses, scores timing per count”, students can practice again as many times as they want before submitting.</p><figcaption>The core loop: practice is unlimited; only the final take goes to the instructor.</figcaption></figure>
+<div class="table-wrap"><table class="dc-table"><thead><tr><th><p>Noun</p></th><th><p>What it is</p></th><th><p>Created by</p></th></tr></thead><tbody><tr><td><p>Team</p></td><td><p>Connects an instructor to their students</p></td><td><p>Instructor&#x27;s first sign-in</p></td></tr><tr><td><p>Choreo piece</p></td><td><p>A named assignment with a reference video</p></td><td><p>Instructor upload</p></td></tr><tr><td><p>Reference video</p></td><td><p>The instructor&#x27;s version, with counts and with music</p></td><td><p>Instructor upload; poses extracted on upload</p></td></tr><tr><td><p>Submission</p></td><td><p>A student&#x27;s take of a piece, practice or final</p></td><td><p>Student record or upload</p></td></tr><tr><td><p>Analysis</p></td><td><p>Pose comparison and per-count timing score</p></td><td><p>Backend, after each submission</p></td></tr><tr><td><p>Instructor note</p></td><td><p>The instructor&#x27;s feedback on a final submission</p></td><td><p>Instructor review; hidden until released</p></td></tr></tbody></table></div>
+<div class="prose"><p><strong>The model changed once.</strong> My first noun and verb exercise had students receive AI feedback and then choose whether to share it with the instructor. I moved to practice-then-submit, where the instructor reviews every final submission before the student sees their notes. That kept the instructor in the loop by design.</p></div>
+      </div>
+    </section>
+
+    <section id="key-design-decisions">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">08</span>Key design decisions</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>Four decisions defined the first iteration. Each one traded something away.</p><p><strong>1. Unlimited AI practice before instructor review.</strong> Students can record as many practice takes as they want and see an AI score each time. They submit a final take only when they&#x27;re satisfied.</p><ul class="bullets"><li><em>Why:</em> students get immediate feedback during the week, and instructors review one take per student instead of every attempt.</li><li><em>Tradeoff:</em> students see AI feedback that no instructor has checked. This is the tension that later paused the project (section 11).</li></ul><p><strong>2. Two videos per piece: one to counts, one to music.</strong> This matches how the instructors I talked to already assign homework.</p><ul class="bullets"><li><em>Why:</em> the counts version isolates timing, and the music version shows musicality and styling.</li><li><em>Tradeoff:</em> students record twice, and the instructor uploads two references.</li></ul><p><strong>3. Students on mobile, instructors on a web dashboard.</strong> Students record on their phones. Instructors review on a laptop.</p><ul class="bullets"><li><em>Why:</em> Lumyr reviews only on a laptop with two monitors, and a phone can&#x27;t show detail or let him watch and type at once.</li><li><em>Tradeoff:</em> two front ends to build and maintain. Students who prefer a larger screen to review (Nick, and me) still get phone only.</li></ul><p><strong>4. Roles verified on the server.</strong> The backend decides whether someone is a student or an instructor from a signed identity token (Clerk), never from what the app says. It checks the role again on every request.</p><ul class="bullets"><li><em>Why:</em> if the app could claim a role, any student could open the instructor&#x27;s review queue and read other students&#x27; unreleased feedback. Before auth existed, that data was open to anyone with the URL.</li><li><em>Tradeoff:</em> instructors are promoted by hand for now. That is deliberate gatekeeping at this scale, and invite codes could replace it later.</li></ul></div>
+      </div>
+    </section>
+
+    <section id="building-with-an-ai-agent">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">09</span>Building with an AI agent</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>Claude Code wrote the code. My job was to set the plan, give context, and catch the agent when it was wrong. The problems I caught mattered more than the amount of code produced.</p><p><strong>How I directed the build.</strong></p><ul class="bullets"><li><strong>A sequence of prompts, run in order.</strong> I broke the build into numbered prompts, each one a feature with its dependencies stated. Examples: storage, then pose analysis, then the dashboard, then auth. Thirteen prompts produced the working core loop. I added a rule: any decision that changes a prompt I haven&#x27;t run yet must be flagged, along with what needs updating.</li><li><strong>VECTOR.md as the source of truth.</strong> One document described the users, the loop, the data model, and the current state. The agent read it at the start of every session, and I updated it after each milestone.</li><li><strong>A check that the docs match the code.</strong> Partway through, I found VECTOR.md said the auth system was installed and that the user and team tables existed. Neither was true. I had Claude Code write a script that checks the doc&#x27;s countable claims against the repo (migration count, installed dependencies, API routes), so that kind of drift fails a check instead of hiding.</li><li><strong>An architecture review.</strong> I asked for a review of the whole system and tracked the results in ARCHITECTURE-DEBT.md, ranked by cost: four items closed, eleven open.</li></ul><p><strong>Problems I caught (AI Fluency&#x27;s discernment in practice).</strong></p></div>
+<div class="table-wrap"><table class="dc-table"><thead><tr><th><p>Problem</p></th><th><p>How I caught it</p></th><th><p>What changed</p></th></tr></thead><tbody><tr><td><p>The agent&#x27;s dance knowledge was wrong. It treated bachata hip action as side-to-side movement, and weight transfer as foot placement only.</p></td><td><p>My own training as a dancer</p></td><td><p>Hip action is modeled as a pelvic tilt driven by knee extension. Weight transfer requires foot placement plus torso and hip alignment.</p></td></tr><tr><td><p>Student uploads crashed the Android app (out of memory)</p></td><td><p>Testing on my own phone</p></td><td><p>720p recording, on-device compression before upload (a 118.7 MB clip became 11.8 MB), and a larger memory allowance. No crash since.</p></td></tr><tr><td><p>Debug logs I&#x27;d been told to check never appeared on a real device</p></td><td><p>Logs I expected were missing</p></td><td><p>The agent had used a logging call that release builds drop. I fixed it and treated every earlier on-device conclusion as unverified.</p></td></tr><tr><td><p>Anyone with the URL could read every student&#x27;s unreleased feedback</p></td><td><p>Reviewing what the API returned</p></td><td><p>Server-side auth, as described in section 08</p></td></tr><tr><td><p>Video storage rejected files over 100 MB</p></td><td><p>Real student videos</p></td><td><p>Moved storage from Cloudinary to Cloudflare R2</p></td></tr></tbody></table></div>
+<div class="prose"><p><strong>Production stack:</strong> Expo/React Native (Android), React dashboard on Vercel, FastAPI and Postgres on Railway, Cloudflare R2 for video, Clerk for sign-in, MediaPipe for pose.</p></div>
+      </div>
+    </section>
+
+    <section id="testing-whether-the-ai-feedback-is-right">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">10</span>Testing whether the AI feedback is right</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>The app worked end to end, but when I uploaded two real student videos, the feedback wasn&#x27;t accurate enough to show anyone. I stopped adding features and focused on accuracy.</p><p><strong>What I tested, and what changed.</strong></p></div>
+<div class="table-wrap"><table class="dc-table"><thead><tr><th><p>Test</p></th><th><p>Result before</p></th><th><p>Result after</p></th></tr></thead><tbody><tr><td><p>Same video compared with itself</p></td><td><p>Scored about 80 out of 100</p></td><td><p>100</p></td></tr><tr><td><p>Gap between a good take and a poor take</p></td><td><p>2.4 points</p></td><td><p>9.2 points, after reformulating the body markers the score is built on</p></td></tr><tr><td><p>Beginner vs. advanced dancer (live run with Andres Florez)</p></td><td><p>—</p></td><td><p>Found real differences: right shoulder, head stability (about 51% more head movement for the beginner), and spine tilt. It flagged core engagement without being asked.</p></td></tr></tbody></table></div>
+<div class="prose"><p><strong>What is still unreliable.</strong></p><ul class="bullets"><li><strong>Style is scored as error.</strong> Accent ratio and shoulder ratio were the least trustworthy outputs. They measure stylistic choices, not mistakes.</li><li><strong>The score measures how you move, not which step you do.</strong> I haven&#x27;t yet run a deliberately wrong take to see whether the score is too generous toward wrong choreography.</li><li><strong>Recording conditions distort results.</strong> Body type, distance from the camera, lighting, and framing all change how large a movement looks.</li><li><strong>Failures look like bad dancing.</strong> One practice take scored 0 against another at 44, most likely because no pose was detected. A student who sees a 0 with no explanation would reasonably think the app is broken.</li><li><strong>Count numbering assumes count 1 has the most movement.</strong> Choreography that accents other counts gets its counts misnumbered, so feedback can name the wrong count.</li></ul><p><strong>The key lesson.</strong> The beginner-vs-advanced run found the right answer on a case where the answer was already obvious. That is exactly the case where nobody needs the tool. Getting the obvious case right doesn&#x27;t show the AI can be trusted on subtle cases.</p></div>
+      </div>
+    </section>
+
+    <section id="pausing-the-build-to-finish-the-pipeline">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">11</span>Pausing the build to finish the pipeline</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p>On Aug 30, I paused feature work for two reasons. First, the project&#x27;s purpose was to work through the Open Vector curriculum, and building had pulled me ahead of the pipeline. Second, I hadn&#x27;t shown that the AI feedback is something people actually want. The technical problems can be solved, but whether the feedback is useful was the real unknown. The remaining pipeline steps, Jobs to Be Done through validation, are how I&#x27;ll answer that.</p><p><strong>The core design tension.</strong> The instructor&#x27;s review is what makes the feedback safe, and the practice loop removes it.</p><ul class="bullets"><li>When the instructor reviews every AI note before releasing it, wrong and style-only notes get filtered out. That loop works.</li><li>But half the value was that students could practice on their own without using the instructor&#x27;s time. In practice mode, nothing filters the output. A student sees incorrect feedback as if it were correct, which is actively harmful.</li><li>The risk is becoming known as the app that gives wrong corrections.</li></ul><p>I haven&#x27;t resolved this yet. These are the options I&#x27;m weighing:</p><ol class="num-list"><li><strong>Show students less than instructors see.</strong> Sort each measure into shown to students, shown to instructors only, or hidden. This is a product decision that doesn&#x27;t depend on the model improving.</li><li><strong>Say plainly what the AI doesn&#x27;t judge</strong>, such as style and partner connection, and let students flag or dismiss a note.</li><li><strong>Fix the input first:</strong> a framing guide while recording and a quality check before submitting (&quot;good to submit&quot; or &quot;fix your lighting&quot;).</li><li><strong>Bring in a subject-matter expert</strong>, an instructor who can watch a video and name exactly what to correct. They would tell me which measures matter and where the AI is wrong.</li></ol><p><strong>What changed in how I work.</strong> Once building started, almost all my time went to coding and debugging. After Aug 30, I committed at least half my time on the project to user and business research. I also changed my interview question from &quot;would you want this?&quot; to &quot;what do you need, and what would you pay?&quot;</p></div>
+      </div>
+    </section>
+
+    <section id="outcome-next-steps-and-what-i-learned">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">12</span>Outcome, next steps, and what I learned</span>
+      </div>
+      <div class="dc-body">
+<div class="prose"><p><strong>What works today.</strong> The full loop runs in production with real accounts on both sides. I verified it on a device in August. A student signs in, joins the team, sees the assignment, records and scores practice takes, and submits a final take. The instructor then reviews it and releases feedback, and the student reads it.</p><p><strong>Limits.</strong></p><ul class="bullets"><li>Android only. There&#x27;s no iPhone build, even though iPhone users are the larger group.</li><li>MediaPipe tracks one person, but teams move to group and partner practice as the season goes on.</li><li>The feedback isn&#x27;t useful yet for intermediate or advanced dancers. Beginner teams are the likely first users.</li><li>Some measures score style as error, and a failed pose detection looks like a score of 0.</li></ul><p><strong>Next steps.</strong></p><ol class="num-list"><li>Decide what practice mode shows students (section 11) before any more model tuning.</li><li>Run a controlled accuracy test: the same dancer in the same clothes and lighting, including a deliberately wrong take.</li><li>Test recording guidance and a quality check before submitting.</li><li>Interview more students, including women and people who left their teams. So far most sources are men, and only one is a student.</li><li>Later: test a step library built from the current choreography. It could satisfy both the fundamentals and the choreography positions from the research.</li></ol><p><strong>What I learned.</strong></p><ul class="bullets"><li><strong>An AI agent builds fast, so deciding when to stop matters more.</strong> Once building started, it took all my time. The most important decision in the project was to stop and validate.</li><li><strong>The agent is only as right as the domain knowledge I give it.</strong> It got bachata hip action and weight transfer wrong, and only my experience as a dancer caught that.</li><li><strong>Docs drift from the code unless something checks them.</strong> A source-of-truth file is only useful if it stays true.</li><li><strong>Test AI output on cases where you don&#x27;t already know the answer.</strong> Getting the obvious case right proves little.</li><li><strong>Design choices can make AI safer without making it more accurate:</strong> who sees which output, what the app says it doesn&#x27;t judge, and whether a human reviews before release.</li></ul><p><strong>Why this matters beyond dance.</strong> Dance Coach gives people feedback on how their body moves and asks whether that analysis can be trusted. Physical therapy, fitness, and remote care products face the same questions. How accurate does movement feedback need to be before a patient sees it unreviewed? When must a clinician review it first? And how do you guide someone to record usable video at home?</p></div>
+      </div>
+    </section>
+
+    <section id="next">
+      <div class="section-head">
+        <span class="section-eyebrow"><span class="num">13</span>Continue reading</span>
+      </div>
+      <div class="next-grid">
+        <a class="next-card" href="focus-gym.html">
+          <span class="nc-eyebrow">Pearson Internal Hackathon · 2025</span>
+          <h3>Focus Gym</h3>
+          <p>A gamified concept that helps students train sustained focus like a skill.</p>
+          <div class="nc-arrow"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
+        </a>
+        <a class="next-card" href="ux-audit.html">
+          <span class="nc-eyebrow">Pearson Education · UX Audit</span>
+          <h3>UX Audit</h3>
+          <p>Two weeks of review and research that shaped two redesigns.</p>
+          <div class="nc-arrow"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
+        </a>
+        <a class="next-card" href="job-match.html">
+          <span class="nc-eyebrow">Pearson Education · 2022–2023</span>
+          <h3>Job Match</h3>
+          <p>Opening a closed career-exploration tool to a public audience at MVP.</p>
+          <div class="nc-arrow"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="contact">
+    <div class="fin">
+      <div class="ft-top">
+        <div>
+          <div class="ft-brand"><span class="mk">E</span>Esther Nam</div>
+          <p class="ft-tag">Product designer working on research-led, AI-assisted tools for education.</p>
+        </div>
+        <div class="ft-cta">
+          <span>Thanks for checking out my portfolio!<br />I’d love to hear from you: <span class="email-out"></span></span>
+          <div class="ft-links">
+            <a href="https://www.linkedin.com/in/esther-nam/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="-1.25 0 24 24" fill="currentColor" width="16" height="16"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.58-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.5V23h-4V8z"/></svg></a>
+            <a href="#" class="email-link" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="ft-bottom">
+        <span>© 2026 Esther Nam</span>
+        <span>UX Portfolio</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox overlay -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image">
+    <button class="lb-close" type="button" aria-label="Close">&times;</button>
+    <img alt="" />
+    <div class="lb-hint">Click anywhere or press Esc to close</div>
+  </div>
+
+  <script>
+    (function () {
+      const body = document.body;
+      const btn = document.getElementById('theme-toggle');
+      function set(theme) {
+        body.dataset.theme = theme;
+        try { localStorage.setItem('case-palette', theme); } catch (e) {}
+      }
+      btn.addEventListener('click', () => {
+        set(body.dataset.theme === 'graphite' ? 'blue' : 'graphite');
+      });
+      document.getElementById('top-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      const lb = document.getElementById('lightbox');
+      const lbImg = lb.querySelector('img');
+      function open(src, alt) {
+        lbImg.src = src; lbImg.alt = alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function close() {
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.removeAttribute('src');
+      }
+      document.querySelectorAll('figure.real img').forEach(function (img) {
+        img.addEventListener('click', function () { open(img.currentSrc || img.src, img.alt); });
+      });
+      lb.addEventListener('click', function (e) {
+        if (e.target === lbImg) return; // clicks on the image itself don't close
+        close();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lb.classList.contains('open')) close();
+      });
+    })();
+  </script>
+<style id="mobile-opt">
+@keyframes contact-jiggle { 0%,100%{transform:translateX(0)} 18%{transform:translateX(-5px)} 38%{transform:translateX(5px)} 58%{transform:translateX(-3px)} 78%{transform:translateX(3px)} }
+.ft-cta.jiggle > span { animation: contact-jiggle .5s ease; display:inline-block; }
+.ft-cta.jiggle .ft-links a { animation: contact-jiggle .55s ease; }
+.ft-cta.jiggle .ft-links a:nth-child(2){ animation-delay:.06s; }
+@media (prefers-reduced-motion: reduce){ .ft-cta.jiggle > span, .ft-cta.jiggle .ft-links a { animation:none; } }
+.nav-work.open .work-menu { opacity:1 !important; visibility:visible !important; transform:translateX(-50%) translateY(0) !important; }
+.nav-work.open .caret { transform: rotate(180deg); }
+@media (hover: none) and (max-width: 600px){
+  .work-menu { left:0 !important; right:auto !important; transform:translateX(0) translateY(-4px) !important; min-width:210px !important; }
+  .nav-work.open .work-menu { transform:translateX(0) translateY(0) !important; }
+}
+</style>
+<script>
+(function(){
+  document.querySelectorAll('.nav-work > a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      if (window.matchMedia('(hover: none)').matches){ e.preventDefault(); a.parentElement.classList.toggle('open'); }
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.nav-work')){ document.querySelectorAll('.nav-work.open').forEach(function(n){n.classList.remove('open');}); }
+  });
+  var foot = document.getElementById('contact');
+  document.querySelectorAll('a.btn-primary[href="#contact"]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      if(!foot) return;
+      var r = foot.getBoundingClientRect();
+      if(r.top < window.innerHeight*0.5 && r.bottom > 0){
+        e.preventDefault();
+        var cta = foot.querySelector('.ft-cta');
+        if(cta){ cta.classList.remove('jiggle'); void cta.offsetWidth; cta.classList.add('jiggle'); }
+      }
+    });
+  });
+})();
+</script>
+<style id="mobile-nav">
+.nav-toggle{display:none;background:none;border:0;cursor:pointer;padding:8px;color:var(--ink);}
+.nav-toggle svg{width:24px;height:24px;display:block;}
+.mobile-menu{display:none;}
+@media (max-width:700px){
+  .topbar nav{display:none!important;}
+  .topbar .btn-primary{display:none!important;}
+  .nav-toggle{display:grid;place-items:center;}
+  .mobile-menu{display:block;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 20px 44px -22px rgba(0,0,0,.4);padding:10px;z-index:90;max-height:calc(100vh - 64px);overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .2s,transform .2s,visibility .2s;}
+  .mobile-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
+  .mobile-menu a{display:block;padding:13px 14px;border-radius:10px;text-decoration:none;color:var(--ink);font-size:16px;font-weight:600;}
+  .mobile-menu a small{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:2px;}
+  .mobile-menu a:active{background:var(--field);}
+  .mobile-menu .mm-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:14px 14px 4px;}
+  .mobile-menu .mm-cta{margin-top:8px;background:var(--accent);color:#fff;text-align:center;}
+  .mobile-menu .mm-sep{height:1px;background:var(--line);margin:8px 6px;}
+}
+</style>
+<script>
+(function(){
+  var bar=document.querySelector('.topbar .inner');
+  if(!bar||bar.querySelector('.nav-toggle'))return;
+  var btn=document.createElement('button');
+  btn.className='nav-toggle';btn.setAttribute('aria-label','Open menu');btn.setAttribute('aria-expanded','false');
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+  bar.appendChild(btn);
+  var menu=document.createElement('div');menu.className='mobile-menu';
+  var html='<div class="mm-label">Work</div>';
+  document.querySelectorAll('.work-menu a').forEach(function(a){html+='<a href="'+a.getAttribute('href')+'">'+a.innerHTML+'</a>';});
+  html+='<div class="mm-sep"></div><a href="resume.html">Resume</a><a class="mm-cta" href="#contact">Get in touch</a>';
+  menu.innerHTML=html;document.body.appendChild(menu);
+  function close(){menu.classList.remove('open');btn.setAttribute('aria-expanded','false');btn.querySelector('svg').innerHTML='<path d="M3 6h18M3 12h18M3 18h18"/>';}
+  function open(){menu.classList.add('open');btn.setAttribute('aria-expanded','true');btn.querySelector('svg').innerHTML='<path d="M5 5l14 14M19 5L5 19"/>';}
+  btn.addEventListener('click',function(e){e.stopPropagation();menu.classList.contains('open')?close():open();});
+  menu.addEventListener('click',function(e){if(e.target.closest('a'))close();});
+  document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!e.target.closest('.mobile-menu')&&!e.target.closest('.nav-toggle'))close();});
+})();
+</script>
+<script>(function(){var e="enam0491"+String.fromCharCode(64)+"gmail.com";document.querySelectorAll(".email-out").forEach(function(s){s.textContent=e;});document.querySelectorAll(".email-link").forEach(function(a){a.setAttribute("href","mailto:"+e);});})();</script>
+</body>
+</html>
+
+<style id="__om-edit-overrides">
+#solution :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) >div { padding: 0px 0px 0px 8px !important }
+#solution :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) >div { padding: 0px 0px 0px 12px !important }
+#solution :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) >div { padding: 0px 0px 0px 24px !important }
+</style>
