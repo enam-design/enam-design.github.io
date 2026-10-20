@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Dance Coach Project Docs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  /* Layout: same chrome and 720px reading column as the case study; tabs switch between the two files. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; scrollbar-gutter: stable; }
+  body { font-family: "Figtree", -apple-system, BlinkMacSystemFont, system-ui, sans-serif; font-size: 16px; line-height: 1.6; background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  :root { --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+  /* Palette: identical to the case study pages */
+  body[data-theme="blue"] { --bg: #FBFBFC; --ink: #1A1A1E; --muted: #6A6A72; --line: #E6E6EA; --field: #F3F3F6; --accent: #E92E66; --accent-soft: #FCE7EE; --code-bg: #F3F2F5; color-scheme: light; }
+  body[data-theme="graphite"] { --bg: #14141A; --ink: #E8E8EE; --muted: #8D8D95; --line: #2A2A33; --field: #1E1E26; --accent: #FF6492; --accent-soft: rgba(255,100,146,0.16); --code-bg: #20202A; color-scheme: dark; }
+
+  .topbar { top: env(safe-area-inset-top, 0px); }
+  .topbar .inner, .back-link { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  @media (min-width: 760px) { .topbar .inner, .back-link { padding-left: 32px; padding-right: 32px; } }
+
+  .docs { max-width: 720px; margin: 0 auto; padding-block: 0 120px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  @media (min-width: 760px) { .docs { padding-left: 32px; padding-right: 32px; } }
+
+  .eyebrow { margin-top: 48px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .eyebrow b { color: var(--accent); font-weight: 500; }
+  h1.page-title { margin-top: 16px; font-size: clamp(32px, 4.6vw, 48px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance; }
+  .intro { margin-top: 20px; font-size: 15.5px; line-height: 1.6; color: var(--muted); }
+  .intro p + p { margin-top: 12px; }
+
+  /* Tabs */
+  .tabs { margin-top: 36px; display: flex; gap: 6px; border-bottom: 1px solid var(--line); }
+  .tabs button { font: inherit; font-family: var(--mono); font-size: 13.5px; font-weight: 600; color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 14px; cursor: pointer; }
+  .tabs button:hover { color: var(--ink); }
+  .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+  .tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
+
+  .doc-meta { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; color: var(--muted); }
+  .doc-meta .doc-name { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+
+  .doc-toc { margin-top: 18px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; }
+  .doc-toc-label { display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .doc-toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+  .doc-toc a { display: inline-block; font-size: 13px; color: var(--ink); text-decoration: none; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
+  .doc-toc a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Rendered markdown */
+  .md { margin-top: 8px; font-size: 15px; line-height: 1.7; min-width: 0; }
+  .md h2 { margin-top: 48px; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; scroll-margin-top: 96px; }
+  .md h3 { margin-top: 28px; font-size: 16.5px; font-weight: 600; }
+  .md p { margin-top: 14px; }
+  .md ul, .md ol { margin-top: 12px; padding-left: 22px; }
+  .md li { margin-top: 8px; padding-left: 2px; }
+  .md li::marker { color: var(--accent); }
+  .md li > p:first-child { margin-top: 0; }
+  .md li > ul, .md li > ol { margin-top: 6px; }
+  .md strong { font-weight: 600; }
+  .md code { font-family: var(--mono); font-size: 0.86em; background: var(--code-bg); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+  .md pre { margin-top: 14px; overflow-x: auto; background: var(--code-bg); padding: 12px 14px; border-radius: 10px; }
+  .md pre code { background: none; padding: 0; }
+
+  .top-link { margin-top: 48px; display: inline-block; font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; }
+  .top-link:hover { text-decoration: underline; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+<link rel="stylesheet" href="shared.css" />
+</head>
+<body data-theme="blue">
+<script>
+  (function(){ try { var t = localStorage.getItem('case-palette'); document.body.dataset.theme = (t === 'graphite' || t === 'blue') ? t : 'blue'; } catch(e) { document.body.dataset.theme = 'blue'; } })();
+</script>
+
+<header class="topbar">
+  <div class="inner">
+    <a class="brand" href="index.html"><span class="mk">E</span>Esther Nam</a>
+    <span class="spacer"></span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</header>
+
+<a href="dance-coach.html#prototype" class="back-link">← Back to Dance Coach</a>
+
+<main class="docs" id="top">
+  <div class="eyebrow"><b>Dance Coach</b> · Project docs</div>
+  <h1 class="page-title">VECTOR.md and CLAUDE.md</h1>
+  <div class="intro">
+    <p>Claude Code read both files at the start of every session. VECTOR.md is the source of truth for the product: what it is, who it&#x27;s for, the data model, and the current state of the build. CLAUDE.md is the shorter working brief: the stack, the user flows, the constraints, and what not to build yet.</p>
+    <p>These are the current versions from the project repo, unedited.</p>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Choose a file">
+    <button role="tab" id="tab-vector" aria-controls="panel-vector" aria-selected="true" data-doc="vector">VECTOR.md</button>
+    <button role="tab" id="tab-claude" aria-controls="panel-claude" aria-selected="false" data-doc="claude" tabindex="-1">CLAUDE.md</button>
+  </div>
+  
+    <section class="doc-panel" id="panel-vector" data-doc="vector" role="tabpanel" aria-labelledby="tab-vector">
+      <div class="doc-meta">
+        <span class="doc-name">VECTOR.md</span>
+        <span>Source of truth for the product</span>
+        <span>572 lines</span>
+        <span>Last edited Sep 8, 2026</span>
+      </div>
+      <nav class="doc-toc" aria-label="Sections of VECTOR.md"><span class="doc-toc-label">Sections</span><ul><li><a href="#vector-project-overview">Project Overview</a></li><li><a href="#vector-users">Users</a></li><li><a href="#vector-jobs-to-be-done">Jobs to Be Done</a></li><li><a href="#vector-architecture">Architecture</a></li><li><a href="#vector-mvp-scope-direction-1">MVP Scope — Direction 1</a></li><li><a href="#vector-feedback-model">Feedback Model</a></li><li><a href="#vector-data-model">Data Model</a></li><li><a href="#vector-constraints">Constraints</a></li><li><a href="#vector-future-partner-work">Future: Partner Work</a></li><li><a href="#vector-current-state">Current State</a></li></ul></nav>
+      <div class="md"><h2 id="vector-project-overview">Project Overview</h2>
+<p>Dance Coach is a mobile-first dance coaching app for Latin dance teams
+(bachata and salsa). It solves the gap between class and practice:
+instructors teach choreo in class, but have no visibility into how
+students practice during the week, and students have no structured
+feedback until the next class.</p>
+<p>Instructors upload a reference video of a choreo piece. Students
+record themselves and get immediate AI timing feedback during
+practice — as many times as they want. When ready, they submit a
+final version. The instructor reviews the AI analysis, adds their
+own note, and releases feedback to the student.</p>
+<p>The AI does the grunt work. The instructor owns the relationship.</p>
+<h2 id="vector-users">Users</h2>
+<p><strong>Instructors</strong> — teach bachata and salsa at studios and/or lead dance teams. Currently manage student practice informally
+via Band app (video uploads, group chats). Pain point: no visibility
+into student practice, spend time on feedback that students may forget
+by next class.</p>
+<p><strong>Students</strong> — range from recreational to competitive. Film
+themselves constantly but may need guidance between classes. Want
+faster feedback and a way to self-assess before showing the instructor.</p>
+<h2 id="vector-jobs-to-be-done">Jobs to Be Done</h2>
+<ul>
+<li>Instructor: assign choreo homework without managing video DMs</li>
+<li>Instructor: review student submissions efficiently with AI pre-analysis</li>
+<li>Instructor: add context and voice to AI output before releasing to student</li>
+<li>Student: practice with real feedback, not just filming into the void</li>
+<li>Student: know if they're ready to submit before the instructor sees it</li>
+<li>Student: understand specifically what counts they're hitting late or early</li>
+</ul>
+<h2 id="vector-architecture">Architecture</h2>
+<ul>
+<li><strong>Mobile app:</strong> React Native + Expo (TypeScript) — student facing</li>
+<li>
+<p><strong>Dashboard:</strong> React — instructor facing. Platform resolved 2026-08-18:
+    both roles get both device types, so every screen works at phone and
+    desk width. Breakpoints live in <code>packages/ui</code> tokens — 900px for
+    navigation and My Videos, 1024px for the instructor's two-column review</p>
+</li>
+<li>
+<p><strong>Backend:</strong> Python FastAPI on Railway</p>
+</li>
+<li><strong>Pose estimation:</strong> MediaPipe BlazePose</li>
+<li><strong>Video storage:</strong> Cloudflare R2 — direct upload via presigned PUT</li>
+<li><strong>Auth:</strong> Clerk, wired in. Roles come from Clerk public metadata</li>
+<li><strong>Shared package:</strong> packages/metrics — feedback thresholds and math</li>
+<li><strong>Monorepo:</strong> npm workspaces (app/, backend/, dashboard/, packages/)</li>
+</ul>
+<p><strong>Key architecture decisions:</strong></p>
+<ul>
+<li>Server-side processing only — no on-device inference for MVP</li>
+<li>FRAME_STRIDE=3 default — performance vs accuracy tradeoff on Railway shared CPU</li>
+<li>Reference pose extracted once at instructor upload, not per student submission</li>
+<li>Direct upload to storage with signed URLs — video never passes through FastAPI</li>
+<li>Instructors upload a music reference video, a counts reference video, or both. At least one is required; neither individually is. Whichever is analysed supplies both the pose sequence (MediaPipe) and the beat grid (librosa). The music version is preferred whenever present, because a track's pulse places each beat more precisely than a spoken count does. A piece analysed from counts alone is flagged, and its timing is presented with the extra uncertainty that carries.</li>
+<li>Filming direction is detected, not prescribed. Whether each video was
+    shot from the front or from behind is read from the pose data, and the
+    backend mirrors the student's landmarks horizontally only when the two
+    clips face opposite ways. Instructors and students can film whichever
+    way suits them. No partner detection in v1.</li>
+</ul>
+<h2 id="vector-mvp-scope-direction-1">MVP Scope — Direction 1</h2>
+<p>Direction 1 measures both timing AND technique, relative to the
+instructor's reference video. The instructor's movement at each moment
+is the standard — no separate absolute thresholds are needed.</p>
+<p>Measured per count/beat:</p>
+<ul>
+<li>Timing — did the student hit the movement at the right moment</li>
+<li>Hip displacement — does lateral hip movement match the reference</li>
+<li>Weight transfer — does the shift happen at the same point in the phrase</li>
+<li>Footwork — does the student's pattern align with the reference</li>
+<li>Frame and posture — does upper body position match</li>
+<li>Knee flexion — does depth match the instructor's</li>
+</ul>
+<p>Not in scope for v1:</p>
+<ul>
+<li>Partner/duo detection</li>
+<li>Aesthetic or stylistic feedback beyond what pose data captures</li>
+<li>Absolute technique thresholds (Direction 2)</li>
+<li>Frame-perfect synchronization</li>
+</ul>
+<h2 id="vector-feedback-model">Feedback Model</h2>
+<p>There are two distinct feedback tiers with different audiences,
+tone, and purpose. The underlying AI analysis is the same raw data —
+what changes is framing and authority.</p>
+<p><strong>Practice feedback (immediate, student-facing):</strong></p>
+<ul>
+<li>Delivered instantly after each practice attempt</li>
+<li>No instructor involvement</li>
+<li>Tone: encouraging and directional — answers "what do I fix right now?"</li>
+<li>Scope: top 1-2 actionable items, not exhaustive</li>
+<li>Explicitly labeled as AI feedback</li>
+<li>Example: "Your weight transfer on counts 3 and 7 is landing late —
+    try initiating the shift a beat earlier"</li>
+</ul>
+<p><strong>Released feedback (instructor-gated, formal):</strong></p>
+<ul>
+<li>Only delivered after instructor reviews and approves the final submission</li>
+<li>Instructor adds their own note before releasing</li>
+<li>Tone: authoritative — carries the instructor's voice, not just AI output</li>
+<li>Scope: more comprehensive, includes instructor context and nuance</li>
+<li>Labeled as instructor feedback, with AI analysis as supporting detail</li>
+<li>Triggers a push notification to the student when released</li>
+</ul>
+<p><strong>The distinction that matters:</strong>
+Practice attempts are informal and self-directed — student sees AI
+immediately, instructor never sees them. Final submissions are formal —
+instructor reviews AI analysis, annotates, and releases. The gate
+applies to final submissions only, not practice.</p>
+<h2 id="vector-data-model">Data Model</h2>
+<p><strong>User</strong> — id, role (instructor/student), name, email, clerkId</p>
+<p><strong>Team</strong> — id, name, instructorId</p>
+<p><strong>Enrollment</strong> — studentId, teamId</p>
+<p><strong>ChoreoPiece</strong> — id, teamId, name, weekNumber, referenceVideoCountsUrl, referenceVideoMusicUrl (at least one required), analysisSource (music/counts — which video was analysed), referencePoseSequence (stored JSON, null until analysed), beatTimestamps (extracted from that video's audio via librosa, null until analysed), status (draft/published), analysisState (processing/ready/failed) with frame counts, measured fps and a failure reason for reporting progress</p>
+<p><strong>PracticeAttempt</strong> — id, studentId, choreoPieceId, videoUrl,
+analysisResult (JSON), createdAt
+(informal — student sees AI feedback immediately, instructor never sees)</p>
+<p><strong>Submission</strong> — id, studentId, choreoPieceId, videoUrl,
+analysisResult (JSON),
+status (processing/failed/pending/reviewed/released)</p>
+<p><strong>InstructorNote</strong> — id, submissionId, instructorId, note, createdAt</p>
+<h2 id="vector-constraints">Constraints</h2>
+<ul>
+<li>
+<p>Filming direction is detected, not prescribed. Whether each video was
+    shot from the front or from behind is read from the pose data, and the
+    backend mirrors the student's landmarks horizontally only when the two
+    clips face opposite ways. Instructors and students can film whichever
+    way suits them. No partner detection in v1.</p>
+</li>
+<li>
+<p>At least one reference video is required, either version. The music version is analysed whenever it exists; with counts only, the counts video is analysed instead and flagged as a lower-confidence beat grid. Both are surfaced to students as learning references.</p>
+</li>
+<li>
+<p>Clip length is not artificially capped — typical choreo phrases
+    run 20-60 seconds; longer clips increase processing time on Railway's
+    shared CPU (mitigated by FRAME_STRIDE=3, properly solved by background
+    job queue which is not yet built)</p>
+</li>
+<li>
+<p>No on-device processing — requires internet connection</p>
+</li>
+<li>MediaPipe accuracy degrades with fast movement and baggy clothing</li>
+<li>
+<p>Technique feedback is relative to instructor reference, not absolute
+    thresholds — the instructor's movement IS the standard</p>
+</li>
+<li>
+<p>No payments or subscriptions in v1</p>
+</li>
+<li>No social or community features in v1</li>
+<li>
+<p>Practice feedback comes back on the response that files the attempt,
+    and stays that way until a real job queue exists. Backgrounding it
+    would give the student a progress bar as honest as the instructor's,
+    but it turns "record and know immediately" into post, poll, then
+    navigate — and immediacy is the point of the tier, not an accident of
+    how it was built. The in-process task behind the reference analysis is
+    not a good enough foundation to reshape it on. Revisit when the queue
+    is real.</p>
+</li>
+<li>
+<p>Direction 2 (fundamentals library + progress tracking) is next phase —
+    do not build yet</p>
+</li>
+</ul>
+<h2 id="vector-future-partner-work">Future: Partner Work</h2>
+<p>Partner detection is out of scope for v1 and v2 but is central to Latin
+dance teams long term. Planned phases:</p>
+<p><strong>Phase 2 — Role-separated solo analysis.</strong> Leader and follower each
+submit their own solo video of the same piece. The app analyses each
+against a role-specific reference: the instructor films the leader part
+and the follower part separately. No multi-person detection needed.</p>
+<p><strong>Phase 3 — Duo detection.</strong> Two tracked skeletons in one frame.
+Requires multi-person pose estimation (OpenPose or its successor) with
+enough accuracy for close-contact Latin dance movement. Dependent on
+computer vision tooling maturity.</p>
+<p><strong>Phase 4 — Interaction analysis.</strong> Connection quality, lead clarity,
+follower responsiveness. Research-level today, productizable in 3-5
+years.</p>
+<p><strong>Architecture note:</strong> keep role (leader/follower) as a field on
+Enrollment and Submission from Phase 2 onward — it costs nothing now and
+makes Phase 3 significantly cleaner to build.</p>
+<h2 id="vector-current-state">Current State</h2>
+<p>All thirteen build prompts are delivered, and Direction 1 works end to end:
+an instructor sets a piece, a student practises against it and gets feedback
+in seconds, hands a take in, and reads their instructor's note when it is
+released. Deployed and running on Railway.</p>
+<p>That is the feature sequence finished, not the product. What is missing below
+was never part of those prompts — auth, notifications and a job queue are the
+difference between a working demo and something a real team could use on
+Monday, and none of them are started.</p>
+<p><strong>Built:</strong></p>
+<ul>
+<li>
+<p>Expo mobile app — navigation shell, Record screen (assignment picker,
+    camera + camera roll, preview with the practice/submit choice), and a
+    Feedback screen with both real templates: practice feedback (score,
+    one or two corrections, labelled AI, with a Submit for Review button)
+    and released feedback (instructor's note first, then the score,
+    markers and count-by-count detail behind it).</p>
+</li>
+<li>
+<p>My Videos — three sections: active assignments, practice history, and
+    submissions with their status. An assignment card says whether it has
+    been submitted and flags a counts-only reference. Practice entries
+    reopen the feedback they were given rather than re-analysing.
+    Submissions open a holding screen whose wording matches the status, so
+    <code>reviewed</code> reads as almost ready rather than as the same wait as
+    <code>pending</code>.</p>
+</li>
+<li>
+<p>The app opens on My Videos, and the bar reads My Videos, Record,
+    Feedback — the order the week runs in. A student opening the app is
+    more often checking whether feedback landed than ready to film that
+    second.</p>
+</li>
+<li>
+<p>Reference viewing, between the assignment list and the camera. Tapping
+    an assignment opens whichever reference videos exist, labelled and
+    each with its own play button; starting one pauses the other. From
+    there Start Recording goes to the camera with the piece already
+    chosen. A student can come back and rewatch as often as they like,
+    which is most of how a piece gets learned. Each video has its own play
+    and fullscreen button rather than leaving fullscreen to the native
+    overlay, which only appears after a tap and fades again — watching
+    footwork on a phone-width card is the whole reason to want it.
+    Built as a screen hidden from the tab bar rather than as a stack
+    screen: adding @react-navigation/native-stack pulls
+    @react-navigation/native forward and breaks the React 19 JSX types
+    across every file in the app. Noted in navigation/types.ts so it isn't
+    "fixed" by adding the stack back.</p>
+</li>
+<li>
+<p>Student-scoped listing routes, kept apart from the instructor's.
+    GET /submissions is the instructor's queue and is ungated by design;
+    the app reads /students/{id}/... instead, which goes through the same
+    gated view as every other student-facing route.</p>
+</li>
+<li>
+<p>FastAPI backend on Railway, healthy. Pose estimation via MediaPipe at
+    FRAME_STRIDE=3 everywhere, local and deployed, so a reference and a
+    student clip are always sampled the same way.
+    (/analyze still exists but nothing in either client calls it — the
+    student flow goes through /practice-attempts and /submissions.)</p>
+</li>
+<li>
+<p>ChoreoPiece flow — instructor creates a piece, registers reference
+    video URLs, and publishes it. Pose sequence (MediaPipe) and beat grid
+    (librosa) are extracted once at registration and stored on the row.</p>
+</li>
+<li>
+<p>Either reference video is enough. Music, counts, or both; at least one
+    is required and neither individually is. The music version is analysed
+    whenever it exists. With counts only, the counts video is analysed
+    instead — librosa reads a grid off the onset of each spoken number —
+    and the piece is flagged <code>beats_low_confidence</code>. That flag travels: it
+    is stored on the row, returned by the API, threaded into the
+    comparison, and softens the timing correction a student is shown, so
+    nothing presents a voice-derived beat with a track's precision.</p>
+</li>
+<li>
+<p>Video storage — Cloudflare R2 presigned-PUT direct upload, live in
+    production since 2026-08-10. Video never passes through FastAPI: the
+    client uploads straight to storage and only the URL comes back.
+    Reference and student clips go to separate prefixes, so a retention
+    policy on student takes can never sweep up an instructor's reference.
+    Every URL is checked against our own storage before being stored or
+    fetched. Without credentials it falls back to local disk so the flow
+    runs with no accounts set up, and that fallback closes itself off as
+    soon as real storage exists; /health reports which mode is live.</p>
+<p>R2 replaced Cloudinary because Cloudinary's plan refuses a single file
+over 100 MB and three minutes of 4K from a phone is 1.5-2 GB, which
+was asking instructors to compress their own reference videos. R2
+takes 5 GiB in one PUT and charges nothing for egress — the deciding
+cost here, since every student comparison reads the reference back, so
+downloads vastly outnumber uploads. The size limit is reported by the
+backend with each signature rather than hardcoded in the clients,
+because it differed by two orders of magnitude between the two.</p>
+<p><strong>Cloudinary was removed on 2026-08-12.</strong> It had been kept configured
+because pieces uploaded before the switch still held Cloudinary URLs —
+but those pieces were deleted rather than backfilled, and a query
+against production confirmed no Cloudinary URL survives on any piece,
+submission or practice attempt. Keeping a dormant provider meant every
+storage change had to be made twice and reasoned about twice.</p>
+<p>The local-disk fallback stayed, but only when asked for:
+<code>ALLOW_LOCAL_STORAGE=true</code> and no R2 credentials. R2 wins whenever it is
+configured, so the flag can never take storage away from a real bucket.
+It used to happen automatically whenever no provider was set, and
+automatic was the bug — a deploy that lost its R2 variables would keep
+accepting student takes and write them to a container disk that does
+not survive a restart. Nothing failed; the videos simply stopped
+existing. /health reports <code>r2</code>, <code>local</code> or <code>unconfigured</code>, so the wrong
+mode is visible before it costs anything.</p>
+</li>
+<li>
+<p>Clerk auth, across all three pieces. Every route except /health
+    requires a verified session token; the id on a request is the one in
+    the token rather than one the client named. Verification is local
+    against Clerk's JWKS, so no call to Clerk sits on the request path and
+    Clerk being briefly unreachable does not sign anyone out. With the
+    Clerk variables unset the backend refuses everything rather than
+    waving requests through — a deploy that forgets them should serve
+    nothing, not everything.</p>
+<p><strong>Role comes out of the token, never a request body.</strong> A Clerk user's
+public metadata carries <code>{"role": "instructor"}</code>, set in the Clerk
+dashboard; anyone without it is a student, which is the answer that
+can only see its own work. The spec this was built from had
+/users/sync accept a role from the client, which would have let any
+student POST themselves into the review queue — the one route that
+returns every submission's analysis before release. The <code>role</code> column
+on User is a mirror kept for querying and is refreshed on every sync;
+it is never what an endpoint decides on.</p>
+<p>Scope is by team throughout: an instructor sees their own team's
+queue, a student their own team's published pieces and their own work
+alone. Someone else's piece or submission answers 404 rather than 403,
+since the ids are UUIDs and confirming one exists tells an outsider
+about another team for no benefit.</p>
+<p>An instructor signing in on the phone gets a screen pointing at the
+dashboard rather than a set of tabs. Whether reviewing belongs on a
+phone is still open, and building the tabs would answer it by
+accident. That screen reads the dashboard's address from
+GET /client-config rather than carrying it: Expo inlines
+EXPO_PUBLIC_ variables at build time, so deploying the dashboard for
+the first time — or moving it — would otherwise cost an EAS build and
+a store round trip to change one string. With nothing configured the
+screen says the address has not been set rather than offering a dead
+link.</p>
+</li>
+<li>
+<p>User, Team and Enrollment exist as tables for the first time —
+    migration 0008. They had been in this document's data model since the
+    beginning without ever being built. Nothing existing was deleted: the
+    three placeholder ids became real rows, so every piece, submission and
+    note made before auth still resolves, and the first instructor to sign
+    in takes over the placeholder team along with its work.</p>
+</li>
+<li>
+<p>Student flow — the student picks a published piece before filming, then
+    chooses what to do with the take. Practice attempts come back with AI
+    feedback immediately and the instructor never sees them; submissions
+    enter the review queue and stay hidden from the student until an
+    instructor releases them. Separate tables, separate endpoints.</p>
+</li>
+<li>
+<p>A clip out of the camera roll is re-encoded to 720p on the phone before
+    it is uploaded, starting the moment it is picked rather than when the
+    student decides what to do with it. A recorded take is already capped at
+    capture and skips it. Measured on a real submission the three waits were
+    14s encoding, 9s uploading and 12s of backend analysis; the encode needs
+    nothing from the student and they spend about as long watching the take
+    back, so the two now overlap and the encode costs almost nothing in
+    wall-clock. Submitting before it finishes waits on the encode already
+    running instead of starting a second one, and discarding the clip
+    cancels it — a cancel is told apart from a failure in the trace, since
+    otherwise every discarded clip would log the line that matters for
+    spotting a silent fallback. The picker's own <code>videoQuality</code> would have handled this, but that
+    option is iOS-only — on Android it is ignored and a 4K original comes
+    through whole, which is the input to the heap exhaustion this flow has
+    been killed by twice. The encode is not itself a memory risk, which was
+    checked rather than assumed: on Android frames go decoder → GL surface →
+    encoder and never reach the Java heap as pixel buffers, on iOS
+    AVAssetReader/AVAssetWriter pull one sample at a time, and both hand
+    back a file path rather than bytes. The bar names the step, because
+    re-encoding a long take is not instant and "Uploading" sitting at 0%
+    reads as a hang. A failed transcode uploads the original rather than
+    refusing the take, and says which happened in the trace — <code>transcoded
+    from=… to=…</code> against <code>transcode failed … uploading=original</code> — since a
+    silent fallback and a working transcode otherwise look identical.</p>
+</li>
+<li>
+<p>POST /compare — the Direction 1 engine. Runs pose estimation on the
+    student's video, mirrors it when the two were filmed from opposite
+    sides, finds the downbeat and the student's own
+    start offset, and reports all six markers per beat plus an overall
+    score. Tolerance on each marker is a fraction of how much the
+    instructor moved it, so the standard is the reference and never a
+    fixed number. Returns both feedback tiers from one measurement:
+    practice_feedback (one or two items, in dance language) and
+    full_analysis (every beat, for instructor review).
+    Whether the student was mirrored is decided once and then reported —
+    <code>student_mirrored</code> on the comparison — so the review screen can say the
+    two clips face opposite ways instead of asserting a filming convention
+    that orientation detection replaced. It says nothing when they agree,
+    which is most pairs, and nothing on a submission analysed before the
+    flag existed: absent means unknown, not matching.</p>
+</li>
+<li>
+<p>Both feedback tiers, end to end. Practice attempts run the real
+    comparison and return the practice tier only. Submissions run it,
+    store the whole thing, and withhold it — along with the instructor's
+    note — until release. The instructor dashboard reviews the full
+    analysis beside both videos, saves a note, and releases.</p>
+</li>
+<li>
+<p>InstructorNote — its own table, one per submission. Writing and
+    releasing are separate acts, so a note can be drafted and revisited
+    without the student seeing a word of it.</p>
+</li>
+<li>
+<p>Database — SQLAlchemy + Alembic. Postgres on Railway, SQLite locally.
+    Ten migrations, ending at 0010_scoring_version. <code>scripts/check_docs.py</code>
+    verifies that count and that revision against the repo, because both
+    were wrong here for weeks.</p>
+</li>
+<li>
+<p>Reference analysis runs in the background, reporting real progress.
+    POST /choreo-pieces returns in milliseconds rather than holding open
+    for the whole analysis; the row carries frames done against frames
+    expected and the frames per second the machine is managing. The
+    dashboard polls that and shows one bar across upload and analysis,
+    weighted by estimated time so neither half dominates, with no
+    countdown — an estimate that turns out wrong costs more trust than it
+    buys, so it only decides how much of the bar each half occupies.
+    Publishing is refused while a piece is processing, and a failed
+    analysis records a reason an instructor can act on.</p>
+</li>
+<li>
+<p>Deploys migrate themselves. Railway's preDeployCommand runs
+    backend/migrate.py after the build and before any traffic reaches the
+    new version, so the schema is never behind the code reading it and a
+    failed migration blocks the release. It also adopts a database that
+    create_tables() built outside Alembic, which is the state the first
+    Postgres arrived in.</p>
+</li>
+<li>
+<p>Instructor dashboard — both tabs on the real backend. Create
+    Assignment, and a review queue showing the student's take beside the
+    reference, the markers summary, the count-by-count breakdown, the note
+    box and the release button.</p>
+</li>
+<li>
+<p>The dashboard is responsive, one codebase and one URL. Wider on large
+    screens, because judging two videos against each other is what a
+    desktop is for and 820px gave each clip under 400px. On a phone the
+    videos stack and cap their height, the markers table becomes blocks
+    rather than four columns in 360px, and the note and release button go
+    full width — reviewing and releasing between classes is the job a
+    phone is actually good for here.</p>
+</li>
+<li>
+<p>Shared metrics package — feedback thresholds, monorepo wired</p>
+</li>
+<li>
+<p>npm hoisting no longer breaks the app's TypeScript build. Adding any
+    package to the app workspace used to re-hoist react-native to the root
+    while @types/react stayed in app/node_modules, at which point React
+    Native's own types could not resolve React's and every View and Text
+    stopped being valid JSX — several hundred errors naming nothing
+    relevant. @types/react is declared at the root so it lands where the
+    hoisted react-native can find it. Written up in the README, because a
+    root devDependency in a repo whose root imports nothing looks exactly
+    like something to tidy away.</p>
+</li>
+<li>
+<p>EAS Update configured. Project @enam91/dance-coach, expo-updates
+    installed, runtime version tied to app version so a JS bundle cannot
+    land on a build whose native code cannot run it. The preview profile
+    builds an internal-distribution APK on the preview channel with
+    EXPO_PUBLIC_API_URL pointed at Railway, so an installed build works
+    anywhere rather than only on the same network as a laptop.
+    App version 1.1.0 — bumped with the transcoder because the runtime
+    version follows it, and a JS bundle calling a native module that the
+    installed 1.0.0 build does not carry is exactly what that policy exists
+    to stop.</p>
+</li>
+<li>
+<p>Android largeHeap is in a built APK as of 1.1.0. It had been configured
+    in app.json for some time and was only ever waiting on a build.</p>
+</li>
+<li>
+<p>Git — monorepo with direction-2-baseline branch as snapshot</p>
+</li>
+</ul>
+<p><strong>Production, confirmed working (2026-08-08):</strong></p>
+<ul>
+<li>Railway service healthy and serving the current main.</li>
+<li>
+<p>Postgres attached, at revision 0010_scoring_version. Migrations run themselves
+    before each deploy; a failure blocks the release rather than leaving
+    schema and code out of step.</p>
+</li>
+<li>
+<p>R2 live (2026-08-10), replacing Cloudinary. /health reports <code>r2</code>, the
+    signature endpoint returns a real SigV4 presigned PUT against the
+    account with the content type signed in, and a live PUT was accepted —
+    so credentials, permissions and signing are all confirmed end to end.
+    Clips file under reference-videos/ and student-videos/. The local-disk
+    fallback refuses uploads, so the one path where video bytes could
+    travel through the service is unreachable in production.</p>
+</li>
+<li>
+<p>Cloudinary was removed on 2026-08-12, after a query against production
+    found no Cloudinary URL on any piece, submission or practice attempt.</p>
+</li>
+<li>
+<p>Nothing is stranded from the local-disk period: the database was empty
+    when Cloudinary went in, so no row points at a video that no longer
+    exists.</p>
+</li>
+</ul>
+<p><strong>Repair tooling:</strong></p>
+<ul>
+<li>
+<p><code>backend/scripts/backfill_playback.py</code> gives a piece the 720p playback
+    copy it never got. Every piece analysed from 2026-08-10 onward gets one
+    at upload time, so this is for the case where that transcode failed and
+    left a piece falling back to its 4K original.</p>
+</li>
+<li>
+<p>It only transcodes, uploads, and writes the two playback URL columns —
+    never <code>analysis_state</code>, the pose sequence, the beat grid or the publish
+    status — so a failure leaves a working published piece exactly as it
+    was. Idempotent, and it commits per piece, so an interrupted run keeps
+    what it finished. <code>--dry-run</code> lists what it would touch.</p>
+</li>
+<li>
+<p><strong>It needs to run inside the deployed container.</strong> Railway's Postgres
+    is <code>postgres.railway.internal</code> with no public proxy, so the database is
+    unreachable from a laptop, and the script needs the database, R2
+    credentials and ffmpeg in the same place. Running it means
+    <code>railway ssh --service web -- python scripts/backfill_playback.py</code>,
+    which requires an SSH key registered with the Railway account — there
+    is deliberately no admin endpoint for this, since it would mean a
+    public, CPU-expensive operation standing permanently in front of an API
+    that has no auth yet.</p>
+</li>
+</ul>
+<p><strong>Known limits in what is built:</strong></p>
+<ul>
+<li>
+<p>(Fixed 2026-08-10) Timing was measured against the beat grid rather
+    than against the reference, making it the one marker judged by an
+    absolute standard — and one the reference itself did not meet. The
+    same video uploaded as both reference and submission scored 75 with
+    160 of 192 beats called off, because the instructor's own movements
+    sat more than 100ms from the detected beat. Dancers hold and
+    syncopate, and librosa's grid tracks the music's pulse rather than
+    the moment a body arrives. Both dancers are now measured from their
+    own beat and only the difference is reported; that same video now
+    scores 100. Drifting takes are still caught — 3% slow scores 47.</p>
+</li>
+<li>
+<p>A student who is <em>uniformly</em> behind the music reads as on time.
+    /compare estimates one global offset between the two takes and
+    subtracts it, because a student who pressed record a moment late has
+    not thereby danced late — but a constant lag is indistinguishable
+    from a late start, so it is absorbed along with it. Drifting, and
+    being off on particular counts, are both still caught. Detecting
+    steady lateness needs a beat grid from the student's own audio,
+    measuring each dancer against their own music rather than against
+    each other. Not built.</p>
+</li>
+<li>
+<p>(Fixed 2026-08-11) Every assignment used to land on one placeholder
+    team, every student was the same placeholder student, and every note
+    was attributed to the same placeholder instructor, so the review queue
+    showed one team's work to anyone who opened it. Clerk auth replaced all
+    three. The placeholder rows still exist and still own the work made
+    before sign-in existed; the first instructor to sign in adopts them.</p>
+</li>
+<li>
+<p>Student video analysis still runs inside the request, so a practice
+    attempt or a submission holds the connection open for its duration.
+    Reference analysis no longer does — see below.</p>
+</li>
+<li>
+<p>The reference analysis job is in-process, not a queue. A container
+    restarting mid-analysis strands a piece at whatever fraction it had
+    reached, because nothing outside the process knows the job existed.
+    <code>analysis_updated_at</code> is written on every step so a stalled piece can
+    be identified; retries need a real broker.</p>
+</li>
+<li>
+<p>Background upload is not supported. A student's upload survives
+    switching tabs and even the Record screen remounting — it belongs to a
+    module rather than to the screen — but not the app being killed, which
+    takes the JavaScript streaming the bytes with it. Surviving that needs
+    a native background upload session, which only pays off once the job
+    queue above exists to hand a completed upload to: an upload that
+    outlives the app is not much use while the analysis it feeds still
+    runs inside a request.</p>
+</li>
+<li>
+<p>Releasing a submission has no notification behind it yet — the call
+    site is marked in the release endpoint</p>
+</li>
+<li>
+<p>(Resolved 2026-08-10) The EAS preview build is installed on a phone
+    and three updates have been published to it successfully, so "preview
+    from anywhere" is proven rather than configured.</p>
+</li>
+<li>
+<p>A beat grid read from a counts video is looser than one from music.
+    Someone counting aloud drifts in a way a recording does not, and a
+    spoken number places a beat less precisely than a drum. Pieces built
+    that way are flagged and their timing feedback is hedged, but the
+    underlying grid is still the looser one.</p>
+</li>
+<li>
+<p>The transcode is best-effort by design, so a 4K original can still go
+    up. A student whose encode fails has still filmed their take, and
+    refusing it would be worse than sending it large — but that means the
+    size ceiling is a strong default rather than a guarantee, and the
+    backend's own limits are still what actually bounds a request. The
+    trace says which path ran; nothing else does.</p>
+</li>
+<li>
+<p>Encoding on pick means the preview player and the encoder now run at the
+    same time, where before the player was unmounted before any encoding
+    began. Both are native and neither holds frames on the JS or Java heap,
+    but it is three codec sessions at once on the picked-clip path — preview
+    decode, encode decode, encode — and devices do cap concurrent instances.
+    Not seen to fail, not measured either.</p>
+</li>
+<li>
+<p>Nothing has measured the heap on a real 4K take yet, and until
+    2026-08-12 it could not have been. The <code>[paso]</code> traces used
+    <code>console.log</code>, which does not reach logcat in a release build — the only
+    kind installed on a phone — so every <code>adb logcat | grep paso</code>
+    instruction in this repo was greping for lines nobody was emitting where
+    they could be read. Measured, not assumed: a launch showed Clerk's own
+    <code>console.warn</code> arriving as <code>W ReactNativeJS</code> with no info-level line from
+    any trace beside it. <code>trace()</code> now uses <code>console.warn</code>.</p>
+<p>So the claim that the encode streams rather than buffering still rests
+on both platforms' source — GL surfaces between decoder and encoder on
+Android, one sample at a time on iOS — and <code>dumpsys meminfo</code> during an
+actual transcode remains the evidence that has not been taken. This is
+the third fix aimed at the same 256 MB and the first two were also
+reasonable before they were wrong.</p>
+</li>
+<li>
+<p>The mirror note on the review screen only appears for submissions
+    analysed after <code>student_mirrored</code> existed. Older rows have no such key
+    in their stored analysis and are read as unknown, so they say nothing —
+    correct, since their orientations were never recorded, but it does mean
+    the screen is quieter about old work than about new.</p>
+</li>
+</ul>
+<p><strong>Not built yet:</strong></p>
+<p>Still in dependency order. Auth is now done, which unblocks the rest:
+push tokens have a real user to attach to. The queue in turn depends on
+notifications, because backgrounding analysis without a way to deliver
+the result turns "record and know immediately" into post-then-poll.
+JOB-QUEUE.md holds the scope for the last of these.</p>
+<ul>
+<li>
+<p>Student enrollment by invitation. A student signing in today joins the
+    only team if the database has exactly one, and is left unenrolled when
+    there are none or several — which is right, but it is a single-studio
+    answer rather than an enrollment flow.</p>
+</li>
+<li>
+<p>Push notifications — nothing is built; the release flow has no
+    delivery mechanism yet</p>
+</li>
+<li>
+<p>Background job queue for video processing — scoped in JOB-QUEUE.md,
+    deliberately not started</p>
+</li>
+</ul></div>
+    </section>
+  
+    <section class="doc-panel" id="panel-claude" data-doc="claude" role="tabpanel" aria-labelledby="tab-claude">
+      <div class="doc-meta">
+        <span class="doc-name">CLAUDE.md</span>
+        <span>Working brief for Claude Code</span>
+        <span>161 lines</span>
+        <span>Last edited Sep 8, 2026</span>
+      </div>
+      <nav class="doc-toc" aria-label="Sections of CLAUDE.md"><span class="doc-toc-label">Sections</span><ul><li><a href="#claude-project-overview">Project Overview</a></li><li><a href="#claude-tech-stack">Tech Stack</a></li><li><a href="#claude-project-structure">Project Structure</a></li><li><a href="#claude-core-user-flows">Core User Flows</a></li><li><a href="#claude-feedback-model">Feedback Model</a></li><li><a href="#claude-data-model-source-of-truth-vector-md">Data Model (source of truth: VECTOR.md)</a></li><li><a href="#claude-key-constraints">Key Constraints</a></li><li><a href="#claude-domain-context">Domain Context</a></li><li><a href="#claude-code-style">Code Style</a></li><li><a href="#claude-what-not-to-build-yet">What NOT to Build Yet</a></li></ul></nav>
+      <div class="md"><h2 id="claude-project-overview">Project Overview</h2>
+<p>Dance Coach is a mobile-first dance coaching app for Latin dance teams (bachata
+and salsa). Instructors upload reference videos of choreo pieces. Students
+practice against the reference and get immediate AI timing feedback, then
+submit a final version for instructor review and release.</p>
+<p>VECTOR.md is the source of truth for what we are building and why.
+Read it alongside this file at the start of every session.</p>
+<p>Two companions: ARCHITECTURE-DEBT.md is what is wrong with what exists
+and what it will cost; JOB-QUEUE.md scopes the background job queue,
+which is deliberately not built.</p>
+<p>Run <code>npm run check-docs</code> after editing VECTOR.md or CLAUDE.md. It
+verifies the claims in them that can be checked against the repo —
+migration count, head revision, dependencies named as installed,
+storage providers, "Not built yet" entries, API paths. Both files have
+been wrong about all of those at some point.</p>
+<h2 id="claude-tech-stack">Tech Stack</h2>
+<ul>
+<li>Frontend: React Native with Expo (TypeScript) — student facing</li>
+<li>
+<p>Dashboard: React — instructor facing. Platform resolved 2026-08-18:
+    both roles get both device types. An instructor may review on a phone
+    and a student may open their feedback on a laptop, so every screen has
+    to work at both ends. Two breakpoints, in packages/ui tokens: 900px
+    moves navigation from a bottom tab bar to a left sidebar and splits
+    My Videos into two columns; 1024px turns instructor review into a
+    two-column layout. Everything else adapts by capping a column rather
+    than switching layout</p>
+</li>
+<li>
+<p>Backend: Python FastAPI on Railway</p>
+</li>
+<li>Pose Estimation: MediaPipe BlazePose</li>
+<li>
+<p>Video Storage: Cloudflare R2 — direct upload via presigned PUT only;
+    video never passes through FastAPI. Cloudinary was removed 2026-08-12
+    once production held no Cloudinary URLs. A local-disk fallback exists
+    for development behind ALLOW_LOCAL_STORAGE, off by default; R2 wins
+    whenever it is configured</p>
+</li>
+<li>
+<p>Deployment settings the clients need are served at GET /client-config,
+    not baked into builds — Expo inlines EXPO_PUBLIC_ variables, so a
+    value built in costs an EAS build to change</p>
+</li>
+<li>
+<p>Auth: Clerk — wired in across backend, app and dashboard. Role
+    (instructor/student) comes from Clerk public metadata, read from the
+    verified token and never from a request body</p>
+</li>
+<li>
+<p>Hosting: Railway (backend)</p>
+</li>
+</ul>
+<h2 id="claude-project-structure">Project Structure</h2>
+<p>Single repository, npm workspaces for JavaScript projects.</p>
+<ul>
+<li>/app — Expo React Native frontend (student facing)</li>
+<li>/backend — Python FastAPI server</li>
+<li>/dashboard — Instructor dashboard (React)</li>
+<li>/packages/metrics — Shared analysis types and feedback thresholds,
+    used by both /app and /dashboard.
+    Note: src/feedbackMetrics.ts holds absolute technique thresholds
+    (hip displacement, consistency, knee flexion) that belong to
+    Direction 2, not Direction 1's reference-based comparison. They are
+    kept dormant on purpose as groundwork for the fundamentals
+    assessment feature — do not remove them.</li>
+</ul>
+<h2 id="claude-core-user-flows">Core User Flows</h2>
+<h3>Instructor Flow</h3>
+<ol>
+<li>Create a Choreo Piece (name, week number)</li>
+<li>
+<p>Upload reference video — music version, counts version, or both
+   (at least one; filmed from whichever side suits — the backend works
+   out which)</p>
+</li>
+<li>
+<p>Backend extracts pose sequence and beat timestamps at upload time —
+   not per student submission</p>
+</li>
+<li>
+<p>Publish — students can now see and submit against it</p>
+</li>
+<li>Review student final submissions: AI comparison results + add note</li>
+<li>Release feedback — triggers push notification to student</li>
+</ol>
+<h3>Student Flow</h3>
+<ol>
+<li>See active assignments on My Videos screen</li>
+<li>Select a Choreo Piece</li>
+<li>Record or upload a video, filmed from either side</li>
+<li>Receive immediate AI practice feedback (no instructor involvement)</li>
+<li>Repeat as many times as needed</li>
+<li>When ready, submit a final version</li>
+<li>Wait for instructor review and release</li>
+<li>View released feedback — AI analysis + instructor note</li>
+</ol>
+<h2 id="claude-feedback-model">Feedback Model</h2>
+<p>Two tiers — same underlying AI analysis, different framing and authority.</p>
+<p><strong>Practice feedback (immediate, student-facing):</strong></p>
+<ul>
+<li>Delivered instantly after each practice attempt</li>
+<li>No instructor involvement</li>
+<li>Encouraging and directional — answers "what do I fix right now?"</li>
+<li>Surfaces top 1-2 actionable items only</li>
+<li>Explicitly labeled as AI feedback</li>
+</ul>
+<p><strong>Released feedback (instructor-gated, formal):</strong></p>
+<ul>
+<li>Delivered only after instructor reviews and annotates final submission</li>
+<li>Carries instructor's voice and authority</li>
+<li>More comprehensive — includes instructor note alongside AI analysis</li>
+<li>Triggers push notification to student</li>
+</ul>
+<h2 id="claude-data-model-source-of-truth-vector-md">Data Model (source of truth: VECTOR.md)</h2>
+<ul>
+<li>User (instructor / student, mirrored from Clerk on sign-in)</li>
+<li>Team (one instructor owns one team in v1)</li>
+<li>Enrollment (student × team)</li>
+<li>ChoreoPiece (includes stored referencePoseSequence and beatTimestamps)</li>
+<li>PracticeAttempt (student sees AI feedback immediately; instructor never sees)</li>
+<li>Submission (formal; status: processing / failed / pending / reviewed / released)</li>
+<li>InstructorNote (attached to Submission)</li>
+</ul>
+<h2 id="claude-key-constraints">Key Constraints</h2>
+<ul>
+<li>
+<p>Filming direction is detected, not prescribed. Whether each video was
+    shot from the front or from behind is read from the pose data, and the
+    backend mirrors the student's landmarks horizontally only when the two
+    clips face opposite ways. Instructors and students can film whichever
+    way suits them. No partner detection in v1.</p>
+</li>
+<li>
+<p>At least one reference video is required — music version, counts version, or both. Neither is individually required. The music version is analysed whenever it is present; with counts only, the counts video is analysed and its beat grid is flagged as lower confidence, because a spoken count places a beat less precisely than a track. Both versions are surfaced to students as learning references.</p>
+</li>
+<li>
+<p>No hard clip length cap — typical choreo phrases run 20-60 seconds;
+    longer clips increase Railway processing time (FRAME_STRIDE=3 mitigates;
+    background job queue is the proper fix, not yet built)</p>
+</li>
+<li>
+<p>Server-side processing only — no on-device inference</p>
+</li>
+<li>FRAME_STRIDE=3 default on all video processing</li>
+<li>R2 presigned-PUT direct upload — video never routed through FastAPI</li>
+<li>No payments, subscriptions, or social features in v1</li>
+<li>Direction 2 (fundamentals / level assessment) is next phase — do not build</li>
+</ul>
+<h2 id="claude-domain-context">Domain Context</h2>
+<ul>
+<li>Target styles: bachata and salsa</li>
+<li>
+<p>Direction 1 measures both timing AND technique — relative to the
+    instructor's reference video, not absolute thresholds:</p>
+<ul>
+<li>Timing — did the student hit movements at the right counts</li>
+<li>Hip displacement — does the student's lateral hip movement match
+the instructor's at each moment</li>
+<li>Weight transfer — does the shift happen at the same point in the phrase</li>
+<li>Footwork pattern — does the student's footwork align with the reference</li>
+<li>Frame and posture — does the student's upper body position match</li>
+<li>Knee flexion — does the student's depth match the instructor's</li>
+</ul>
+</li>
+<li>
+<p>The instructor reference IS the technique standard — no separate
+    absolute thresholds needed for Direction 1</p>
+</li>
+<li>
+<p>Direction 2 applies the same technique markers but against absolute
+    thresholds (good/needs work) rather than a reference video</p>
+</li>
+<li>
+<p>Feedback language should be specific to Latin dance, not generic fitness</p>
+</li>
+<li>Instructor relationship is central — app supports them, does not replace them</li>
+<li>No filming convention to follow. The backend detects which way each
+    video was filmed from the pose data and mirrors the student's
+    landmarks only when the two face opposite ways. The old convention
+    (references back-facing, students front-facing) was dropped because
+    real footage did not follow it — see backend/app/analysis/orientation.py.</li>
+</ul>
+<h2 id="claude-code-style">Code Style</h2>
+<ul>
+<li>Simple and readable over clever — maintainability is the priority</li>
+<li>Add comments explaining what each section does</li>
+<li>Small focused functions over large complex ones</li>
+<li>Always handle errors gracefully with user-friendly messages</li>
+<li>Make small changes autonomously and report after — minimize permission prompts</li>
+</ul>
+<h2 id="claude-what-not-to-build-yet">What NOT to Build Yet</h2>
+<ul>
+<li>Partner/duo pose detection</li>
+<li>On-device processing</li>
+<li>Social features or community feed</li>
+<li>Payments or subscriptions</li>
+<li>Absolute technique feedback (hip displacement, weight transfer, frame)</li>
+<li>Direction 2 level assessment or progress tracking</li>
+<li>Multi-studio or multi-team support</li>
+</ul></div>
+    </section>
+
+  <a class="top-link" href="#top">Back to top</a>
+</main>
+
+<script>
+  (function () {
+    // Theme toggle, shared with the case study through the same stored key
+    var body = document.body;
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      var next = body.dataset.theme === 'graphite' ? 'blue' : 'graphite';
+      body.dataset.theme = next;
+      try { localStorage.setItem('case-palette', next); } catch (e) {}
+    });
+
+    // Tabs: #vector or #claude (or any section anchor inside one) picks the file
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+    var panels = Array.prototype.slice.call(document.querySelectorAll('.doc-panel'));
+    function show(doc, focus) {
+      tabs.forEach(function (t) {
+        var on = t.dataset.doc === doc;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      });
+      panels.forEach(function (p) { p.hidden = p.dataset.doc !== doc; });
+    }
+    function fromHash() {
+      var h = location.hash.slice(1);
+      if (h.indexOf('claude') === 0) return 'claude';
+      return 'vector';
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { show(t.dataset.doc); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+          show(next.dataset.doc, true);
+        }
+      });
+    });
+    window.addEventListener('hashchange', function () { show(fromHash()); });
+    show(fromHash());
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target && target.tagName === 'H2') target.scrollIntoView();
+  })();
+</script>
+</body>
+</html>
