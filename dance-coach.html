@@ -833,7 +833,7 @@
       <details class="more"><summary><span class="more-label">Evidence for each job<small>What supports it, and what it competes with today</small></span><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body dc-body">
         <div class="table-wrap"><table class="dc-table"><thead><tr><th><p>Job</p></th><th><p>Evidence</p></th></tr></thead><tbody>
           <tr><td><p>1</p></td><td><p>Lumyr reviews 34 videos a week. SyC instructors described an instructor who reviewed about 700 videos by hand.</p></td></tr>
-          <tr><td><p>2</p></td><td><p>Lumyr: homework feedback waits until the next class. Privates cost $50–75 an hour.</p><p>Andres and me: we know there&#x27;s technique we aren&#x27;t executing properly, but can&#x27;t fix it without paying for private lessons.</p></td></tr>
+          <tr><td><p>2</p></td><td><p>Lumyr: homework feedback waits until the next class. Private lessons, the alternative, cost $50–224 an hour.</p><p>Andres and me: we know there&#x27;s technique we aren&#x27;t executing properly, but can&#x27;t fix it without paying for private lessons.</p></td></tr>
           <tr><td><p>3</p></td><td><p>SyC: &quot;why don&#x27;t I move up?&quot; is the top complaint; students expect fast progress and stall.</p></td></tr>
           <tr><td><p>4</p></td><td><p>SyC: no criteria and no record. Lumyr: documented technique would make placement easier to explain.</p></td></tr>
           <tr><td><p>5</p></td><td><p>Nick: motivated by group accountability. Andres: poor technique gets partners hurt. Thin evidence.</p></td></tr>
@@ -915,7 +915,7 @@
       </div>
       <div class="method-grid">
         <div><div class="m-num">Decision 1</div><h4>Unlimited AI practice before instructor review</h4><p>Tradeoff: students see AI feedback no instructor has checked.</p></div>
-        <div><div class="m-num">Decision 2</div><h4>Students on mobile, instructors on a web dashboard</h4><p>Tradeoff: two front ends to build and maintain.</p></div>
+        <div><div class="m-num">Decision 2</div><h4>Students on an Android app, instructors on a web dashboard</h4><p>Tradeoff: two front ends to build and maintain, and students can&#x27;t use a laptop yet.</p></div>
         <div><div class="m-num">Decision 3</div><h4>Roles verified on the server</h4><p>Tradeoff: instructors are promoted by hand for now.</p></div>
       </div>
       <div class="prose" style="margin-top:28px"><p><strong>Building with Claude Code.</strong> I directed the build through numbered prompts, kept VECTOR.md as the single source of truth, and added a script that fails when the docs and code disagree.</p></div>
@@ -937,7 +937,7 @@
       </div></details>
       <details class="more"><summary><span class="more-label">Decisions in full<small>Why each decision, and what it cost</small></span><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body dc-body"><div class="prose">
         <p><strong>Unlimited AI practice.</strong> Instant feedback all week; instructors review one take per student. This is the tension that later paused the project.</p>
-        <p><strong>Mobile and web.</strong> Lumyr reviews only on a laptop with two monitors. Students who prefer a larger screen still get phone only.</p>
+        <p><strong>Mobile and web.</strong> Lumyr reviews only on a laptop with two monitors. The dashboard works at phone width too, so instructors can review anywhere. Students are on the Android app for now; its screens are designed for laptop width as well, but there&#x27;s no student web version yet.</p>
         <p><strong>Server-side roles.</strong> If the app could claim a role, any student could open the review queue and read others&#x27; unreleased feedback.</p>
       </div></div></details>
       <details class="more"><summary><span class="more-label">Problems I caught<small>Where the agent was wrong, and the production stack</small></span><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body dc-body">
@@ -959,7 +959,7 @@
           <tr><td><p>Aug 8</p></td><td><p>Current State filled in as the thirteen prompts finished. Either reference video (music or counts) became enough.</p></td></tr>
           <tr><td><p>Aug 10</p></td><td><p>Storage moved from Cloudinary to Cloudflare R2 because of the 100 MB file limit. The filming rule was replaced by detecting each video&#x27;s direction, because real footage didn&#x27;t follow the rule.</p></td></tr>
           <tr><td><p>Aug 11–12</p></td><td><p>Both files had said sign-in was installed and the user, team and enrollment tables existed. Neither was true. After sign-in was built, I corrected both files and added the script that checks them against the repo.</p></td></tr>
-          <tr><td><p>Aug 18–20</p></td><td><p>Phone vs. laptop review settled: both roles get both device types, with two screen-width breakpoints.</p></td></tr>
+          <tr><td><p>Aug 18–20</p></td><td><p>Decided every screen should work at both phone and laptop width, with two screen-width breakpoints.</p></td></tr>
           <tr><td><p>Sep 8</p></td><td><p>Renamed from Paso to Dance Coach.</p></td></tr>
         </tbody></table></div>
         <div class="prose"><p><strong>What the history shows.</strong></p><ul class="bullets"><li><strong>Most of the growth is recorded decisions, not new features.</strong> Current State explains why each choice was made, so a later session doesn&#x27;t undo it.</li><li><strong>The files were wrong about facts that can be counted.</strong> Correcting them by hand didn&#x27;t stop new errors, so a script now fails when the files and the code disagree.</li><li><strong>The product model was settled on Aug 7.</strong> Later edits recorded how the build met real conditions: file sizes, how people actually film, and what release builds log.</li></ul>
