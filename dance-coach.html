@@ -727,6 +727,7 @@
   @media (max-width: 600px) { .shot-row.phone-first, .shot-row.phone-mid { grid-template-columns: 1fr 1fr; } .shot-row .shot-phone { grid-column: 1 / -1; max-width: 180px; justify-self: center; } .shot-row.phone-mid .shot-phone { order: -1; } .shot-row.phone-first .shot-phone { order: -1; } }
 </style>
 <link rel="stylesheet" href="shared.css" />
+<style>/* Keep card text clear of the arrow button */ .next-card { padding-bottom: 80px; }</style>
 </head>
 <body data-theme="blue" data-screen-label="Dance Coach Case Study">
 <script>
@@ -773,16 +774,17 @@
       <span class="sep">/</span>
       <span>Independent project · Open Vector curriculum</span>
       <span class="sep">/</span>
-      <span>2026</span>
+      <span>Summer 2026</span>
     </div>
 
-    <h1 class="case-title">Learning to build with AI agents on a dance coaching app</h1>
+    <h1 class="case-title">Designing AI feedback people can trust, with the instructor in the loop</h1>
 
     <p class="case-deck">Dance Coach is a practice app for Latin dance teams. Students record themselves against their instructor&#x27;s reference video, get AI feedback on each practice take, and submit a final take for the instructor to review. I researched and designed it, then built it by directing Claude Code, Anthropic&#x27;s AI coding agent. It runs end to end: an Android app for students, a web dashboard for instructors, and a backend that analyzes movement with pose estimation.</p>
 
     <figure class="hero-shot"><img src="images/dance-coach/hero.webp" width="1600" height="825" alt="Instructor review dashboard on a laptop, showing a student's take beside the reference video with a match score of 42, next to the student app on a phone showing a reference video and a Start recording button" /></figure>
 
     <div class="hero-meta"><div class="meta-cell"><span class="k">Role</span><span class="v">Research, product design, system design, and AI-directed build</span></div><div class="meta-cell"><span class="k">Timeline</span><span class="v">Summer 2026 · in progress</span></div><div class="meta-cell"><span class="k">Context</span><span class="v">Open Vector curriculum, units 1–3 (through The Pipeline), and Anthropic’s AI Fluency course</span></div><div class="meta-cell"><span class="k">Tools</span><span class="v">Claude Code, Figma, Claude Design, MediaPipe, Expo/React Native, FastAPI, Postgres</span></div></div>
+    <div class="prose glance" style="margin-top:28px"><p><strong>At a glance</strong></p><ul class="bullets"><li>Interviewed 8 instructors and students before and during the build.</li><li>The full loop runs in production with real accounts for students and instructors.</li><li>Five rounds of accuracy work: a video compared with itself went from 75 to 100, and the gap between a correct and a deliberately wrong take grew from 2.4 to 11.2 points.</li><li>The feedback still wasn&#x27;t reliable enough to show students unchecked, so I paused building to validate it.</li></ul></div>
 
     <nav class="jump"><span class="jump-label">Jump to</span><a href="#objective">Objective</a><a href="#initial-research">Initial research</a><a href="#jobs">Jobs</a><a href="#hypothesis">Hypothesis</a><a href="#competitors">Competitors</a><a href="#prototype">Prototype</a><a href="#validation">Early validation</a><a href="#learned">Learnings</a></nav>
 
@@ -801,8 +803,8 @@
     <!-- 02 -->
     <section id="initial-research">
       <div class="section-head"><span class="section-eyebrow"><span class="num">02</span>Initial research</span></div>
-      <div class="prose"><p>I started talking with dancers and instructors in my community before I built anything, and kept going as the build progressed. Most conversations were casual, after class or at events. The longer ones I recorded in detail. My first conversations were with an instructor, Lumyr, and two students, Debra and Andres.</p></div>
-      <div class="field people"><figure><img src="images/dance-coach/field-lumyr.jpg" width="720" height="540" loading="lazy" alt="Esther with Lumyr at a café, interview notes open on her laptop" /><figcaption><b>Lumyr</b><span>Instructor at Salsa Y Control (SyC) Dance Studio</span><p>Watches every homework video his team submits each week and types timestamped corrections for each student.</p></figcaption></figure><figure><img src="images/dance-coach/field-deb.jpg" width="720" height="540" loading="lazy" alt="Esther with Debra at a restaurant" /><figcaption><b>Debra</b><span>Dance student</span><p>Pays for private lessons and travels to dance congresses to improve her technique with leading instructors. AI that could cover some of that would help her.</p></figcaption></figure><figure><img src="images/dance-coach/field-andres.jpg" width="720" height="540" loading="lazy" alt="Esther with Andres at a café" /><figcaption><b>Andres</b><span>Dance student</span><p>Asked whether instructors would trust AI feedback, and stressed that students need to master the basics first.</p></figcaption></figure></div>
+      <div class="prose"><p>I started talking with dancers and instructors in my community before I built anything, and kept going as the build progressed. Most conversations were casual, after class or at events. The longer ones I recorded in detail. My first conversations were with an instructor, Lumyr, and two students, Debra and Andres Florez.</p></div>
+      <div class="field people"><figure><img src="images/dance-coach/field-lumyr.jpg" width="720" height="540" loading="lazy" alt="Esther with Lumyr at a café, interview notes open on her laptop" /><figcaption><b>Lumyr</b><span>Instructor at Salsa Y Control (SyC) Dance Studio</span><p>Watches every homework video his team submits each week and types timestamped corrections for each student.</p></figcaption></figure><figure><img src="images/dance-coach/field-deb.jpg" width="720" height="540" loading="lazy" alt="Esther with Debra at a restaurant" /><figcaption><b>Debra</b><span>Dance student</span><p>Pays for private lessons and travels to dance congresses to improve her technique with leading instructors. AI that could cover some of that would help her.</p></figcaption></figure><figure><img src="images/dance-coach/field-andres.jpg" width="720" height="540" loading="lazy" alt="Esther with Andres at a café" /><figcaption><b>Andres Florez</b><span>Dance student</span><p>Asked whether instructors would trust AI feedback, and stressed that students need to master the basics first.</p></figcaption></figure></div>
       <div class="prose" style="margin-top:20px"><p><strong>My own view.</strong> As a team dancer for 8+ years, I recorded my own view too, but kept it as a separate source and left it out of the findings.</p></div>
       <div class="prose" style="margin-top:28px"><p><strong>What the research found.</strong> Across these conversations and the longer sessions that followed, two patterns stood out. Instructors already watch students' videos and write individual feedback themselves. What holds students back is the week between corrections, not instructors' willingness. On the student side, there&#x27;s demand for expert feedback, but the ways to get it now, like private lessons or traveling to congresses, cost money, energy, and time. Three findings shaped the product most:</p></div>
       <div class="method-grid">
@@ -817,7 +819,7 @@
           <tr><td><p>Video homework already exists, but corrections don&#x27;t always stick</p></td><td><p>Lumyr reviews 34 videos a week (1–2 hours) and doesn&#x27;t resent it, but his fix for one move worked for one student and others never got there. One SyC instructor reviewed about 700 videos. Feedback waits until the next class.</p></td><td><p>Reinforce feedback instructors already give. An AI check on every practice take covers the week between corrections.</p></td></tr>
           <tr><td><p>There is no universal correct technique</p></td><td><p>Lumyr: technique is a path to a particular look, shaped by each teacher. SyC: level names and teaching differ between studios.</p></td><td><p>Every reference video comes from the studio&#x27;s own instructor. A generic &quot;correct salsa&quot; model would contradict how they teach.</p></td></tr>
           <tr><td><p>Instructors want support, not a verdict</p></td><td><p>SyC: assessment needs human judgment. Lumyr would trust another person&#x27;s read only if they could explain his standard.</p></td><td><p>The AI output is evidence the instructor reviews and releases. No pass/fail scores.</p></td></tr>
-          <tr><td><p>Poor accuracy is mostly a recording problem</p></td><td><p>Angle, distance, lighting, and cramped rooms came up from Ashwin, SyC, Lumyr, and Andres.</p></td><td><p>Recording guidance and a quality check before submission come before model tuning.</p></td></tr>
+          <tr><td><p>Poor accuracy is mostly a recording problem</p></td><td><p>Angle, distance, lighting, and cramped rooms came up from Ashwin, SyC, Lumyr, and Andres Florez.</p></td><td><p>Recording guidance and a quality check before submission come before model tuning.</p></td></tr>
           <tr><td><p>Instructors review on large screens</p></td><td><p>Lumyr reviews only on a laptop with two monitors. On a phone he can&#x27;t see detail or watch and type at once.</p></td><td><p>Instructors review on a web dashboard, not a second mobile app.</p></td></tr>
           <tr><td><p>Students rewatch and repeat; they don&#x27;t record and compare</p></td><td><p>Nick drills with a mirror and slowed music. Recording himself wasn&#x27;t a habit.</p></td><td><p>Recording and comparing is a new habit. Team obligation is the only force found that would drive it.</p></td></tr>
         </tbody></table></div>
@@ -825,7 +827,7 @@
       </div></details>
 
       <details class="more"><summary><span class="more-label">Method and constraints<small>How I ran the research and what it can support</small></span><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body dc-body"><div class="prose">
-        <p>Conversations happened after class, at events, and in a few scheduled sessions, using &quot;Just Enough Research&quot; as a guide. There was no budget for formal, paid sessions.</p>
+        <p>Conversations happened after class, at events, and in a few scheduled sessions, using Erika Hall&#x27;s book <a href="https://abookapart.com/products/just-enough-research" target="_blank" rel="noopener">Just Enough Research</a> as a guide. There was no budget for formal, paid sessions.</p>
         <ul class="bullets"><li><strong>Bias check:</strong> my own positions were marked as a separate source in the affinity map.</li><li><strong>Limits:</strong> a convenience sample from one scene. Good for deciding what to build and test next, not for sizing a market.</li><li><strong>Method:</strong> broke summaries into single observations, grouped them, and rated each insight by how many sources agreed.</li></ul>
       </div></div></details>
     </section>
@@ -845,10 +847,10 @@
       <details class="more"><summary><span class="more-label">Evidence for each job<small>What supports it, and what it competes with today</small></span><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body dc-body">
         <div class="table-wrap"><table class="dc-table"><thead><tr><th><p>Job</p></th><th><p>Evidence</p></th></tr></thead><tbody>
           <tr><td><p>1</p></td><td><p>Lumyr doesn&#x27;t mind the 1–2 hours a week he spends on homework videos. What frustrates him is a correction that doesn&#x27;t take: his fix for one move worked for one student, and others never got there. Hip movement drilled at the start of class disappears once students run the routine.</p></td></tr>
-          <tr><td><p>2</p></td><td><p>Lumyr: homework feedback waits until the next class. Private lessons, the alternative, cost $50–224 an hour.</p><p>Andres and me: we know there&#x27;s technique we aren&#x27;t executing properly, but can&#x27;t fix it without paying for private lessons.</p></td></tr>
+          <tr><td><p>2</p></td><td><p>Lumyr: homework feedback waits until the next class. Private lessons, the alternative, cost $50–224 an hour.</p><p>Andres Florez and me: we know there&#x27;s technique we aren&#x27;t executing properly, but can&#x27;t fix it without paying for private lessons.</p></td></tr>
           <tr><td><p>3</p></td><td><p>SyC: &quot;why don&#x27;t I move up?&quot; is the top complaint; students expect fast progress and stall.</p></td></tr>
           <tr><td><p>4</p></td><td><p>SyC: no criteria and no record. Lumyr: documented technique would make placement easier to explain.</p></td></tr>
-          <tr><td><p>5</p></td><td><p>Nick: motivated by group accountability. Andres: poor technique gets partners hurt. Thin evidence.</p></td></tr>
+          <tr><td><p>5</p></td><td><p>Nick: motivated by group accountability. Andres Florez: poor technique gets partners hurt. Thin evidence.</p></td></tr>
         </tbody></table></div>
         <div class="prose"><p><strong>What each job competes with today.</strong></p><ul class="bullets"><li>Job 1: repeating the correction at the next class, a week later, or in a paid private lesson.</li><li>Job 2: rewatching the class video, a mirror, and slowed-down music. None of these judges the student against their own instructor&#x27;s standard.</li><li>Jobs 3 and 4: an ad hoc conversation after class. No product offers placement or a level path.</li></ul></div>
       </div></details>
@@ -902,7 +904,7 @@
       </div>
       <div class="method-grid">
         <div><div class="m-num">Takeaway 1</div><h4>No one combines the studio&#x27;s own reference, AI feedback, and instructor review</h4><p>Every AI app is sold to individual learners and compares them against generic dancers, a video they pick, or the original artist&#x27;s video. None involves the student&#x27;s own instructor.</p></div>
-        <div><div class="m-num">Takeaway 2</div><h4>AI dance apps haven&#x27;t shown their feedback is reliable, so the instructor&#x27;s review is what makes Dance Coach credible</h4><p>The two AI apps didn&#x27;t build confidence. When I tested DanceBetter, it returned no result after a full day, and DanceBuddy has about 10,000 users but no one paying. An app that offers only AI feedback is hard to trust. In Dance Coach, the student&#x27;s own instructor reviews the AI&#x27;s analysis before it&#x27;s released as formal feedback.</p></div>
+        <div><div class="m-num">Takeaway 2</div><h4>AI dance apps haven&#x27;t shown their feedback is reliable, so the instructor&#x27;s review is what makes Dance Coach credible</h4><p>Two of the AI apps didn&#x27;t build confidence. When I tested DanceBetter, it returned no result after a full day, and DanceBuddy has about 10,000 users but no one paying. An app that offers only AI feedback is hard to trust. In Dance Coach, the student&#x27;s own instructor reviews the AI&#x27;s analysis before it&#x27;s released as formal feedback.</p></div>
         <div><div class="m-num">Takeaway 3</div><h4>The real competitor is free solo practice, with Band alongside it</h4><p>Students already rewatch class videos, slow the music down, and practice in a mirror, at no cost. Dance Coach has to offer what solo practice can&#x27;t: feedback.</p></div>
       </div>
       <details class="more"><summary><span class="more-label">All seven takeaways<small>Including partner work, pricing, and player features</small></span><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body dc-body"><div class="prose"><ol class="num-list">
@@ -994,7 +996,7 @@
       <blockquote class="pullquote">The instructor&#x27;s review is what makes the feedback safe, and the practice loop removes it.</blockquote>
       <div class="prose"><p><strong>How I&#x27;ll approach it.</strong> I&#x27;m weighing four options. I&#x27;ll test recording guidance first. Ashwin, the SyC instructors, Lumyr, and Andres Florez each said poor accuracy was mostly a recording problem, and improving the input doesn&#x27;t require changing the model.</p></div>
       <details class="more"><summary><span class="more-label">Accuracy tests<small>What improved and what&#x27;s still unreliable</small></span><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></summary><div class="more-body dc-body"><div class="prose">
-        <ul class="bullets"><li>Same video compared with itself: 75, now 100</li><li>Gap between a correct and a deliberately wrong take: 2.4 points, now 11.2</li><li>Beginner vs. advanced dancer, a live run with Andres Florez: found real differences in the right shoulder, head stability (about 51% more head movement for the beginner), and spine tilt, and flagged core engagement without being asked</li></ul>
+        <p>Results after five rounds of accuracy work, each measured against real takes:</p><ul class="bullets"><li>Same video compared with itself: 75, now 100</li><li>Gap between a correct and a deliberately wrong take: 2.4 points, now 11.2</li><li>Beginner vs. advanced dancer, a live run with Andres Florez: found real differences in the right shoulder, head stability (about 51% more head movement for the beginner), and spine tilt, and flagged core engagement without being asked</li></ul>
         <p><strong>Still unreliable.</strong></p><ul class="bullets"><li>Style is scored as error: accent ratio and shoulder ratio measure stylistic choices, not mistakes.</li><li>Some measures are limited by the pose tracking itself. Two differently compressed copies of the same video agreed on weight transfer for only 87.5% of counts, so weight transfer is shown but no longer scored.</li><li>No test yet with deliberately wrong choreography, so the score may be too generous toward it.</li><li>Recording conditions distort results: body type, distance from the camera, lighting, and framing change how large a movement looks.</li><li>A failed pose detection shows as a score of 0, which looks like bad dancing.</li><li>Count numbering assumes count 1 has the most movement, so feedback can name the wrong count.</li></ul>
         <p><strong>The key lesson.</strong> The beginner-vs-advanced run found the right answer on a case where the answer was already obvious. That is exactly the case where nobody needs the tool, so it doesn&#x27;t show the AI can be trusted on subtle cases.</p>
       </div></div></details>
@@ -1030,19 +1032,19 @@
       </div>
       <div class="next-grid">
         <a class="next-card" href="ux-audit.html">
-          <span class="nc-eyebrow">Pearson Education · UX Audit</span>
+          <span class="nc-eyebrow">Pearson · Mar 2026</span>
           <h3>UX Audit</h3>
-          <p>Two weeks of review and research that shaped two redesigns.</p>
+          <p>The cross-product audit behind the Writing Solutions and Freehand Grader redesigns.</p>
           <div class="nc-arrow"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
         </a>
         <a class="next-card" href="writing-solutions.html">
-          <span class="nc-eyebrow">Pearson Education · Writing Solutions</span>
+          <span class="nc-eyebrow">Pearson · Apr 2026</span>
           <h3>Writing Solutions</h3>
-          <p>A redesign of assignment creation.</p>
+          <p>Redesigning the assignment creation flow into four focused steps.</p>
           <div class="nc-arrow"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
         </a>
         <a class="next-card" href="job-match.html">
-          <span class="nc-eyebrow">Pearson Education · 2022–2023</span>
+          <span class="nc-eyebrow">Pearson+ · 2022–23</span>
           <h3>Job Match</h3>
           <p>Opening a closed career-exploration tool to a public audience at MVP.</p>
           <div class="nc-arrow"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
