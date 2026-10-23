@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Is AI the Right Tool? · Dance Coach</title>
+<title>Defining the AI Problem · Dance Coach</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -101,6 +101,18 @@
   .ev-col li.on::after { content: ""; position: absolute; left: 5px; top: 14px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
   .ev-col li span { display: block; margin-top: 4px; font-size: 13px; color: var(--muted); }
   .ev-source { margin-top: 28px; font-size: 13px; color: var(--muted); }
+  .ev h3.ev-sub { margin-top: 36px; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+  .ev h2 + .ev-lead { margin-top: 12px; }
+  .ev-list, .ev-plain { margin: 6px 0 0; padding-left: 18px; }
+  .ev-list li, .ev-plain li { margin: 0 0 8px; font-size: 14.5px; line-height: 1.5; }
+  .ev-col .ev-plain li { border-top: 0; padding: 0; color: var(--ink); }
+  .ev-col .ev-plain li::before, .ev-col .ev-plain li::after { display: none; }
+  .ev-col .ev-plain { list-style: disc; }
+  .ev-pair { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ev-note { margin-top: 16px; font-size: 14.5px; line-height: 1.55; }
+  .ev-us td:first-child { white-space: normal; color: var(--ink); width: 34%; }
+  .ev-us td:nth-child(2) { width: 33%; font-weight: 400; }
+  @media (max-width: 640px) { .ev-pair { grid-template-columns: 1fr; } }
   @media (max-width: 640px) { .ev-suit { grid-template-columns: 1fr; } .ev-table td:first-child { white-space: normal; } }
 </style>
 </head>
@@ -124,14 +136,15 @@
 
 <main class="docs ev" id="top">
   <div class="eyebrow"><b>Dance Coach</b> · Project docs</div>
-  <h1 class="page-title">Is AI the right tool?</h1>
+  <h1 class="page-title">Defining the AI problem</h1>
   <div class="intro">
-    <p>Before committing to AI, I checked the user need against the "Evidence of User Need" exercise from Google's <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a>. The exercise asks whether a need is a good fit for AI, using the research you already have.</p>
-    <p>Everything below comes from the research in the case study. The conclusion: AI can help, but only with the instructor reviewing before formal feedback reaches a student.</p>
+    <p>I checked Dance Coach against two exercises from the "User Needs + Defining Success" chapter of Google's <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a>. The first asks whether AI is the right tool for the user need. The second defines what the AI must do, what is easy to leave unspecified, and how the AI could learn the wrong goal.</p>
+    <p>Everything below comes from the research and build in the case study. The short answer: AI can help, but only with the instructor reviewing before formal feedback reaches a student.</p>
   </div>
 
   <!-- Research summary -->
   <h2 id="research">User research summary</h2>
+  <p class="ev-lead">Both exercises start from the same evidence.</p>
   <div class="ev-table"><table>
     <thead><tr><th>Date</th><th>Source</th><th>Summary of findings</th></tr></thead>
     <tbody>
@@ -147,7 +160,9 @@
   </table></div>
 
   <!-- 1. Statement of user need -->
-  <h2 id="need"><span class="num">1</span>Statement of user need</h2>
+  <h2 id="fit"><span class="num">1</span>Is AI the right tool?</h2>
+  <p class="ev-lead">Exercise: Evidence of User Need.</p>
+  <h3 class="ev-sub" id="need">Statement of user need</h3>
   <div class="ev-box">
     <div class="k">How might we solve our user need?</div>
     <p>How might we help team dancers keep practicing an instructor's correction between weekly classes until it sticks, without waiting a week or paying for a private lesson?</p>
@@ -165,7 +180,7 @@
   </table></div>
 
   <!-- 2. AI suitability -->
-  <h2 id="suitability"><span class="num">2</span>AI suitability</h2>
+  <h3 class="ev-sub" id="suitability">AI suitability</h3>
   <p class="ev-lead">Checked statements describe Dance Coach. I added one statement to each side.</p>
   <div class="ev-suit">
     <div class="ev-col">
@@ -195,13 +210,85 @@
   </div>
 
   <!-- 3. Summary -->
-  <h2 id="summary"><span class="num">3</span>Summary of evidence</h2>
+  <h3 class="ev-sub" id="summary">Summary of evidence</h3>
   <div class="ev-box ev-summary">
     <p>I think AI <b>can</b> help solve <b>team dancers' need to keep practicing an instructor's correction between weekly classes</b>, because pose analysis can check every practice take against the studio's own reference video at any hour. No instructor can do that for every take, and no current product does it with the student's own instructor involved.</p>
     <p>It helps only with the instructor in the loop. Instructors said assessment needs human judgment, the analysis is not yet reliable on subtle mistakes or style, and accuracy depends on recording conditions. So the AI supplies count-by-count evidence for practice, and the instructor reviews the final take before formal feedback is released.</p>
     <p class="ev-revisit">I'll revisit this after the controlled accuracy test, after testing recording guidance, or if partner work comes into scope.</p>
   </div>
-  <p class="ev-source">Exercise: "Evidence of User Need," User Needs + Defining Success chapter, <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a> (Google PAIR).</p>
+  <!-- Part 2: Specify and align the AI problem -->
+  <h2 id="specify"><span class="num">2</span>What exactly should the AI do?</h2>
+  <p class="ev-lead">Exercise: Specify and Align the AI Problem.</p>
+
+  <h3 class="ev-sub" id="goal">Primary goal</h3>
+  <div class="ev-box">
+    <div class="k">Our user's primary goal is</div>
+    <p>to dance the team's choreography the way their instructor teaches it, by fixing specific mistakes between weekly classes instead of waiting a week for the next correction.</p>
+    <div class="k">To meet that goal, the AI system must</div>
+    <ul class="ev-list">
+      <li>Find the dancer's body points (hips, knees, shoulders, feet) reliably in an ordinary phone video.</li>
+      <li>Line up the student's take with the instructor's reference video count by count, including detecting which way each video was filmed.</li>
+      <li>Compare timing and technique (hip movement, weight transfer, footwork, frame, knee depth) against the instructor's reference, not against fixed rules.</li>
+      <li>Point the student to the specific counts to work on, with only the top one or two items during practice.</li>
+      <li>Say when it can't judge a take, such as a failed detection or a poor recording, instead of showing it as a low score.</li>
+    </ul>
+  </div>
+
+  <h3 class="ev-sub" id="subgoals">Sub-goals</h3>
+  <div class="ev-pair">
+    <div class="ev-col">
+      <h3>Before the primary goal</h3>
+      <ul class="ev-plain">
+        <li>Learn the piece from the reference: the counts video early in the season, the music video after.</li>
+        <li>Know which correction the instructor gave them to work on.</li>
+        <li>Record a usable take: full body in frame, enough light, a clear angle, and room to dance.</li>
+      </ul>
+    </div>
+    <div class="ev-col">
+      <h3>While working on it</h3>
+      <ul class="ev-plain">
+        <li>Hit movements on the right counts.</li>
+        <li>Work on the technique the instructor stressed, such as hip action, without losing the choreography.</li>
+        <li>Decide when a take is good enough to send to the instructor.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ev-note">These sub-goals are <b>mostly consistent</b> with the primary goal, because each moves the student toward dancing the piece as taught. Two are in tension with it: recording a usable take takes time away from practice, and most team material is partnered, which a student can't fully practice alone and single-dancer tracking can't follow.</p>
+
+  <h3 class="ev-sub" id="underspecified">Underspecification</h3>
+  <p class="ev-lead">Parts of the problem that are easy to assume or overlook, what goes wrong if they stay unknown, and how to pin them down.</p>
+  <div class="ev-table ev-us"><table>
+    <thead><tr><th>If this is unknown</th><th>It can result in</th><th>It can be specified if we</th></tr></thead>
+    <tbody>
+      <tr><td><b>The studio's standard:</b> what "correct" means at this studio, and which differences are style rather than mistakes</td><td>The AI scoring stylistic choices as errors and contradicting the instructor. In testing, accent ratio and shoulder ratio measured style, not mistakes.</td><td>Bring in an instructor to say which measures matter and where the AI is wrong, and show students only the measures that hold up.</td></tr>
+      <tr><td><b>Recording conditions:</b> camera angle, distance, lighting, framing, and the dancer's body type</td><td>Movements looking larger or smaller than they are, and failed detections scoring 0, which looks like bad dancing.</td><td>Add a framing guide while recording and a quality check before submitting, then run a controlled accuracy test with the same dancer, clothes, and lighting.</td></tr>
+      <tr><td><b>Where count 1 falls:</b> how the counts line up between the two videos</td><td>Feedback naming the wrong count. The analysis assumes count 1 has the most movement, and Ashwin flagged count alignment as its own problem.</td><td>Take the beat grid from the music version of the reference whenever it exists, flag counts-only references as lower confidence, and include count alignment in the controlled test.</td></tr>
+      <tr><td><b>Partner and group work:</b> whether a section is danced alone, with a partner, or as a group</td><td>Feedback that judges only one dancer on partnered material, or tracks the wrong person, as teams move to partner work later in the season.</td><td>Say plainly that the AI doesn't judge partner connection, and keep AI feedback to solo sections until partner detection is in scope.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="ev-sub" id="optimization">Optimization</h3>
+  <div class="ev-pair">
+    <div class="ev-col">
+      <h3>Meeting the primary goal can</h3>
+      <ul class="ev-plain">
+        <li>Give students feedback on every practice take, instead of waiting a week for the next class.</li>
+        <li>Reinforce the corrections instructors already give, so fewer fade between classes.</li>
+        <li>Hold students to their own studio's standard, and show instructors which counts each student missed when they review a final take.</li>
+      </ul>
+    </div>
+    <div class="ev-col">
+      <h3>But what if the model</h3>
+      <ul class="ev-plain">
+        <li>Rewards a take that roughly matches the overall movement, so a student scores well while dancing the wrong steps? It hasn't yet been tested with deliberately wrong choreography.</li>
+        <li>Treats every difference from the instructor as a mistake, pushing all students to copy one person's styling?</li>
+        <li>Scores a bad recording as bad dancing, discouraging students with scores they didn't earn?</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ev-note"><b>Where sub-goals compete.</b> More feedback per take works against trustworthy feedback, because the extra measures (style, weight transfer) are the least reliable. The design response: show students fewer measures than instructors see, and keep the instructor's review before any formal feedback.</p>
+
+  <p class="ev-source">Exercises: "Evidence of User Need" and "Specify and Align the AI Problem," User Needs + Defining Success chapter, <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a> (Google PAIR).</p>
 </main>
 
 <script>
