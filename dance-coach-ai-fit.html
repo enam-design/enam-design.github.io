@@ -83,6 +83,8 @@
   .ev-table td:nth-child(2) { width: 30%; font-weight: 500; }
   .ev-qa th { width: 32%; font-weight: 500; color: var(--ink); font-size: 14px; }
   .ev-qa td:first-child { white-space: normal; color: var(--ink); }
+  .ev-qa th { width: 28%; }
+  .ev-qa td:nth-child(2) { width: auto; font-weight: 400; }
   .ev-box { margin-top: 20px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 12px; background: var(--field); }
   .ev-box .k { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
   .ev-box p { margin: 6px 0 16px; font-size: 15.5px; }
@@ -138,7 +140,7 @@
   <div class="eyebrow"><b>Dance Coach</b> · Project docs</div>
   <h1 class="page-title">Defining the AI problem</h1>
   <div class="intro">
-    <p>Before committing to AI, I worked through whether it was the right tool and what it would need to do. This page lays out that reasoning using two exercises from the "User Needs + Defining Success" chapter of Google's <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a>. The first asks whether AI is the right tool for the user need. The second defines what the AI must do, what is easy to leave unspecified, and how the AI could learn the wrong goal.</p>
+    <p>Before committing to AI, I worked through whether it was the right tool and what it would need to do. This page lays out that reasoning using two exercises from the "User Needs + Defining Success" chapter of Google's <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a>. The first asks whether AI is the right tool for the user need. The second defines what the AI must do, what is easy to leave unspecified, and how the AI could learn the wrong goal. The last part sets what would count as success.</p>
     <p>Everything below comes from the research and build in the case study. The short answer: AI can help, but only with the instructor reviewing before formal feedback reaches a student.</p>
   </div>
 
@@ -287,6 +289,20 @@
     </div>
   </div>
   <p class="ev-note"><b>Where sub-goals compete.</b> More feedback per take works against trustworthy feedback, because the extra measures (style, weight transfer) are the least reliable. The design response: show students fewer measures than instructors see, and keep the instructor's review before any formal feedback.</p>
+
+  <!-- Part 3: success criteria -->
+  <h2 id="success"><span class="num">3</span>What would count as success?</h2>
+  <p class="ev-lead">The criteria the controlled accuracy test has to meet. The exact thresholds, such as how often an instructor must agree with the AI, will be set with an instructor during that test.</p>
+  <p class="ev-note">Timing and technique need different criteria. A move is either on the count or it isn&#x27;t, but correct technique depends on each studio&#x27;s standard.</p>
+  <div class="ev-table ev-qa"><table>
+    <tbody>
+      <tr><th scope="row">Timing</th><td>On the controlled test, the deliberately wrong take scores below the correct take every time, and the counts the AI flags match the counts the instructor flags.</td></tr>
+      <tr><th scope="row">Technique</th><td>An instructor agrees with the AI&#x27;s top one or two items for most takes, and rarely has to remove an AI note before releasing feedback.</td></tr>
+      <tr><th scope="row">Takes it can&#x27;t judge</th><td>A failed detection or a poor recording is labeled as such, and never shown as a low score.</td></tr>
+      <tr><th scope="row">For students</th><td>The next practice take improves on the flagged counts, and instructors repeat fewer corrections by the next class.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="ev-note"><b>The tradeoff: precision over coverage.</b> For practice feedback no one has checked, a wrong note does more harm than a missed one. So practice mode should favor fewer, correct notes over flagging everything. Showing students fewer measures than instructors see, one of the options in Early validation, would put that into practice.</p>
 
   <p class="ev-source">Exercises: "Evidence of User Need" and "Specify and Align the AI Problem," User Needs + Defining Success chapter, <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a> (Google PAIR).</p>
 </main>
