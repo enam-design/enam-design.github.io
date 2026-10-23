@@ -325,6 +325,118 @@ body[data-theme] .next-card .nc-arrow { position: absolute; bottom: 28px; right:
 body[data-theme] .next-card .nc-arrow svg { stroke: currentColor; }
 body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-color: var(--accent); color: #fff; transform: translate(2px, -2px); }
 </style>
+<style>
+/* Same page template as the other case studies */
+  body[data-theme="blue"] { --pill-bg: #FFFFFF; }
+  body[data-theme="graphite"] { --pill-bg: #1E1E26; }
+  .meta-strip {
+    margin-top: 56px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-strip .tag { color: var(--accent); font-weight: 500; }
+  .meta-strip .sep { opacity: 0.4; }
+
+  .case-title {
+    font-family: "Figtree", sans-serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin-top: 24px;
+    max-width: 22ch;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .case-title em { font-style: normal; color: inherit; }
+  .case-deck a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+  .case-deck a:hover { border-bottom-width: 2px; }
+  .case-deck a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  .case-deck {
+    margin-top: 28px;
+    max-width: none;
+    font-size: 16px; line-height: 1.55; color: var(--muted);
+  }
+
+  /* Hero meta grid */
+  .hero-meta {
+    margin-top: 56px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .meta-cell {
+    padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    border-right: 1px solid var(--line);
+  }
+  .meta-cell:first-child { padding-left: 0; }
+  .meta-cell:last-child { border-right: 0; padding-right: 0; }
+  .meta-cell .k {
+    font-family: "Figtree", sans-serif;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .meta-cell .v {
+    font-size: 15px; color: var(--ink); font-weight: 500;
+    line-height: 1.35;
+  }
+
+  /* Jump nav */
+  .jump {
+    margin-top: 40px;
+    display: flex; flex-wrap: wrap; gap: 8px 4px;
+    align-items: center;
+  }
+  .jump-label {
+    font-family: "Figtree", sans-serif;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-right: 12px;
+  }
+  .jump a {
+    font-size: 13px; color: var(--ink); text-decoration: none;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    background: var(--pill-bg);
+  }
+  .jump a:hover { border-color: var(--accent); color: var(--accent); }
+
+  .section-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-eyebrow {
+    font-family: "Figtree", sans-serif;
+    font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink); font-weight: 500; flex-shrink: 0;
+  }
+  .section-eyebrow .num { color: var(--accent); margin-right: 14px; }
+  .case-title { font-family: 'Figtree', -apple-system, system-ui, sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+  main section { padding: 0; border-top: 0; margin-top: 96px; scroll-margin-top: 100px; }
+  main section.hero { margin-top: 0; padding-top: 0; }
+  .hero .turbo { margin-top: 40px; }
+  .section-eyebrow { white-space: normal; line-height: 1.35; }
+  #prototype .proto-pw { text-align: left; }
+  .lead.center { text-align: left; }
+  @media (max-width: 760px) {
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .meta-cell { padding: 18px 16px; }
+    .meta-cell:nth-child(2) { border-right: 0; }
+    .meta-cell:nth-child(3) { padding-left: 0; }
+  }
+  @media (max-width: 460px) {
+    .hero-meta { grid-template-columns: 1fr; }
+    .meta-cell { border-right: 0; padding-left: 0; padding-right: 0; }
+    .meta-cell:not(:last-child) { border-bottom: 1px solid var(--line); }
+    .jump a { font-size: 12px; padding: 5px 10px; }
+  }
+</style>
 </head>
 <body data-theme="blue">
 <script>
@@ -362,14 +474,22 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
   <main>
     <!-- Hero -->
     <section class="hero" data-screen-label="Hero">
-      <h1 class="title">Pearson+ Job Match: MVP</h1>
-      <p class="sub">Career-exploration tool · Pearson+ digital learning platform · 2022–2023</p>
-      <div class="meta">
-        <div><b>Role</b>User testing · Visual &amp; interaction design</div>
-        <div><b>Timeline</b>Jul 2022 – Feb 2023</div>
-        <div><b>Scope</b>POC → public MVP</div>
+      <div class="meta-strip">
+        <span class="tag">JOB MATCH</span>
+        <span class="sep">/</span>
+        <span>Pearson+ · Career-exploration tool</span>
+        <span class="sep">/</span>
+        <span>2022–2023</span>
       </div>
-      <div class="jump-pills">
+      <h1 class="case-title">Opening a closed career-exploration tool to a public audience at MVP.</h1>
+      <p class="case-deck">A career-exploration tool built into Pearson+. Three new surfaces supported its move from a 10% pilot to a public MVP open to anyone, including users with no prior Pearson relationship.</p>
+      <div class="hero-meta">
+        <div class="meta-cell"><span class="k">Role</span><span class="v">User testing · Visual &amp; interaction design</span></div>
+        <div class="meta-cell"><span class="k">Timeline</span><span class="v">Jul 2022 – Feb 2023</span></div>
+        <div class="meta-cell"><span class="k">Scope</span><span class="v">POC → public MVP</span></div>
+        <div class="meta-cell"><span class="k">Team</span><span class="v">4 designers</span></div>
+      </div>
+      <nav class="jump">
         <span class="jump-label">Jump to</span>
         <a href="#impact">Impact</a>
         <a href="#problem">Problem space</a>
@@ -377,7 +497,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
         <a href="#objectives">Objectives</a>
         <a href="#additions">Additions</a>
         <a href="#prototype">Prototype</a>
-      </div>
+      </nav>
       <a class="turbo" href="https://www.figma.com/proto/tOPbgaoVW9l4EO9SRNtEMh/Turbo-Designs%2C-MVP---Feb-2023-(Copy)?page-id=5601%3A118153&amp;type=design&amp;node-id=5908-152656&amp;viewport=11382%2C4661%2C0.59&amp;scaling=min-zoom&amp;starting-point-node-id=5908%3A152656" target="_blank" rel="noopener" aria-label="Open the Figma prototype, password Turbo">
         <img class="shot" src="images/jm-turbo-hero.jpg" alt="Laptop displaying the Job Match prototype" />
         <svg class="cursor" viewBox="0 0 32 32" fill="#fff" stroke="#2a2a3a" stroke-width="1.4" stroke-linejoin="round"><path d="M8 4 L8 23 L13 18.5 L16.5 26 L20 24.3 L16.5 17 L23 16.5 Z"/></svg>
@@ -388,7 +508,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- Impact -->
     <section id="impact" data-screen-label="Impact">
       <div class="wrap">
-        <h2>Impact</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">01</span>Impact</span></div>
         <ul class="impact-list">
           <li>
             <span class="imp-num">01</span>
@@ -425,7 +545,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- Background -->
     <section data-screen-label="Background">
       <div class="wrap">
-        <h2>Background</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">02</span>Background</span></div>
         <p class="lead">Pearson+ is a digital learning platform for college students, offering access to digital textbooks, interactive study tools, and educational channels. The latest addition, Job Match, helps students explore career paths, identify skills, and optimize their job searches.</p>
         <p class="lead">This case study focuses on the evolution of Job Match from POC (Proof of Concept) to MVP (Minimum Viable Product) and highlights the UX contributions that made it possible.</p>
       </div>
@@ -434,7 +554,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- Problem space -->
     <section id="problem" data-screen-label="Problem space">
       <div class="wrap">
-        <h2>Problem space for Job Match</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">03</span>Problem space</span></div>
         <div class="cols">
           <div class="panel">
             <h4>Problem</h4>
@@ -460,7 +580,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- Project details -->
     <section id="details" data-screen-label="Project details">
       <div class="wrap">
-        <h2>Project details</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">04</span>Project details</span></div>
         <div class="details">
           <div class="panel">
             <h4>UX Team</h4>
@@ -498,7 +618,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- Main objectives -->
     <section id="objectives" data-screen-label="Main objectives">
       <div class="wrap">
-        <h2>Main objectives for MVP</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">05</span>MVP objectives</span></div>
         <p class="lead center">For the MVP launch, Job Match expanded from serving 10% of Pearson+ subscribers to serving all potential users, including those unfamiliar with Pearson products. The key goals defined by the product team were to:</p>
         <ul class="obj">
           <li>Accommodate diverse entry points (e.g. organic search vs. the Pearson+ platform).</li>
@@ -510,7 +630,8 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- Additions -->
     <section id="additions" data-screen-label="Additions">
       <div class="wrap">
-        <h2>Additions made between the POC and MVP launches, with the above objectives in mind</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">06</span>MVP additions</span></div>
+        <p class="lead">Additions made between the POC and MVP launches, with the above objectives in mind:</p>
         <div class="tags">
           <a class="t" href="#unauth">Unauthenticated homepage<svg class="dn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 11l4 4 4-4"/></svg></a>
           <a class="t" href="#careers">Careers section<svg class="dn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 11l4 4 4-4"/></svg></a>
@@ -610,7 +731,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- End-to-end prototype -->
     <section id="prototype" data-screen-label="Prototype">
       <div class="wrap">
-        <h2 style="text-align:center;">End-to-end prototype</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">07</span>End-to-end prototype</span></div>
         <p class="proto-pw">Password: Turbo</p>
         <p class="lead center">The flows below link out to the end-to-end Figma prototype (just click <b>Start</b> next to the user flow you want to view). The sections of Job Match that were newly added for MVP are marked by yellow borders.</p>
         <a class="proto-flows" href="https://www.figma.com/proto/tOPbgaoVW9l4EO9SRNtEMh/Turbo-Designs%2C-MVP---Feb-2023-(Copy)?page-id=5601%3A118153&amp;type=design&amp;node-id=5908-152656&amp;viewport=11382%2C4661%2C0.59&amp;scaling=min-zoom&amp;starting-point-node-id=5908%3A152656" target="_blank" rel="noopener" aria-label="Open the Figma prototype, password Turbo">
@@ -622,7 +743,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- Looking ahead -->
     <section data-screen-label="Looking ahead">
       <div class="wrap">
-        <h2>Looking back</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">08</span>Looking back</span></div>
         <p class="lead center">Job Match shipped to all Pearson+ users in mid-February 2023. Shortly after launch, leadership shifted investment toward other parts of the portfolio and the product was wound down. Still, the MVP shipped a complete, accessible public experience. What I carry forward is the work itself: opening a closed tool to a broad audience, designing for unknown entry points, and making assessment results feel clear and actionable.</p>
       </div>
     </section>
@@ -630,7 +751,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     <!-- Continue reading -->
     <section data-screen-label="Continue reading">
       <div class="wrap">
-        <h2 style="text-align:left;">Continue reading</h2>
+        <div class="section-head"><span class="section-eyebrow"><span class="num">09</span>Continue reading</span></div>
         <div class="next-grid">
           <a class="next-card" href="dance-coach.html">
             <span class="nc-eyebrow">Independent · Summer 2026</span>
