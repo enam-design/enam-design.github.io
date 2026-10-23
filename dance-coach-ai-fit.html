@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Is AI the Right Tool? · Dance Coach</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  /* Layout: same chrome and 720px reading column as the case study; tabs switch between the two files. */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; scrollbar-gutter: stable; }
+  body { font-family: "Figtree", -apple-system, BlinkMacSystemFont, system-ui, sans-serif; font-size: 16px; line-height: 1.6; background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  :root { --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+  /* Palette: identical to the case study pages */
+  body[data-theme="blue"] { --bg: #FBFBFC; --ink: #1A1A1E; --muted: #6A6A72; --line: #E6E6EA; --field: #F3F3F6; --accent: #E92E66; --accent-soft: #FCE7EE; --code-bg: #F3F2F5; color-scheme: light; }
+  body[data-theme="graphite"] { --bg: #0B0B0F; --ink: #E8E8EE; --muted: #8D8D95; --line: #2A2A33; --field: #1E1E26; --accent: #FF6492; --accent-soft: rgba(255,100,146,0.16); --code-bg: #20202A; color-scheme: dark; }
+
+  .topbar { top: env(safe-area-inset-top, 0px); }
+  .topbar .inner, .back-link { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  @media (min-width: 760px) { .topbar .inner, .back-link { padding-left: 32px; padding-right: 32px; } }
+
+  .docs { max-width: 720px; margin: 0 auto; padding-block: 0 120px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  @media (min-width: 760px) { .docs { padding-left: 32px; padding-right: 32px; } }
+
+  .eyebrow { margin-top: 48px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .eyebrow b { color: var(--accent); font-weight: 500; }
+  h1.page-title { margin-top: 16px; font-size: clamp(32px, 4.6vw, 48px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance; }
+  .intro { margin-top: 20px; font-size: 15.5px; line-height: 1.6; color: var(--muted); }
+  .intro p + p { margin-top: 12px; }
+
+  /* Tabs */
+  .tabs { margin-top: 36px; display: flex; gap: 6px; border-bottom: 1px solid var(--line); }
+  .tabs button { font: inherit; font-family: var(--mono); font-size: 13.5px; font-weight: 600; color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 14px; cursor: pointer; }
+  .tabs button:hover { color: var(--ink); }
+  .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+  .tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
+
+  .doc-meta { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; color: var(--muted); }
+  .doc-meta .doc-name { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+
+  .doc-toc { margin-top: 18px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; }
+  .doc-toc-label { display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .doc-toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+  .doc-toc a { display: inline-block; font-size: 13px; color: var(--ink); text-decoration: none; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
+  .doc-toc a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Rendered markdown */
+  .md { margin-top: 8px; font-size: 15px; line-height: 1.7; min-width: 0; }
+  .md h2 { margin-top: 48px; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 22px; font-weight: 600; letter-spacing: -0.01em; scroll-margin-top: 96px; }
+  .md h3 { margin-top: 28px; font-size: 16.5px; font-weight: 600; }
+  .md p { margin-top: 14px; }
+  .md ul, .md ol { margin-top: 12px; padding-left: 22px; }
+  .md li { margin-top: 8px; padding-left: 2px; }
+  .md li::marker { color: var(--accent); }
+  .md li > p:first-child { margin-top: 0; }
+  .md li > ul, .md li > ol { margin-top: 6px; }
+  .md strong { font-weight: 600; }
+  .md code { font-family: var(--mono); font-size: 0.86em; background: var(--code-bg); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+  .md pre { margin-top: 14px; overflow-x: auto; background: var(--code-bg); padding: 12px 14px; border-radius: 10px; }
+  .md pre code { background: none; padding: 0; }
+
+  .top-link { margin-top: 48px; display: inline-block; font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; }
+  .top-link:hover { text-decoration: underline; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+<link rel="stylesheet" href="shared.css" />
+<style>
+  /* AI-fit page: tables, statement box and checklist in the site's palette */
+  .ev a { color: var(--accent); }
+  .ev h2 { margin-top: 56px; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .ev h2 .num { color: var(--accent); margin-right: 14px; }
+  .ev-lead { margin-top: 16px; color: var(--muted); font-size: 15px; }
+  .ev-table { margin-top: 20px; overflow-x: auto; }
+  .ev-table table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
+  .ev-table th, .ev-table td { text-align: left; vertical-align: top; padding: 12px 12px 12px 0; border-bottom: 1px solid var(--line); }
+  .ev-table thead th { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .ev-table td:first-child { white-space: nowrap; color: var(--muted); }
+  .ev-table td:nth-child(2) { width: 30%; font-weight: 500; }
+  .ev-qa th { width: 32%; font-weight: 500; color: var(--ink); font-size: 14px; }
+  .ev-qa td:first-child { white-space: normal; color: var(--ink); }
+  .ev-box { margin-top: 20px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 12px; background: var(--field); }
+  .ev-box .k { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .ev-box p { margin: 6px 0 16px; font-size: 15.5px; }
+  .ev-box p:last-child { margin-bottom: 0; }
+  .ev-summary p { margin: 0 0 12px; }
+  .ev-revisit { color: var(--muted); font-size: 14px !important; }
+  .ev-suit { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ev-col { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .ev-col h3 { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+  .ev-col ul { list-style: none; }
+  .ev-col li { position: relative; padding: 10px 0 10px 28px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.45; color: var(--muted); }
+  .ev-col li b { font-weight: 600; }
+  .ev-col li::before { content: ""; position: absolute; left: 0; top: 12px; width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--line); }
+  .ev-col li.on { color: var(--ink); }
+  .ev-col li.on::before { background: var(--accent); border-color: var(--accent); }
+  .ev-col li.on::after { content: ""; position: absolute; left: 5px; top: 14px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .ev-col li span { display: block; margin-top: 4px; font-size: 13px; color: var(--muted); }
+  .ev-source { margin-top: 28px; font-size: 13px; color: var(--muted); }
+  @media (max-width: 640px) { .ev-suit { grid-template-columns: 1fr; } .ev-table td:first-child { white-space: normal; } }
+</style>
+</head>
+<body data-theme="blue">
+<script>
+  (function(){ try { var t = localStorage.getItem('case-palette'); document.body.dataset.theme = (t === 'graphite' || t === 'blue') ? t : 'blue'; } catch(e) { document.body.dataset.theme = 'blue'; } })();
+</script>
+
+<header class="topbar">
+  <div class="inner">
+    <a class="brand" href="index.html"><span class="mk">E</span>Esther Nam</a>
+    <span class="spacer"></span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</header>
+
+<a href="dance-coach.html#hypothesis" class="back-link">← Back to Dance Coach</a>
+
+<main class="docs ev" id="top">
+  <div class="eyebrow"><b>Dance Coach</b> · Project docs</div>
+  <h1 class="page-title">Is AI the right tool?</h1>
+  <div class="intro">
+    <p>Before committing to AI, I checked the user need against the "Evidence of User Need" exercise from Google's <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a>. The exercise asks whether a need is a good fit for AI, using the research you already have.</p>
+    <p>Everything below comes from the research in the case study. The conclusion: AI can help, but only with the instructor reviewing before formal feedback reaches a student.</p>
+  </div>
+
+  <!-- Research summary -->
+  <h2 id="research">User research summary</h2>
+  <div class="ev-table"><table>
+    <thead><tr><th>Date</th><th>Source</th><th>Summary of findings</th></tr></thead>
+    <tbody>
+      <tr><td>Summer 2026, before the build</td><td>Informal conversations: Lumyr (instructor, Salsa Y Control), Debra and Andres Florez (students)</td><td>Lumyr already watches every homework video and types timestamped corrections for each student. Students want expert feedback, but private lessons and workshops cost money, time, and energy. Andres asked whether instructors would trust AI feedback.</td></tr>
+      <tr><td>Aug 22, 2026</td><td>Prototype demo and feedback: Ashwin, studio owner and instructor outside Salsa Y Control</td><td>Poor accuracy comes from the video capture, not the model: inconsistent angles, framing, and lighting. Suggested on-screen guidance while recording. Flagged aligning counts between the instructor's and student's videos as a separate problem.</td></tr>
+      <tr><td>Aug 22, 2026</td><td>Interview: Nick, team student</td><td>Practices by drilling with a mirror and slowed-down music. Recording and comparing himself isn't a habit. Motivated by group accountability. Most team material is partnered.</td></tr>
+      <tr><td>Aug 27, 2026</td><td>Second interview (two parts): Lumyr</td><td>Reviews about 34 videos a week (1–2 hours) and doesn't mind the time. A correction often hasn't taken hold by the next class. Technique is a path to a look shaped by each teacher. Reviews only on a laptop with two monitors. Would trust another person's read only if they could explain his standard.</td></tr>
+      <tr><td>Aug 30, 2026</td><td>Working session with a live accuracy test: Andres Florez</td><td>The analysis found real differences between a beginner and an advanced dancer (about 51% more head movement for the beginner), but anyone could see that by eye. Accent and shoulder ratios measure style, not mistakes. Decision: pause building and validate the feedback.</td></tr>
+      <tr><td>Aug–Sep 2026</td><td>Five rounds of accuracy tests on real takes</td><td>A video compared with itself went from a match score of 75 to 100. The gap between a correct and a deliberately wrong take grew from 2.4 to 11.2 points. Two compressed copies of one video agreed on weight transfer for only 87.5% of counts. A failed pose detection scores 0, which looks like bad dancing.</td></tr>
+      <tr><td>Sep 8, 2026</td><td>Group interview: Salsa Y Control instructors (Andres G., Tara, Kelly, Lumyr)</td><td>Assessment needs human judgment. "Why don't I move up?" is students' top complaint. Level names and teaching differ between studios. One instructor reviewed about 700 videos. Single named steps are easier to judge than choreography.</td></tr>
+      <tr><td>Oct 2026</td><td>Competitive analysis of 8 options</td><td>No product combines the studio's own reference, AI feedback, and instructor review. DanceBetter returned no result after a full day; DanceBuddy has about 10,000 users and no paying customers. Private lessons cost $50–224 an hour. The real competitor is free solo practice.</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- 1. Statement of user need -->
+  <h2 id="need"><span class="num">1</span>Statement of user need</h2>
+  <div class="ev-box">
+    <div class="k">How might we solve our user need?</div>
+    <p>How might we help team dancers keep practicing an instructor's correction between weekly classes until it sticks, without waiting a week or paying for a private lesson?</p>
+    <div class="k">How can AI solve this problem in a unique way?</div>
+    <p>Pose analysis can compare every practice take with the instructor's own reference video, count by count, at any hour. No instructor can review every practice take, so AI fills the week between classes. The instructor still reviews the final take before formal feedback reaches the student.</p>
+  </div>
+  <div class="ev-table ev-qa"><table>
+    <tbody>
+      <tr><th scope="row">How pervasive is the problem?</th><td>It recurs every week of the team season. One instructor reviews about 34 homework videos a week; another reviewed about 700. Corrections often haven't taken hold by the next class, and every Salsa Y Control instructor named "why don't I move up?" as students' top complaint.</td></tr>
+      <tr><th scope="row">Whom does it affect?</th><td>Students on studio dance teams, who practice choreography between classes. Instructors, who repeat corrections and must explain placement decisions. Indirectly, dance partners, because poor technique can get partners hurt.</td></tr>
+      <tr><th scope="row">How does it affect various individuals?</th><td>Students wait a week for feedback or pay $50–224 an hour for private lessons; some travel to workshops. Students who stall get frustrated that they aren't moving up. Instructors spend 1–2 hours a week on homework review and still see fixes that don't take.</td></tr>
+      <tr><th scope="row">How does it vary across dimensions of identity or historically marginalized communities?</th><td>The research did not study this, so it is an evidence gap. What the evidence does show: the paid alternatives (private lessons, workshops) favor students with more money and time. The app runs only on Android, though iPhone users are the larger group. Body type, camera distance, and lighting change how large a movement looks, so accuracy may differ between dancers. The sample is one Boston scene.</td></tr>
+      <tr><th scope="row">Do the effects change over time?</th><td>Yes. A correction fades over the week between classes. Within a season, counts videos appear only in the first weeks, and teams move to group and partner work, which single-dancer pose tracking can't follow. Over months, students who stall stop seeing progress.</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- 2. AI suitability -->
+  <h2 id="suitability"><span class="num">2</span>AI suitability</h2>
+  <p class="ev-lead">Checked statements describe Dance Coach. I added one statement to each side.</p>
+  <div class="ev-suit">
+    <div class="ev-col">
+      <h3>AI is probably better for</h3>
+      <ul>
+        <li class="on"><b>Personalization:</b> the core experience requires personalizing content to individual users or a domain.<span>Feedback is specific to each student's take and to their own studio's reference, because there is no universal correct technique.</span></li>
+        <li><b>Predictions:</b> requires predicting future events.</li>
+        <li class="on"><b>Scale:</b> need to recognize a general class of things too large to articulate every case.<span>Every dancer, room, and take is different; pose tracking reads body positions without a rule for each case.</span></li>
+        <li><b>Volume:</b> need to detect low-occurrence events that keep evolving.</li>
+        <li><b>Language:</b> requires natural language interactions or an agent.</li>
+        <li><b>Diversification:</b> the experience is better when outcomes vary.</li>
+        <li class="on"><b>Availability (added):</b> feedback is needed at the moment of practice, at home, when no instructor is present.<span>Homework feedback now waits until the next class, a week later.</span></li>
+      </ul>
+    </div>
+    <div class="ev-col">
+      <h3>AI is probably not better for</h3>
+      <ul>
+        <li><b>Consistency:</b> the most valuable part is predictability regardless of input.<span>Not checked: the value is feedback on each take, which varies by design.</span></li>
+        <li><b>Cost:</b> running AI at the needed frequency is very high.<span>Not checked yet: storage and processing costs arrive with real users and still need measuring.</span></li>
+        <li class="on"><b>Stakes:</b> the consequences of errors are very high.<span>Wrong feedback can teach wrong technique, and instructors said assessment needs human judgment. Mitigated by instructor review before formal feedback is released.</span></li>
+        <li class="on"><b>Explainability:</b> people need to understand what happens.<span>Lumyr would trust another person's read only if they could explain his standard, and students need to know which count to fix.</span></li>
+        <li><b>Momentum:</b> getting to market first matters more than AI's value.</li>
+        <li class="on"><b>Directive (partly):</b> people say they don't want a task automated.<span>Instructors don't want assessment or level placement automated. They welcome support for practice between classes.</span></li>
+        <li class="on"><b>Input quality (added):</b> accuracy depends on conditions users control.<span>Angle, distance, lighting, and cramped rooms caused most errors, so recording guidance comes before model tuning.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. Summary -->
+  <h2 id="summary"><span class="num">3</span>Summary of evidence</h2>
+  <div class="ev-box ev-summary">
+    <p>I think AI <b>can</b> help solve <b>team dancers' need to keep practicing an instructor's correction between weekly classes</b>, because pose analysis can check every practice take against the studio's own reference video at any hour. No instructor can do that for every take, and no current product does it with the student's own instructor involved.</p>
+    <p>It helps only with the instructor in the loop. Instructors said assessment needs human judgment, the analysis is not yet reliable on subtle mistakes or style, and accuracy depends on recording conditions. So the AI supplies count-by-count evidence for practice, and the instructor reviews the final take before formal feedback is released.</p>
+    <p class="ev-revisit">I'll revisit this after the controlled accuracy test, after testing recording guidance, or if partner work comes into scope.</p>
+  </div>
+  <p class="ev-source">Exercise: "Evidence of User Need," User Needs + Defining Success chapter, <a href="https://pair.withgoogle.com/guidebook/" target="_blank" rel="noopener">People + AI Guidebook</a> (Google PAIR).</p>
+</main>
+
+<script>
+  (function () {
+    // Theme toggle, shared with the case study through the same stored key
+    var body = document.body;
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      var next = body.dataset.theme === 'graphite' ? 'blue' : 'graphite';
+      body.dataset.theme = next;
+      try { localStorage.setItem('case-palette', next); } catch (e) {}
+    });
+
+    // Tabs: #vector or #claude (or any section anchor inside one) picks the file
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+    var panels = Array.prototype.slice.call(document.querySelectorAll('.doc-panel'));
+    function show(doc, focus) {
+      tabs.forEach(function (t) {
+        var on = t.dataset.doc === doc;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        if (on && focus) t.focus();
+      });
+      panels.forEach(function (p) { p.hidden = p.dataset.doc !== doc; });
+    }
+    function fromHash() {
+      var h = location.hash.slice(1);
+      if (h.indexOf('claude') === 0) return 'claude';
+      return 'vector';
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { show(t.dataset.doc); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+          show(next.dataset.doc, true);
+        }
+      });
+    });
+    window.addEventListener('hashchange', function () { show(fromHash()); });
+    show(fromHash());
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target && target.tagName === 'H2') target.scrollIntoView();
+  })();
+</script>
+</body>
+</html>
