@@ -51,7 +51,7 @@
     --shadow: 0 1px 0 rgba(0,0,0,0.04), 0 12px 30px rgba(20, 20, 30, 0.07);
   }
   body[data-theme="graphite"] {
-    --bg: #14141A;
+    --bg: #0B0B0F;
     --ink: #E8E8EE;
     --muted: #8D8D95;
     --line: #2A2A33;
@@ -571,6 +571,17 @@
 </style>
 <link rel="stylesheet" href="shared.css" />
 <style>/* Keep card text clear of the arrow button */ .next-card { padding-bottom: 80px; }</style>
+<style>
+/* Continue reading cards: one style on every case study, following light or dark mode */
+body[data-theme] { --nc-bg: #FFFFFF; --nc-ink: #1A1A1E; --nc-arrow-bg: #F1F1F3; }
+body[data-theme="graphite"] { --nc-bg: #1E1E26; --nc-ink: #E8E8EE; --nc-arrow-bg: #2A2A33; }
+body[data-theme] .next-card { background: var(--nc-bg); border: 1px solid var(--line); color: var(--nc-ink); }
+body[data-theme] .next-card .nc-eyebrow, body[data-theme] .next-card h3, body[data-theme] .next-card p { color: var(--nc-ink); }
+body[data-theme] .next-card .nc-arrow { position: absolute; bottom: 28px; right: 32px; width: 36px; height: 36px; border-radius: 999px; display: grid; place-items: center; background: var(--nc-arrow-bg); border: 1px solid var(--line); color: var(--nc-ink); transform: none; }
+body[data-theme] .next-card .nc-arrow svg { stroke: currentColor; }
+body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-color: var(--accent); color: #fff; transform: translate(2px, -2px); }
+</style>
+<style>/* Five header details fit on one row */ @media (min-width: 761px) { .hero-meta { grid-template-columns: repeat(5, 1fr); } }</style>
 </head>
 <body data-theme="blue" data-screen-label="Focus Gym Case Study">
 <script>
