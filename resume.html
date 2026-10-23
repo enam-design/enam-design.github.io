@@ -236,6 +236,10 @@
     .stage { display: block !important; padding: 0 !important; }
     .resume { width: 8.5in !important; height: 11in !important; padding: 0.42in 0.5in 0.34in !important; overflow: hidden !important; page-break-after: avoid; }
     @page { size: letter; margin: 0; }
+    /* Print at true letter size: undo the screen zoom, frame padding and card shadow */
+    body { zoom: 1 !important; }
+    .resume-frame { padding: 0 !important; max-width: none !important; }
+    .resume { box-shadow: none !important; border-radius: 0 !important; }
   }
 </style>
 <link rel="stylesheet" href="shared.css" />
@@ -389,6 +393,7 @@
         <div>
           <span class="sec">Skills</span>
           <div class="pills">
+            <span class="pill">UX research</span>
             <span class="pill">Interaction design</span>
             <span class="pill">Visual design</span>
             <span class="pill">Information architecture</span>
@@ -400,7 +405,7 @@
             <span class="pill">Rapid prototyping</span>
             <span class="pill">Cross-functional facilitation</span>
             <span class="pill">HTML / CSS / JS</span>
-            <span class="pill">AI agents (Claude Code)</span>
+            <span class="pill">Building with AI (Claude Code)</span>
           </div>
           <div class="tools"><b>Tools — </b>Figma · FigJam · UserTesting · Pendo · Claude Code · Claude Design</div>
         </div>
