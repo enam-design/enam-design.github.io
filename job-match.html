@@ -440,6 +440,28 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
     .jump a { font-size: 12px; padding: 5px 10px; }
   }
 </style>
+<style>
+/* Match the other case studies: pink accent only, no tinted boxes */
+body[data-theme] { --brand1: var(--accent); --brand2: var(--accent); --brand-ink: var(--accent); }
+.panel { background: transparent; border: 0; border-radius: 0; padding: 0; }
+.cols .panel + .panel { border-top: 1px solid var(--line); padding-top: 32px; }
+.cols { gap: 36px; }
+.details { gap: 32px; }
+.tstep .dot { box-shadow: 0 0 0 4px var(--bg); }
+.tstep.ghost .dot { background: var(--bg); border-color: var(--line); box-shadow: 0 0 0 4px var(--bg); }
+.obj { gap: 0; max-width: none; margin-left: 0; margin-right: 0; padding: 0; }
+.obj li { background: transparent; border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 18px 0 18px 44px; }
+.obj li:last-child { border-bottom: 1px solid var(--line); }
+.obj li::before { left: 0; top: 17px; }
+.tags .t { background: var(--pill-bg); border: 1px solid var(--line); font-weight: 600; }
+.tags .t:hover { border-color: var(--accent); }
+.tags .t .n { background: transparent; }
+.note { background: transparent; padding: 0; }
+.feature-cards { gap: 0; }
+.fc { background: transparent; border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 16px 0; }
+.fc:last-child { border-bottom: 1px solid var(--line); }
+.turbo { box-shadow: 0 30px 70px -40px rgba(20,20,30,0.45); }
+</style>
 </head>
 <body data-theme="blue">
 <script>
