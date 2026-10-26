@@ -535,6 +535,9 @@
   /* ─── Display type unified to Geist (was Poppins) ─── */
   .case-title { font-family: 'Figtree', -apple-system, system-ui, sans-serif !important; font-weight: 700 !important; letter-spacing: -0.03em !important; }
   .case-study :is(h2,h3,h4,h5,h6,blockquote), .insight .ins-num, figure.placeholder .ph-headline, .pull-quote { font-family: 'Figtree', -apple-system, system-ui, sans-serif !important; }
+  .case-deck a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+  .case-deck a:hover { border-bottom-width: 2px; }
+  .case-deck a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
 </style>
 <link rel="stylesheet" href="shared.css" />
 <style>/* Keep card text clear of the arrow button */ .next-card { padding-bottom: 80px; }</style>
@@ -600,7 +603,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
 
     <h1 class="case-title">Restructuring assignment creation around <em>how instructors actually think</em>.</h1>
 
-    <p class="case-deck">I redesigned the assignment creation flow in Writing Solutions, an instructor-facing assessment tool in beta. While the audit set the strategic foundation, I extended those findings to tackle the issues specific to Writing Solutions.</p>
+    <p class="case-deck">I redesigned the assignment creation flow in Writing Solutions, an instructor-facing assessment tool in beta. While the <a href="ux-audit.html">audit</a> set the strategic foundation, I extended those findings to tackle the issues specific to Writing Solutions.</p>
 
     <div class="hero-meta">
       <div class="meta-cell">
