@@ -444,6 +444,7 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
 /* Match the other case studies: pink accent only, no tinted boxes */
 body[data-theme] { --brand1: var(--accent); --brand2: var(--accent); --brand-ink: var(--accent); }
 .panel { background: transparent; border: 0; border-radius: 0; padding: 0; }
+.panel .pbody { margin: 0; font-size: 15px; line-height: 1.6; color: var(--ink-2); }
 .cols .panel + .panel { border-top: 1px solid var(--line); padding-top: 32px; }
 .cols { gap: 36px; }
 .details { gap: 32px; }
@@ -584,7 +585,7 @@ body[data-theme] { --brand1: var(--accent); --brand2: var(--accent); --brand-ink
         <div class="section-head"><span class="section-eyebrow"><span class="num">03</span>Problem space</span></div>
         <div class="cols">
           <div class="panel">
-            <h4>Problem</h4>
+            <h4>The student problem</h4>
             <ul>
               <li><b>Resumes lack depth:</b> students struggle to convey skills and potential due to limited work experience.</li>
               <li><b>Skills gap awareness:</b> many students are unaware of their marketable skills.</li>
@@ -592,13 +593,16 @@ body[data-theme] { --brand1: var(--accent); --brand2: var(--accent); --brand-ink
             </ul>
           </div>
           <div class="panel">
-            <h4>Solution</h4>
-            <p class="pintro">An intelligent platform that offers:</p>
+            <h4>What Job Match offered</h4>
             <ul>
-              <li><b>Skill identification:</b> recognizes skills gained through education.</li>
-              <li><b>Personalized insights:</b> understands user motivations and preferences to offer tailored recommendations.</li>
-              <li><b>Job matching:</b> connects students with relevant internships and jobs, ensuring employers find qualified candidates.</li>
+              <li><b>Skill identification:</b> identifies skills students gained through their education.</li>
+              <li><b>Personalized insights:</b> recommendations tailored to each student&#x27;s motivations and preferences.</li>
+              <li><b>Job matching:</b> connects students with relevant internships and jobs.</li>
             </ul>
+          </div>
+          <div class="panel">
+            <h4>The design problem</h4>
+            <p class="pbody">Before the MVP, Job Match was only available to a 10% pilot group of signed-in Pearson+ subscribers. Opening it to the public meant designing for people with no account, no context about the product, and very different career stages.</p>
           </div>
         </div>
       </div>
@@ -646,7 +650,7 @@ body[data-theme] { --brand1: var(--accent); --brand2: var(--accent); --brand-ink
     <section id="objectives" data-screen-label="Main objectives">
       <div class="wrap">
         <div class="section-head"><span class="section-eyebrow"><span class="num">05</span>MVP objectives</span></div>
-        <p class="lead center">For the MVP launch, Job Match expanded from serving 10% of Pearson+ subscribers to serving all potential users, including those unfamiliar with Pearson products. The key goals defined by the product team were to:</p>
+        <p class="lead center">The product team set two goals for the MVP:</p>
         <ul class="obj">
           <li>Accommodate diverse entry points (e.g. organic search vs. the Pearson+ platform).</li>
           <li>Enable customization for different job-search stages (e.g. exploratory freshmen vs. upperclassmen with clear career plans).</li>
