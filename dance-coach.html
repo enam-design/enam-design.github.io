@@ -745,6 +745,7 @@
   .interviewees span { display: block; font-size: 12.5px; color: var(--accent); margin-top: 1px; }
   .interviewees p { margin: 6px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
   @media (max-width: 600px) { .interviewees { grid-template-columns: 1fr; } }
+  .flag-screens { margin-top: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; align-items: start; max-width: 620px; }
 </style>
 <link rel="stylesheet" href="shared.css" />
 <style>/* Keep card text clear of the arrow button */ .next-card { padding-bottom: 80px; }</style>
@@ -974,6 +975,12 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
       <div class="prose" style="margin-top:24px">
         <p>The accuracy work was taking most of my time, so I paused it before running the full controlled test and returned to the design. On a product team, I would work with engineers on the model and define what accurate feedback means for dancers. For the rest of the design, I&#x27;m assuming a reliable pose analysis model that gives useful dance technique feedback.</p>
         <p>Even a reliable model will make mistakes, so the design has to handle them. The app already tells students when it couldn&#x27;t see part of their body or measure a take. It also warns them in released feedback when timing is uncertain. Those notes cover measurement problems, but they can&#x27;t catch a correction that is wrong on a clear video. Only a person can catch that, so I&#x27;m adding a way for students to flag a specific correction. Practice takes stay private, and the instructor sees a flag only if the student submits that take.</p>
+      </div>
+      <div class="app-screens flag-screens">
+        <figure><figcaption><b>Step 1</b> · A student questions a correction</figcaption><img src="images/dance-coach/screen-flag-entry.jpg" width="600" height="917" loading="lazy" alt="Student practice feedback with two AI corrections, each with a Doesn't look right? link" /></figure>
+        <figure><figcaption><b>Step 2</b> · The student says what looks wrong</figcaption><img src="images/dance-coach/screen-flag-form.jpg" width="600" height="1073" loading="lazy" alt="Flag form under a timing correction, with three reasons, an optional note, and Send and Cancel buttons" /></figure>
+      </div>
+      <div class="prose" style="margin-top:24px">
         <p>Task-based usability tests with students and instructors on the coded app are upcoming. They&#x27;ll use scripted feedback, so people&#x27;s reactions reflect the design rather than the current model.</p>
       </div>
     </section>
