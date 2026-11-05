@@ -752,9 +752,10 @@
   .comp-title { margin: 0 0 12px; font-size: 18px; font-weight: 600; color: var(--ink); }
   .anno-wrap { position: relative; align-self: start; }
   .anno-note { position: absolute; z-index: 1; white-space: nowrap; padding: 4px 9px; border-radius: 6px; background: #fff; color: #C81E52; border: 1.5px solid var(--accent); font-size: 12px; font-weight: 600; line-height: 1.3; box-shadow: 0 3px 10px rgba(0,0,0,0.3); pointer-events: none; }
-  .anno-entry { top: 56.5%; left: 73%; transform: translateY(-50%); }
+  .anno-entry { top: 56.5%; right: 77%; transform: translateY(-50%); }
+  .anno-entry::after { content: " \2192"; }
   .anno-review { top: 0; left: 60%; transform: translateY(-50%); }
-  @media (max-width: 600px) { .anno-note { font-size: 10.5px; padding: 3px 6px; } .anno-entry { left: 66%; } }
+  @media (max-width: 600px) { .anno-note { font-size: 10.5px; padding: 3px 6px; } .anno-entry { top: 60.5%; right: auto; left: 4%; } .anno-entry::after { content: " \2191"; } }
 </style>
 <link rel="stylesheet" href="shared.css" />
 <style>/* Keep card text clear of the arrow button */ .next-card { padding-bottom: 80px; }</style>
@@ -987,10 +988,10 @@ body[data-theme] .next-card:hover .nc-arrow { background: var(--accent); border-
         <p>Even a reliable model will make mistakes. The app already tells students when it can&#x27;t see them or measure a take, but only a person can catch a correction that is wrong on a clear video. So I added a way for students to flag one. Practice takes stay private, and the instructor sees a flag only if the student submits that take.</p>
       </div>
       <div class="app-screens flag-screens">
-        <figure><figcaption><b>Step 1</b> · A student questions a correction</figcaption><div class="anno-wrap"><img src="images/dance-coach/screen-flag-entry.jpg?v=3" width="600" height="917" loading="lazy" alt="Student practice feedback with two AI corrections, each with a Doesn't look right? link" /><span class="anno-note anno-entry">&#8592; Flag starts here</span></div></figure>
+        <figure><figcaption><b>Step 1</b> · A student questions a correction</figcaption><div class="anno-wrap"><img src="images/dance-coach/screen-flag-entry.jpg?v=3" width="600" height="917" loading="lazy" alt="Student practice feedback with two AI corrections, each with a Doesn't look right? link" /><span class="anno-note anno-entry">Tap to flag</span></div></figure>
         <figure><figcaption><b>Step 2</b> · The student says what looks wrong</figcaption><img src="images/dance-coach/screen-flag-form.jpg" width="600" height="1073" loading="lazy" alt="Flag form under a timing correction, with three reasons, an optional note, and Send and Cancel buttons" /></figure>
       </div>
-      <figure class="app-desk flag-review"><figcaption><b>Step 3</b> · The instructor sees the flag next to the correction</figcaption><div class="anno-wrap"><img src="images/dance-coach/screen-flag-review.png?v=3" width="1146" height="331" loading="lazy" alt="Instructor dashboard card titled What the student was told, with two AI corrections. The timing correction is marked Flagged by student, with the reason and the student&#x27;s note beside it." /><span class="anno-note anno-review">&#8595; Flag appears here</span></div></figure>
+      <figure class="app-desk flag-review"><figcaption><b>Step 3</b> · The instructor sees the flag next to the correction</figcaption><div class="anno-wrap"><img src="images/dance-coach/screen-flag-review.png?v=3" width="1146" height="331" loading="lazy" alt="Instructor dashboard card titled What the student was told, with two AI corrections. The timing correction is marked Flagged by student, with the reason and the student&#x27;s note beside it." /><span class="anno-note anno-review">&#8595; Student&#x27;s flag</span></div></figure>
       <div class="prose" style="margin-top:24px">
         <p>Usability tests with students and instructors are upcoming. They&#x27;ll use scripted feedback, so reactions reflect the design rather than the current model.</p>
         <p><strong>What&#x27;s next.</strong> If I continue this project, I&#x27;d explore a version focused on fundamentals, such as spins and basic steps. These give the AI a clearer target than full choreography, and students could return to them to keep improving.</p>
