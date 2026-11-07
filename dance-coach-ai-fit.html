@@ -347,6 +347,14 @@
     show(fromHash());
     var target = location.hash && document.getElementById(location.hash.slice(1));
     if (target && target.tagName === 'H2') target.scrollIntoView();
+    // A fresh visit with no section link always starts at the top of the page
+    function startAtTop() {
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (location.hash || (nav && nav.type === 'back_forward')) return;
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+    startAtTop();
+    window.addEventListener('load', startAtTop);
   })();
 </script>
 </body>
