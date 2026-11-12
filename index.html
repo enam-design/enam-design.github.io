@@ -374,6 +374,22 @@
   .focus-vis .stamp { position: absolute; top: 22px; right: 22px; font-size: 11px; font-weight: 600; color: #1577D6; letter-spacing: 0.08em; z-index: 3; }
   body[data-theme="graphite"] .focus-vis .stamp { color: #5AA0EA; }
 
+
+  /* ── Earlier work: compact cards ── */
+  .compact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .compact { position: relative; display: block; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 16px; padding: 24px 64px 24px 24px; text-decoration: none; transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease; }
+  .compact:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--ink) 32%, var(--line)); box-shadow: 0 18px 38px -22px rgba(0,0,0,0.32); }
+  .compact:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .compact .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: var(--accent); margin-bottom: 9px; }
+  .compact h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; margin: 0 0 8px; }
+  .compact p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink-2); }
+  .compact-arrow { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center; transition: transform 0.22s ease, background-color 0.2s; }
+  .compact-arrow svg { width: 13px; height: 13px; stroke: var(--ink); transition: stroke 0.2s; }
+  .compact:hover .compact-arrow { transform: translate(2px, -2px); background: var(--accent); border-color: var(--accent); }
+  .compact:hover .compact-arrow svg { stroke: #fff; }
+  @media (max-width: 820px) { .compact-grid { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .compact, .compact-arrow { transition: none; } .compact:hover { transform: none; } }
+
   /* ─────────────── Topics + footer ─────────────── */
   .pills { display: flex; gap: 9px; flex-wrap: wrap; }
   .pills a, .pills span { text-decoration: none; font-size: 13.5px; font-weight: 500; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 8px 15px; }
@@ -474,8 +490,8 @@
     <section class="hero" id="about">
       <img class="portrait" src="images/esther-portrait.png" alt="Esther Nam" />
       <div>
-        <h1>I’m Esther, a product designer based in Boston.</h1>
-        <p class="hero-sub">For nine years, I’ve designed tools for students and instructors, most recently leading a redesign of AI grading and assignment products at Pearson.</p>
+        <h1>I’m Esther, a product designer who builds AI tools that experts can review, correct, and trust.</h1>
+        <p class="hero-sub">For nine years, I’ve designed tools for instructors and students. Most recently, I led redesigns of Pearson’s AI grading and assignment tools, where instructors review the AI’s work before students see it. I’m based in Boston.</p>
       </div>
     </section>
 
@@ -577,42 +593,25 @@
         </div>
       </a>
 
-      <div class="group-label" style="margin-top: 28px;"><span>Pearson Education 2022–2023</span><span class="ln"></span></div>
+      <div class="group-label" style="margin-top: 28px;"><span>Earlier work</span><span class="ln"></span></div>
 
-      <!-- Job Match -->
-      <a href="job-match.html" class="wide">
-        <div class="left">
-          <div>
-            <div class="eyebrow">Pearson+ · POC → MVP</div>
-            <h3>Job Match</h3>
-            <p>A career-exploration tool built into Pearson+. Three new surfaces supported its move from a 10% pilot to a public MVP open to anyone, including users with no prior Pearson relationship.</p>
-          </div>
-          <div class="meta-pills"><span class="pill">Visual + IxD</span><span class="pill">User testing</span><span class="pill">Accessibility</span></div>
-        </div>
-        <div class="arrow"><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
-        <div class="crop crop-shot">
-          <img src="images/card-jobmatch.png" alt="The Pearson+ Job Match unauthenticated home page shown on a laptop." loading="lazy" />
-        </div>
-      </a>
+      <div class="compact-grid">
+        <!-- Job Match -->
+        <a href="job-match.html" class="compact">
+          <div class="eyebrow">Pearson+ · 2022–23</div>
+          <h3>Job Match</h3>
+          <p>A career-exploration tool built into Pearson+. Three new surfaces supported its move from a 10% pilot to a public MVP open to anyone, including users with no prior Pearson relationship.</p>
+          <span class="compact-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></span>
+        </a>
 
-      <div class="group-label" style="margin-top: 28px;"><span>Pearson Education 2020–2021</span><span class="ln"></span></div>
-
-      <!-- Collections -->
-      <a href="collections.html" class="wide">
-        <div class="left">
-          <div>
-            <div class="eyebrow">Creation flow redesign</div>
-            <h3>Collections</h3>
-            <p>A redesign of how instructors build custom books from Pearson chapters, including a self-service way to convert print books to digital. The launch was followed by 85% year-over-year subscription growth.</p>
-          </div>
-          <div class="meta-pills"><span class="pill">Interaction design</span><span class="pill">User testing</span><span class="pill">Growth</span></div>
-        </div>
-        <div class="arrow"><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></div>
-        <div class="crop crop-shot">
-          <img src="images/card-collections.png" alt="The redesigned My Collections page, with a Build new card and a print Collection card tagged Go digital!" loading="lazy" />
-        </div>
-      </a>
-
+        <!-- Collections -->
+        <a href="collections.html" class="compact">
+          <div class="eyebrow">Pearson · 2020–21</div>
+          <h3>Collections</h3>
+          <p>I led the redesign of how instructors build custom books, including a self-service way to convert print books to digital. Subscriptions grew 85% year over year after launch.</p>
+          <span class="compact-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke-width="2"><path d="M3 13L13 3M13 3H5M13 3V11" stroke-linecap="round"/></svg></span>
+        </a>
+      </div>
 
     </section>
 
